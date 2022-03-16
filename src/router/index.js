@@ -10,6 +10,7 @@ import user from './modules/user';
 import category from './modules/category';
 import ideal from './modules/ideal';
 import department from './modules/department';
+import setting from './modules/setting';
 
 export const constantRoutes = [
     {
@@ -23,6 +24,7 @@ export const constantRoutes = [
     category,
     ideal,
     department,
+    setting,
 ];
 
 export const asyncRoutes = [
@@ -31,6 +33,7 @@ export const asyncRoutes = [
     category,
     ideal,
     department,
+    setting,
 ];
 
 const createRouter = () => new VueRouter({

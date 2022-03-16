@@ -8,11 +8,11 @@
 				:key="index"
 				link
 				:disabled="item.disabled"
-				class="route-item"
+				:class="['route-item', isSelected]"
 				@click="handleNavigation(item)"
 			>
 				<v-list-item-icon>
-					<v-icon>{{ item.icon }}</v-icon>
+					<v-icon class="icon">{{ item.icon }}</v-icon>
 				</v-list-item-icon>
 
 				<v-list-item-content>
@@ -28,9 +28,9 @@ export default {
     name: 'Sidebar',
     props: {
         drawer: {
-            type: [Array, String, Object],
+            type: Boolean,
             default: () => {
-                return [];
+                return true;
             },
         },
     },
@@ -69,16 +69,24 @@ export default {
                 },
                 {
                     icon: 'mdi-cog',
-                    name: 'System Setting',
-                    url: '/system-setting/index',
+                    name: 'Setting',
+                    url: '/setting/index',
                     disabled: false,
                 },
             ],
-            drawerStorage: this.drawer,
+
+            drawerStorage: this.drawerStorage,
+            isSelected: '',
         };
     },
     watch: {
         $route() {},
+        drawer() {
+            this.drawerStorage = !this.drawer;
+        },
+    },
+    created() {
+        this.handleSetDataWhenCreated();
     },
     methods: {
         async handleNavigation(item) {
@@ -91,6 +99,20 @@ export default {
             }
             this.$router.push({ path: `${item.url}` });
         },
+
+        handleSetDataWhenCreated() {
+            const CURRENT_ROUTE = this.$route.fullPath;
+
+            for (let i = 0; i < this.listRoutes.length; i++) {
+                if (this.listRoutes[i].url === CURRENT_ROUTE) {
+                    this.listRoutes[i].disabled = true;
+                    this.isSelected = 'v-list-item--disabled';
+                } else {
+                    this.listRoutes[i].disabled = false;
+                    this.isSelected = '';
+                }
+            }
+        },
     },
 };
 </script>
@@ -98,7 +120,17 @@ export default {
 <style lang="scss" scoped>
     @import '@/scss/variables.scss';
 
+    .route-item {
+        font-weight: bold;
+    }
+
     .v-list-item--disabled {
-        background-color: $west-side;
+        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        color: $white !important;
+        background-color: $shark;
+
+        .icon {
+            color: $dandelion;
+        }
     }
 </style>
