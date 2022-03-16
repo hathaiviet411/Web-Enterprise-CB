@@ -11,7 +11,6 @@ import '@/scss/index.scss';
 
 Vue.config.productionTip = false;
 Vue.prototype.$axios = axios;
-axios.defaults.baseUrl = 'http://localhost:8000/';
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);

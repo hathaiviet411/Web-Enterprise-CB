@@ -147,7 +147,10 @@ import OvalIllustration from '@/assets/images/oval-1.png';
 // Helper functions import
 import { MakeToast } from '@/toast/toastMessage';
 
-const LOGIN_API = '/api/auth/login';
+// API import
+import { postLogin } from '@/api/modules/login';
+
+const LOGIN_API = '/auth/login';
 
 export default {
     name: 'Login',
@@ -200,10 +203,11 @@ export default {
                     password: this.User.password,
                 };
 
-                const BASE_URL = 'http://localhost:8000';
+                const response = await postLogin(LOGIN_API, USER);
 
-                const response = await this.$axios.post(BASE_URL + LOGIN_API, USER);
-                console.log(response);
+                if (response.status === true) {
+                    this.$router.push({ path: '/dashboard/index' });
+                }
             }
         },
 

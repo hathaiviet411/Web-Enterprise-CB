@@ -37,6 +37,7 @@ export const asyncRoutes = [
 ];
 
 const createRouter = () => new VueRouter({
+    mode: 'history',
     scrollBehavior: () => ({ y: 0 }),
     routes: constantRoutes,
 });
