@@ -19,12 +19,6 @@ export const constantRoutes = [
         hidden: true,
     },
     login,
-    dashboard,
-    user,
-    category,
-    ideal,
-    department,
-    setting,
 ];
 
 export const asyncRoutes = [

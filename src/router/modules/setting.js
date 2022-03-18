@@ -3,6 +3,10 @@ import Layout from '@/layout';
 const setting = {
     path: '/setting',
     name: 'Setting',
+    meta: {
+        title: 'Setting Management',
+        roles: ['admin, qac, qaa, staff'],
+    },
     hidden: true,
     component: Layout,
     children: [

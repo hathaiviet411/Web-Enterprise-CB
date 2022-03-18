@@ -65,6 +65,7 @@
 														v-model="User.username"
 														type="text"
 														placeholder="Username"
+														:disabled="isProcess"
 													/>
 												</b-col>
 
@@ -76,6 +77,7 @@
 														v-model="User.password"
 														type="password"
 														placeholder="⋄⋄⋄⋄⋄⋄⋄⋄⋄⋄⋄⋄⋄⋄"
+														:disabled="isProcess"
 													/>
 												</b-col>
 
@@ -88,15 +90,14 @@
 																name="checkbox-remember-me"
 																value="checked"
 																unchecked-value="not_checked"
+																:disabled="isProcess"
 															>
 																<span>Remember Me</span>
 															</b-form-checkbox>
 														</b-col>
 
-														<b-col cols="6" class="text-right">
-															<span
-																class="create-account-text"
-															>Forgot password</span>
+														<b-col cols="6" class="text-right" :disabled="isProcess">
+															<span class="create-account-text">Forgot password</span>
 														</b-col>
 													</b-row>
 												</b-col>
@@ -104,7 +105,7 @@
 
 											<b-row>
 												<b-col cols="12">
-													<b-button class="btn-login" @click="doLogin()">
+													<b-button class="btn-login" :disabled="isProcess" @click="doLogin()">
 														<span class="btn-login-text">Login</span>
 													</b-button>
 												</b-col>
@@ -115,10 +116,8 @@
 													<span>Not Registered Yet?</span>
 												</b-col>
 												<v-spacer />
-												<b-col cols="6" class="text-right">
-													<span
-														class="create-account-text"
-													>Create an account</span>
+												<b-col cols="6" class="text-right" :disabled="isProcess">
+													<span class="create-account-text">Create an account</span>
 												</b-col>
 											</b-row>
 										</div>
@@ -139,11 +138,14 @@ import OvalIllustration from '@/assets/images/oval-1.png';
 
 // Helper functions import
 import { MakeToast } from '@/toast/toastMessage';
+import { resetRouter } from '@/router';
 
 // API import
-import { postLogin } from '@/api/modules/login';
+import { postLogin, getInfo } from '@/api/modules/login';
 
+// API url
 const LOGIN_API = '/auth/login';
+const GET_INFO = '/auth/info';
 
 export default {
     name: 'Login',
@@ -157,9 +159,16 @@ export default {
                 password: '123456',
             },
 
-            isRememberMe: 'not_checked',
+            isRememberMe: this.$store.getters.isRememberMe,
             isMobileMode: false,
+
+            isProcess: false,
         };
+    },
+    watch: {
+        isRememberMe() {
+            this.$store.dispatch('app/setRememberMe', this.isRememberMe);
+        },
     },
     created() {
         window.addEventListener('resize', this.handleResizeResolution);
@@ -196,11 +205,66 @@ export default {
                     password: this.User.password,
                 };
 
-                const response = await postLogin(LOGIN_API, USER);
+                this.callApiLogin(LOGIN_API, USER);
+            }
 
+            this.isProcess = false;
+        },
+
+        async callApiLogin(URL, USER) {
+            try {
+                const response = await postLogin(URL, USER);
                 if (response.status === true) {
-                    this.$router.push({ path: '/dashboard/index' });
+                    const TOKEN = response.data.access_token;
+                    const EXPIRED_TOKE = response.data.expired_time;
+                    const REFRESH_TOKEN = response.data.refresh_token;
+
+                    await this.$store.dispatch('user/saveLogin', TOKEN);
+
+                    try {
+                        const USER = await getInfo(GET_INFO);
+                        if (response.status === true) {
+                            const PROFILE = {
+                                id: USER.info.user._id,
+                                isAgreedTerm: USER.info.user.isAgreedTerm,
+                                username: USER.info.user.username,
+                                name: USER.info.user.name,
+                                department_id: '',
+                                expired_token: EXPIRED_TOKE,
+                                refresh_token: REFRESH_TOKEN,
+                                role: USER.info.role.roleName,
+                            };
+
+                            await this.$store.dispatch('user/saveProfile', PROFILE);
+
+                            MakeToast({
+                                variant: 'success',
+                                title: 'Login Successful',
+                                content: 'Welcome back, ' + this.$store.getters.profile.name,
+                            });
+
+                            resetRouter();
+
+                            const ROLE = this.$store.getters.profile.role;
+
+                            await this.$store.dispatch('role/generateRoutes', ROLE)
+                                .then((routes) => {
+                                    for (let route = 0; route < routes.length; route++) {
+                                        this.$router.addRoute(routes[route]);
+                                    }
+                                    this.$router.push('/dashboard/index');
+                                });
+                        }
+                    } catch (error) {
+                        console.error(error.message);
+                    }
                 }
+            } catch (error) {
+                MakeToast({
+                    variant: 'error',
+                    title: 'Error',
+                    content: error.message,
+                });
             }
         },
 

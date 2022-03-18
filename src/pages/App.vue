@@ -14,15 +14,14 @@ export default {
         );
     },
     mounted() {
-    //     const ROLES = this.$store.getters.roles;
-    //     const PERMISSIONS = this.$store.getters.permissions;
+        const ROLE = this.$store.getters.role;
 
-    //     this.$store.dispatch('permissions/generateRoutes', { roles: ROLES, permissions: PERMISSIONS })
-    //         .then((routes) => {
-    //             for (let route = 0; route < routes.length; route++) {
-    //                 this.$router.addRoute(routes[route]);
-    //             }
-    //         });
+        this.$store.dispatch('role/generateRoutes', ROLE)
+            .then((routes) => {
+                for (let route = 0; route < routes.length; route++) {
+                    this.$router.addRoute(routes[route]);
+                }
+            });
     },
 };
 </script>

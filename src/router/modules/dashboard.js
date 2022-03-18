@@ -3,6 +3,10 @@ import Layout from '@/layout';
 const dashboard = {
     path: '/dashboard',
     name: 'Dashboard',
+    meta: {
+        title: 'Dashboard',
+        roles: ['admin, qac, qaa, staff'],
+    },
     hidden: true,
     component: Layout,
     children: [

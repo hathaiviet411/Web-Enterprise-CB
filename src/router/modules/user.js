@@ -3,6 +3,10 @@ import Layout from '@/layout';
 const user = {
     path: '/user',
     name: 'User',
+    meta: {
+        title: 'User Management',
+        roles: ['admin, qac, qaa, staff'],
+    },
     hidden: true,
     component: Layout,
     children: [

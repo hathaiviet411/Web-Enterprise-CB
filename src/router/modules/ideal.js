@@ -3,6 +3,10 @@ import Layout from '@/layout';
 const ideal = {
     path: '/ideal',
     name: 'Ideal',
+    meta: {
+        title: 'Ideal Management',
+        roles: ['admin, qac, qaa, staff'],
+    },
     hidden: true,
     component: Layout,
     children: [

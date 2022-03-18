@@ -2,7 +2,7 @@
 	<v-app-bar app elevate-on-scroll elevation="3" color="white">
 		<v-app-bar-nav-icon @click="$emit('drawerEvent')" />
 		<v-spacer />
-		<v-col lg="6" cols="12">
+		<!-- <v-col lg="6" cols="12">
 			<v-form>
 				<v-text-field
 					class="p-0 m-0 mt-6"
@@ -14,7 +14,7 @@
 					placeholder="Search"
 				/>
 			</v-form>
-		</v-col>
+		</v-col> -->
 		<v-spacer />
 		<v-menu offset-y>
 			<template v-slot:activator="{ attrs, on }">
@@ -64,22 +64,29 @@
 					<v-chip link>
 						<v-badge dot bottom color="green" offset-y="10" offset-x="10">
 							<v-avatar size="40">
-								<v-img src="https://randomuser.me/api/portraits/women/81.jpg" />
+								<v-img src="@/assets/images/avatar.png" />
 							</v-avatar>
 						</v-badge>
-						<span class="ml-3">Jane Smith</span>
+						<span class="ml-3">{{ user.name }}</span>
 					</v-chip>
 				</span>
 			</template>
 			<v-list width="250" class="py-0">
 				<v-list-item two-line>
 					<v-list-item-avatar>
-						<img src="https://randomuser.me/api/portraits/women/81.jpg">
+						<img src="@/assets/images/avatar.png">
 					</v-list-item-avatar>
 
 					<v-list-item-content>
-						<v-list-item-title>Jane Smith</v-list-item-title>
-						<v-list-item-subtitle>Logged In</v-list-item-subtitle>
+						<v-list-item-title>{{ user.name }}</v-list-item-title>
+						<v-list-item-subtitle>
+							<v-chip class="ma-2" color="success">
+								<v-icon left x-small>
+									mdi-check
+								</v-icon>
+								Logged in
+							</v-chip>
+						</v-list-item-subtitle>
 					</v-list-item-content>
 				</v-list-item>
 				<v-divider />
@@ -97,6 +104,8 @@
 </template>
 
 <script>
+import { MakeToast } from '@/toast/toastMessage';
+
 export default {
     name: 'Topbar',
     data() {
@@ -115,6 +124,9 @@ export default {
                 },
                 { divider: true, inset: true },
             ],
+            user: {
+                name: this.$store.getters.profile.name,
+            },
         };
     },
     methods: {
@@ -136,11 +148,29 @@ export default {
                     this.$router.push('/setting');
                     break;
                 case LOGOUT:
-                    this.$router.push('/login');
+                    this.doLogout();
                     break;
                 default:
                     break;
             }
+        },
+
+        async doLogout() {
+            try {
+                await this.$store.dispatch('user/doLogout');
+
+                MakeToast({
+                    variant: 'success',
+                    title: 'Success',
+                    content: 'Logout Successful',
+                });
+
+                this.$router.push('/login');
+            } catch (error) {
+                console.log(error.message);
+            }
+
+            await this.$store.dispatch('role/clearData');
         },
     },
 };
