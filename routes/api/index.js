@@ -1,11 +1,12 @@
 const Router = require('@koa/router');
 const router = new Router();
-const admin = require('./admin');
-const QAM = require('./QA manager');
-const auth = require('./auth/auth');
-const passport = require('koa-passport');
-const checkRole = require('../../middleware/checkRole');
-require('../../middleware/passport');
+const admin = require("./admin");
+const QAM = require("./QA manager")
+const auth = require("./auth/auth");
+const idea = require("./main/idea")
+const passport = require("koa-passport");
+const checkRole = require("../../middleware/checkRole");
+require("../../middleware/passport");
 
 // Auth api
 router.use('/auth', auth);
@@ -24,5 +25,10 @@ router.use(
     checkRole.checkQAM,
     QAM
 );
+
+router.use(passport.authenticate("jwt-access", { failWithError: true }), idea)
+
+
+
 
 module.exports = router.routes();

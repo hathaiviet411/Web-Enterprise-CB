@@ -1,13 +1,13 @@
 const Router = require('@koa/router');
 const router = new Router();
-const admin = require('../../../controllers/admin/register');
+const controller = require("../../../controllers/main/register");
 
-router.post('/register', admin.register);
+router.post("/register", controller.register);
 
-router.get('/role', admin.getRole);
+router.get("/role", controller.getRole);
 
-router.post('/role', admin.addRole);
+router.post("/role", controller.addRole);
 
-router.delete('/role/:id', admin.deleteRole);
+router.delete("/role/:id", controller.deleteRole);
 
 module.exports = router.routes();

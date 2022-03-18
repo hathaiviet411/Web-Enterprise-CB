@@ -1,13 +1,13 @@
 const Router = require('@koa/router');
 const router = new Router();
-const admin = require('../../../controllers/admin/category');
+const controller = require("../../../controllers/main/category");
 
-router.get('/category', admin.getCategory);
+router.get("/category", controller.getCategory);
 
-router.put('/category/:id', admin.updateCategory);
+router.put("/category/:id", controller.updateCategory);
 
-router.post('/category', admin.createCategory);
+router.post("/category", controller.createCategory);
 
-router.delete('/category/:id', admin.deleteCategory);
+router.delete("/category/:id", controller.deleteCategory);
 
 module.exports = router.routes();

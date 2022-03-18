@@ -1,5 +1,5 @@
-const category = require('../../models/category');
-const Category = require('../../models/category');
+const Category = require("../../models/category");
+const Idea = require("../../models/idea");
 
 module.exports = {
     getCategory: async(ctx) => {
@@ -27,7 +27,7 @@ module.exports = {
         });
         return (ctx.body = {
             status: true,
-            message: 'delete category success',
+            message: "update category success",
         });
     },
 
@@ -40,12 +40,21 @@ module.exports = {
         });
     },
 
-    deleteCategory: async(ctx) => {
-        const id = ctx.request.params.id;
+    deleteCategory: async (ctx) => {
+        const id = ctx.request.params.id
+
         if (!id || id === undefined) {
             return (ctx.body = {
                 status: false,
                 message: 'id not found',
+            });
+        }
+
+        const idea = await Idea.findOne({ category: id }).lean()
+        if(idea) {
+            return (ctx.body = {
+                status: false,
+                message: "category is being used",
             });
         }
 

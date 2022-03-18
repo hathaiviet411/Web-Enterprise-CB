@@ -1,11 +1,11 @@
 const Router = require('@koa/router');
 const router = new Router();
-const QAM = require('../../../controllers/QA manager/category');
+const controller = require("../../../controllers/main/category");
 
-router.get('/category', QAM.getCategory);
+router.get("/category", controller.getCategory);
 
-router.post('/category', QAM.createCategory);
+router.post("/category", controller.createCategory);
 
-router.delete('/category/:id', QAM.deleteCategory);
+router.delete("/category/:id", controller.deleteCategory);
 
 module.exports = router.routes();
