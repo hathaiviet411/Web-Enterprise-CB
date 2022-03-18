@@ -8,7 +8,6 @@ import axios from 'axios';
 // import { MakeToast } from '@/utils/MakeToast';
 
 const baseURL = process.env.VUE_APP_BASE_URL;
-console.log(baseURL);
 
 const service = axios.create({
     baseURL: baseURL,
