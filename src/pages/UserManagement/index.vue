@@ -4,7 +4,7 @@
 			:headers="headers"
 			:items="desserts"
 			sort-by="calories"
-			class="elevation-1"
+			class="elevation-12"
 		>
 			<template v-slot:top>
 				<v-toolbar
@@ -12,11 +12,7 @@
 				>
 					<v-toolbar-title>User Management</v-toolbar-title>
 
-					<v-divider
-						class="mx-4"
-						inset
-						vertical
-					/>
+					<v-divider class="mx-4" inset vertical />
 
 					<v-spacer />
 

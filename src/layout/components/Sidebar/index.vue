@@ -1,6 +1,6 @@
 <template>
 	<v-navigation-drawer v-model="drawerStorage" app>
-		<v-img height="140" class="pa-4" src="@/assets/images/logo.png" />
+		<v-img height="200" class="pa-4" src="@/assets/images/logo.png" />
 		<v-divider />
 		<v-list>
 			<v-list-item
@@ -8,7 +8,7 @@
 				:key="index"
 				link
 				:disabled="item.disabled"
-				:class="['route-item', isSelected]"
+				:class="['route-item', isSelected, isDisplay]"
 				@click="handleNavigation(item)"
 			>
 				<v-list-item-icon>
@@ -77,6 +77,7 @@ export default {
 
             drawerStorage: this.drawerStorage,
             isSelected: '',
+            isDisplay: '',
         };
     },
     watch: {
