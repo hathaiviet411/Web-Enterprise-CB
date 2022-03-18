@@ -1,5 +1,127 @@
 <template>
 	<div>
+
+		<div class="header">
+			<v-card class="mx-auto my-12" min-width="100%">
+				<v-card-title>{{ 'Category Management Filter' }}</v-card-title>
+				<v-card-text>
+					<v-container>
+						<v-row>
+							<v-col lg="1" sm="1" md="1">
+								<v-switch v-model="filter.isCheck.category_name" color="purple" />
+							</v-col>
+							<v-col lg="11" sm="11" md="11">
+								<v-text-field
+									v-model="filter.category_name"
+									label="Category Name"
+									clearable
+									:disabled="!filter.isCheck.category_name"
+									prepend-inner-icon="mdi-library"
+								/>
+							</v-col>
+						</v-row>
+
+						<v-row>
+							<v-col lg="1" sm="1" md="1">
+								<v-switch v-model="filter.isCheck.created_date" color="purple" />
+							</v-col>
+							<v-col lg="11" sm="11" md="11">
+								<v-menu
+									ref="created_date_menu"
+									v-model="created_date_menu"
+									:close-on-content-click="false"
+									transition="scale-transition"
+									offset-y
+									max-width="290px"
+									min-width="auto"
+								>
+									<template v-slot:activator="{ on, attrs }">
+										<v-text-field
+											:value="filter.created_date"
+											label="Created Date"
+											hint="YYYY-mm-dd"
+											persistent-hint
+											prepend-inner-icon="mdi-calendar"
+											v-bind="attrs"
+											clearable
+											readonly
+											v-on="on"
+										/>
+									</template>
+									<v-date-picker
+										v-if="filter.isCheck.created_date === true"
+										v-model="filter.created_date"
+										no-title
+										:max="filter.expired_date"
+										@input="created_date_menu = false"
+									/>
+								</v-menu>
+							</v-col>
+						</v-row>
+
+						<v-row>
+							<v-col lg="1" sm="1" md="1">
+								<v-switch v-model="filter.isCheck.expired_date" color="purple" />
+							</v-col>
+							<v-col lg="11" sm="11" md="11">
+								<v-menu
+									ref="expired_date_menu"
+									v-model="expired_date_menu"
+									:close-on-content-click="false"
+									transition="scale-transition"
+									offset-y
+									max-width="290px"
+									min-width="auto"
+								>
+									<template v-slot:activator="{ on, attrs }">
+										<v-text-field
+											:value="filter.expired_date"
+											label="Expired Date"
+											hint="YYYY-mm-dd"
+											persistent-hint
+											prepend-inner-icon="mdi-calendar"
+											v-bind="attrs"
+											clearable
+											readonly
+											v-on="on"
+										/>
+									</template>
+									<v-date-picker
+										v-if="filter.isCheck.expired_date === true"
+										v-model="filter.expired_date"
+										no-title
+										:min="filter.created_date"
+										@input="expired_date_menu = false"
+									/>
+								</v-menu>
+							</v-col>
+						</v-row>
+
+						<v-row>
+							<v-col cols="12">
+								<v-btn
+									color="primary"
+									class="mx-2"
+									@click="doFilter()"
+								>
+									<v-icon left>mdi-magnify</v-icon>
+									<span>{{ 'Apply' }}</span>
+								</v-btn>
+								<v-btn
+									color="error"
+									class="mx-2"
+									@click="resetFilter()"
+								>
+									<v-icon left>mdi-eraser</v-icon>
+									<span>{{ 'Reset' }}</span>
+								</v-btn>
+							</v-col>
+						</v-row>
+					</v-container>
+				</v-card-text>
+			</v-card>
+		</div>
+
 		<v-data-table
 			:headers="headers"
 			:items="desserts"
@@ -111,6 +233,17 @@ export default {
     name: 'CategoryManagement',
     data() {
         return {
+            filter: {
+                category_name: '',
+                created_date: '',
+                expired_date: '',
+
+                isCheck: {
+                    category_name: false,
+                    created_date: false,
+                    expired_date: false,
+                },
+            },
             dialog: false,
             dialogDelete: false,
             headers: [
@@ -142,12 +275,27 @@ export default {
                 carbs: 0,
                 protein: 0,
             },
+
+            created_date_menu: false,
+            expired_date_menu: false,
         };
     },
 
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+        },
+
+        isCheckCategoryName() {
+            return this.filter.isCheck.category_name;
+        },
+
+        isCheckCreatedDate() {
+            return this.filter.isCheck.created_date;
+        },
+
+        isCheckExpiredDate() {
+            return this.filter.isCheck.expired_date;
         },
     },
 
@@ -157,6 +305,18 @@ export default {
         },
         dialogDelete(val) {
             val || this.closeDelete();
+        },
+
+        isCheckCategoryName() {
+            this.filter.category_name = '';
+        },
+
+        isCheckCreatedDate() {
+            this.filter.created_date = '';
+        },
+
+        isCheckExpiredDate() {
+            this.filter.expired_date = '';
         },
     },
 
@@ -290,6 +450,18 @@ export default {
                 this.desserts.push(this.editedItem);
             }
             this.close();
+        },
+
+        doFilter() {
+            //
+        },
+
+        resetFilter() {
+            this.filter.isCheck = {
+                category_name: false,
+                created_date: false,
+                expired_date: false,
+            };
         },
     },
 };
