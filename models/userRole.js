@@ -10,6 +10,10 @@ const userRole = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "role",
   },
+  department: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "department",
+  }
 });
 
 module.exports = mongoose.model("userRole", userRole);

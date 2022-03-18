@@ -15,6 +15,10 @@ const idea = new Schema({
         trim: true,
         require: true,
     },
+    ideaFile: [{
+        type: String,
+        trim: true,
+    }],
     likeCount: {
         type: Number,
         default: 0,
