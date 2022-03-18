@@ -1,14 +1,14 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const idea = new Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+        ref: 'user',
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "category",
+        ref: 'category',
     },
     ideaContent: {
         type: String,
@@ -30,12 +30,12 @@ const idea = new Schema({
     isDisabled: {
         type: Boolean,
         default: false,
-    }
+    },
 }, {
     timestamps: {
-        createdAt: "createdAt",
-        updatedAt: "updatedAt",
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
     },
 });
 
-module.exports = mongoose.model("idea", idea);
+module.exports = mongoose.model('idea', idea);

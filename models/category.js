@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const category = new Schema({
@@ -21,9 +21,9 @@ const category = new Schema({
     },
 }, {
     timestamps: {
-        createdAt: "createdAt",
-        updatedAt: "updatedAt",
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
     },
 });
 
-module.exports = mongoose.model("category", category);
+module.exports = mongoose.model('category', category);

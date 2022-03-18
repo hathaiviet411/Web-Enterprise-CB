@@ -116,19 +116,11 @@
 							<v-card-actions>
 								<v-row>
 									<v-col cols="12">
-										<v-btn
-											color="primary"
-											class="mx-2"
-											@click="doFilter()"
-										>
+										<v-btn color="primary" class="mx-2" @click="doFilter()">
 											<v-icon left>mdi-magnify</v-icon>
 											<span>{{ 'Apply' }}</span>
 										</v-btn>
-										<v-btn
-											color="error"
-											class="mx-2"
-											@click="resetFilter()"
-										>
+										<v-btn color="error" class="mx-2" @click="resetFilter()">
 											<v-icon left>mdi-eraser</v-icon>
 											<span>{{ 'Reset' }}</span>
 										</v-btn>
@@ -149,23 +141,124 @@
 		>
 			<template v-slot:top>
 				<v-toolbar flat>
-					<v-toolbar-title>Category Management</v-toolbar-title>
+					<v-toolbar-title>
+						<span>{{ 'Category Management' }}</span>
+					</v-toolbar-title>
 
 					<v-divider class="mx-4" inset vertical />
 
 					<v-spacer />
 
-					<v-btn color="primary" dark class="mb-2 btn-register">
-						<span class="mdi mdi-window-closed pr-1" />
-						<span>New Category</span>
-					</v-btn>
+					<v-dialog v-model="dialog" max-width="500px">
+						<template v-slot:activator="{ on, attrs }">
+							<v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+								<v-icon left>mdi-plus-box</v-icon>
+								<span>New Category</span>
+							</v-btn>
+						</template>
+						<v-card>
+							<v-card-title>
+								<span class="text-h5">{{ formTitle }}</span>
+							</v-card-title>
+
+							<v-card-text>
+								<v-container>
+									<v-row>
+										<v-col cols="12" sm="12" md="12">
+											<v-text-field
+												v-model="editedItem.categoryName"
+												prepend-inner-icon="mdi-library"
+												label="Category Name"
+											/>
+										</v-col>
+										<v-col cols="12" sm="12" md="12">
+											<v-menu
+												ref="created_date_menu"
+												v-model="created_date_menu"
+												:close-on-content-click="false"
+												transition="scale-transition"
+												offset-y
+												max-width="290px"
+												min-width="auto"
+											>
+												<template v-slot:activator="{ on, attrs }">
+													<v-text-field
+														:value="editedItem.firstClosureDate"
+														label="Created Date"
+														hint="YYYY-mm-dd"
+														persistent-hint
+														prepend-inner-icon="mdi-calendar"
+														readonly
+														v-bind="attrs"
+														v-on="on"
+													>
+														<v-icon v-show="created_date_menu === true" slot="append" color="red" @click="editedItem.firstClosureDate = ''">mdi-close-box</v-icon>
+													</v-text-field>
+												</template>
+												<v-date-picker
+													v-model="editedItem.firstClosureDate"
+													no-title
+													:max="editedItem.finalClosureDate"
+													@input="created_date_menu = false"
+												/>
+											</v-menu>
+										</v-col>
+										<v-col cols="12" sm="12" md="12">
+											<v-menu
+												ref="expired_date_menu"
+												v-model="expired_date_menu"
+												:close-on-content-click="false"
+												transition="scale-transition"
+												offset-y
+												max-width="290px"
+												min-width="auto"
+											>
+												<template v-slot:activator="{ on, attrs }">
+													<v-text-field
+														:value="editedItem.finalClosureDate"
+														label="Expired Date"
+														hint="YYYY-mm-dd"
+														persistent-hint
+														prepend-inner-icon="mdi-calendar"
+														v-bind="attrs"
+														readonly
+														v-on="on"
+													>
+														<v-icon v-show="expired_date_menu === true" slot="append" color="red" @click="editedItem.finalClosureDate = ''">mdi-close-box</v-icon>
+													</v-text-field>
+												</template>
+												<v-date-picker
+													v-model="editedItem.finalClosureDate"
+													no-title
+													:min="editedItem.firstClosureDate"
+													@input="expired_date_menu = false"
+												/>
+											</v-menu>
+										</v-col>
+									</v-row>
+								</v-container>
+							</v-card-text>
+
+							<v-card-actions>
+								<v-spacer />
+								<v-btn color="red darken-1" text @click="close()">
+									<v-icon left>mdi-exit-to-app</v-icon>
+									<span>Cancel</span>
+								</v-btn>
+								<v-btn color="blue darken-1" text @click="save()">
+									<v-icon left>mdi-lead-pencil</v-icon>
+									<span>{{ editedIndex === -1 ? 'Register' : 'Save' }}</span>
+								</v-btn>
+							</v-card-actions>
+						</v-card>
+					</v-dialog>
 
 					<v-dialog v-model="dialogDelete" max-width="500px">
 						<v-card>
 							<v-card-title>
 								<v-row>
 									<v-col cols="12" class="text-center">
-										<span>Are you sure to delete?</span>
+										<span>Are you sure to delete this item?</span>
 									</v-col>
 								</v-row>
 							</v-card-title>
@@ -175,23 +268,26 @@
 									<v-row>
 										<v-col cols="12" sm="12" md="12">
 											<v-text-field
-												:value="tmpStoreData.category_name"
+												v-model="editedItem.categoryName"
 												label="Category Name"
+												prepend-inner-icon="mdi-library"
 												readonly
 											/>
 										</v-col>
 										<v-col cols="12" sm="12" md="12">
 											<v-text-field
-												:value="tmpStoreData.created_date"
+												v-model="editedItem.firstClosureDate"
 												label="Created Date"
 												readonly
+												prepend-inner-icon="mdi-calendar"
 											/>
 										</v-col>
 										<v-col cols="12" sm="12" md="12">
 											<v-text-field
-												:value="tmpStoreData.expired_date"
+												v-model="editedItem.finalClosureDate"
 												label="Expired Date"
 												readonly
+												prepend-inner-icon="mdi-calendar"
 											/>
 										</v-col>
 									</v-row>
@@ -200,17 +296,14 @@
 
 							<v-card-actions>
 								<v-spacer />
-
-								<v-btn tile color="success" class="btn" @click="closeDelete()">
-									<v-icon left>mdi-delete-empty</v-icon>
+								<v-btn color="blue darken-1" text @click="closeDelete()">
+									<v-icon left>mdi-exit-to-app</v-icon>
 									<span>Cancel</span>
 								</v-btn>
-
-								<v-btn tile color="success" class="btn confirm" @click="deleteItemConfirm()">
-									<v-icon left>mdi-delete-empty</v-icon>
-									<span>OK</span>
+								<v-btn color="red darken-1" text @click="deleteItemConfirm()">
+									<v-icon left>mdi-lead-pencil</v-icon>
+									<span>{{ 'Confirm' }}</span>
 								</v-btn>
-								<v-spacer />
 							</v-card-actions>
 						</v-card>
 					</v-dialog>
@@ -218,24 +311,31 @@
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-icon normal class="mr-2" style="color: #542E71;">mdi-pencil</v-icon>
-				<v-icon normal style="color: #CF0000;" @click="deleteItem(item)">mdi-delete</v-icon>
+				<v-icon normal class="mr-2" style="color: #051367;" @click="editItem(item)">mdi-pencil</v-icon>
+				<v-icon normal style="color: #E84545;" @click="deleteItem(item)">mdi-delete</v-icon>
 			</template>
 
 			<template v-slot:no-data>
-				<span>Table is Empty</span>
+				<span>{{ 'Table is Empty' }}</span>
 			</template>
 		</v-data-table>
 	</div>
 </template>
 
 <script>
-import { getCategory, deleteCategory } from '@/api/modules/category';
+// APIs import
+import { getCategory, postCategory, putCategory, deleteCategory } from '@/api/modules/category';
 
+// Helper functions import
 import { convertDateToISO } from '@/utils/handleConvertDateFormat';
+import { MakeToast } from '@/toast/toastMessage';
+import { isPassValidation } from './helper';
 
+// Const APIs Url
 const URL_GET_CATEGORY = '/admin/category';
-const URL_DELETE_CATEGORY = '/qamanager/category';
+const URL_POST_CATEGORY = '/admin/category';
+const URL_PUT_CATEGORY = '/admin/category';
+const URL_DELETE_CATEGORY = '/admin/category';
 
 export default {
     name: 'CategoryManagement',
@@ -255,6 +355,7 @@ export default {
                 },
             },
 
+            dialog: false,
             dialogDelete: false,
 
             vFields: [
@@ -269,11 +370,20 @@ export default {
             created_date_menu: false,
             expired_date_menu: false,
 
-            tmpStoreData: {
+            editedIndex: -1,
+
+            editedItem: {
                 id: '',
-                category_name: '',
-                created_date: '',
-                expired_date: '',
+                categoryName: '',
+                firstClosureDate: '',
+                finalClosureDate: '',
+            },
+
+            defaultItem: {
+                id: '',
+                categoryName: '',
+                firstClosureDate: '',
+                finalClosureDate: '',
             },
         };
     },
@@ -290,6 +400,10 @@ export default {
         isCheckExpiredDate() {
             return this.filter.isCheck.expired_date;
         },
+
+        formTitle() {
+            return this.editedIndex === -1 ? 'New Category' : 'Edit Category';
+        },
     },
 
     watch: {
@@ -304,9 +418,17 @@ export default {
         isCheckExpiredDate() {
             this.filter.expired_date = '';
         },
+
+        dialog(val) {
+            val || this.close();
+        },
+
+        dialogDelete(val) {
+            val || this.closeDelete();
+        },
     },
 
-    created() {
+    mounted() {
         this.getCategoryData();
     },
 
@@ -331,35 +453,114 @@ export default {
             //
         },
 
-        deleteItem(item) {
-            this.dialogDelete = true;
+        async createNewCategory() {
+            if (isPassValidation(this.editedItem) === true) {
+                this.close();
+                try {
+                    const response = await postCategory(URL_POST_CATEGORY, this.editedItem);
+                    if (response.status === true) {
+                        MakeToast({
+                            variant: 'success',
+                            title: 'Success',
+                            content: 'Create Successful',
+                        });
 
-            this.tmpStoreData = {
+                        this.getCategoryData();
+                    }
+                } catch (error) {
+                    console.log(error.message);
+                }
+            }
+        },
+
+        async updateCategory(DATA) {
+            const URL = `${URL_PUT_CATEGORY}/${DATA.id}`;
+            if (isPassValidation(DATA) === true) {
+                this.close();
+                try {
+                    const response = await putCategory(URL, DATA);
+
+                    if (response.status === true) {
+                        MakeToast({
+                            variant: 'success',
+                            title: 'Success',
+                            content: 'Update Successful',
+                        });
+
+                        this.getCategoryData();
+                    }
+                } catch (error) {
+                    console.log(error.message);
+                }
+            }
+        },
+
+        async removeCategory(ID) {
+            this.closeDelete();
+            const URL = `${URL_DELETE_CATEGORY}/${ID}`;
+            try {
+                const response = await deleteCategory(URL);
+                if (response.status === true) {
+                    MakeToast({
+                        variant: 'success',
+                        title: 'Success',
+                        content: 'Delete Successful',
+                    });
+
+                    this.getCategoryData();
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        },
+
+        editItem(item) {
+            this.editedIndex = this.vItems.indexOf(item);
+            this.editedItem = {
                 id: item._id,
-                category_name: item.categoryName,
-                created_date: item.firstClosureDate,
-                expired_date: item.finalClosureDate,
+                categoryName: item.categoryName,
+                firstClosureDate: convertDateToISO(item.firstClosureDate),
+                finalClosureDate: convertDateToISO(item.finalClosureDate),
             };
+            this.dialog = true;
+        },
+
+        deleteItem(item) {
+            this.editedIndex = this.vItems.indexOf(item);
+            this.editedItem = {
+                id: item._id,
+                categoryName: item.categoryName,
+                firstClosureDate: convertDateToISO(item.firstClosureDate),
+                finalClosureDate: convertDateToISO(item.finalClosureDate),
+            };
+            this.dialogDelete = true;
+        },
+
+        deleteItemConfirm() {
+            this.removeCategory(this.editedItem.id);
+        },
+
+        close() {
+            this.dialog = false;
+            this.$nextTick(() => {
+                this.editedItem = Object.assign({}, this.defaultItem);
+                this.editedIndex = -1;
+            });
         },
 
         closeDelete() {
             this.dialogDelete = false;
-
-            this.tmpStoreData = {
-                id: '',
-                category_name: '',
-                created_date: '',
-                expired_date: '',
-            };
+            this.$nextTick(() => {
+                this.editedItem = Object.assign({}, this.defaultItem);
+                this.editedIndex = -1;
+            });
         },
 
-        async deleteItemConfirm() {
-            try {
-                const URL = `${URL_DELETE_CATEGORY}/${this.tmpStoreData.id}`;
-                const response = await deleteCategory(URL);
-                console.log(response);
-            } catch (error) {
-                console.log(error.message);
+        save() {
+            if (this.editedIndex > -1) {
+                this.updateCategory(this.editedItem);
+            } else {
+                this.createNewCategory();
             }
         },
 
