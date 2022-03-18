@@ -2,7 +2,6 @@ const Koa = require("koa");
 const app = new Koa();
 const koaBody = require("koa-body");
 const router = require("./routes");
-const path = require("path");
 const db = require("./config/db");
 const koaStatic = require("koa-static");
 const morgan = require("koa-morgan");

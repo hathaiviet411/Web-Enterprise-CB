@@ -1,5 +1,5 @@
 const verifyAdmin = (user) => {
-  return user.role.roleName === "admin";
+  return user.role.roleName === "Admin";
 };
 
 const verifyQAManager = (user) => {
