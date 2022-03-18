@@ -2,12 +2,13 @@ const Koa = require("koa");
 const app = new Koa();
 const koaBody = require("koa-body");
 const router = require("./routes");
-const path = require("path");
 const db = require("./config/db");
 const koaStatic = require("koa-static");
 const morgan = require("koa-morgan");
 const fs = require("fs");
 const passport = require("koa-passport");
+const { Server } = require("socket.io");
+const { createServer } = require("http");
 db.connect();
 
 app.use(passport.initialize());
@@ -85,7 +86,14 @@ app.use(async (ctx, next) => {
 
 app.use(router);
 
+const httpServer = createServer(app.callback());
+const io = new Server(httpServer, { /* options */ });
+
+io.on("connection", (socket) => {
+  // ...
+});
+
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log("Server is running on port: " + PORT);
 });

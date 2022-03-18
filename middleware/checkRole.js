@@ -1,5 +1,5 @@
 const verifyAdmin = (user) => {
-  return user.role.roleName === "admin";
+  return user.role.roleName === "Admin";
 };
 
 const verifyQAManager = (user) => {
@@ -16,6 +16,7 @@ const verifyStaff = (user) => {
 module.exports = {
   checkAdmin: (ctx, next) => {
     const user = ctx.state.user;
+    console.log(user)
     if (!verifyAdmin(user)) {
       ctx.status = 401;
       return (ctx.body = {
