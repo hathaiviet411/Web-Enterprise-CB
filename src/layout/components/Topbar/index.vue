@@ -1,5 +1,5 @@
 <template>
-	<v-app-bar app elevate-on-scroll elevation="3" color="white">
+	<v-app-bar app elevation="6" color="white">
 		<v-app-bar-nav-icon @click="$emit('drawerEvent')" />
 		<v-spacer />
 		<!-- <v-col lg="6" cols="12">

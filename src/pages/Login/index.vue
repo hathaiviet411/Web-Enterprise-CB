@@ -41,18 +41,13 @@
 
 											<b-row>
 												<b-col cols="12">
-													<b-button variant="light" class="btn-sign-up">
-														<v-icon left>mdi-account-plus</v-icon>
-														<span>Sign up</span>
-													</b-button>
+													<v-img src="@/assets/images/banner.png" min-width="100%" />
 												</b-col>
 											</b-row>
 
 											<b-row class="mt-3">
 												<b-col cols="12" class="text-center">
-													<span
-														class="login-option-suggest"
-													>or Sign in with CLS Account</span>
+													<span class="login-option-suggest">Please contact with administrator if you do not have an account.</span>
 												</b-col>
 											</b-row>
 
@@ -112,12 +107,8 @@
 											</b-row>
 
 											<b-row class="footer-description">
-												<b-col cols="6">
-													<span>Not Registered Yet?</span>
-												</b-col>
-												<v-spacer />
-												<b-col cols="6" class="text-right" :disabled="isProcess">
-													<span class="create-account-text">Create an account</span>
+												<b-col class="text-center" cols="12">
+													<span>Copyright ©FGW 2021 All Rights Reserved</span>
 												</b-col>
 											</b-row>
 										</div>
@@ -315,7 +306,7 @@ export default {
 	}
 
 	.login-option-suggest {
-		opacity: 0.6;
+		opacity: 0.8;
 	}
 
 	.login-description {
