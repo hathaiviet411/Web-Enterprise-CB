@@ -83,7 +83,7 @@
 					</v-list-item-content>
 				</v-list-item>
 				<v-divider />
-				<v-list-item v-for="(menu, i) in menus" :key="i" link>
+				<v-list-item v-for="(menu, index) in menus" :key="index" link @click="handleProfileAction(menu)">
 					<v-list-item-icon>
 						<v-icon>{{ menu.icon }}</v-icon>
 					</v-list-item-icon>
@@ -110,38 +110,38 @@ export default {
             items: [
                 {
                     avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-                    title: 'Brunch this weekend?',
+                    title: 'Trăng Trong Nước',
                     subtitle: `<span class="text--primary">Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
                 },
                 { divider: true, inset: true },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-                    title: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-                    subtitle: `<span class="text--primary">to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend.`,
-                },
-                { divider: true, inset: true },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-                    title: 'Oui oui',
-                    subtitle:
-            '<span class="text--primary">Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?',
-                },
-                { divider: true, inset: true },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-                    title: 'Birthday gift',
-                    subtitle:
-            '<span class="text--primary">Trevor Hansen</span> &mdash; Have any ideas about what we should get Heidi for her birthday?',
-                },
-                { divider: true, inset: true },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
-                    title: 'Recipe to try',
-                    subtitle:
-            '<span class="text--primary">Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.',
-                },
             ],
         };
+    },
+    methods: {
+        handleProfileAction(action) {
+            const ACTION = action.title;
+            const PROFILE = 'Profile';
+            const CHANGE_PASSWORD = 'Change Password';
+            const SETTING = 'Setting';
+            const LOGOUT = 'Logout';
+
+            switch (ACTION) {
+                case PROFILE:
+                    this.$router.push('/profile');
+                    break;
+                case CHANGE_PASSWORD:
+                    this.$router.push('/change-password');
+                    break;
+                case SETTING:
+                    this.$router.push('/setting');
+                    break;
+                case LOGOUT:
+                    this.$router.push('/login');
+                    break;
+                default:
+                    break;
+            }
+        },
     },
 };
 </script>

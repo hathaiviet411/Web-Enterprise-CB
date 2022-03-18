@@ -13,16 +13,10 @@
 												id="logo"
 												fluid
 												center
+												min-height="100%"
 												:src="LoginIllustration"
 												alt="Logo"
 											/>
-											<h2 class="first-slogan">
-												Turn your ideal into reality.
-											</h2>
-											<span
-												class="second-slogan"
-											>Collect Ideals System - Give away your IDEALS - Receive
-												your FUTURE</span>
 										</div>
 									</b-col>
 
@@ -32,7 +26,6 @@
 												<b-col cols="12">
 													<v-img
 														id="oval-1"
-														mix-height="100%"
 														:src="OvalIllustration"
 														alt="oval-1"
 													/>
@@ -233,16 +226,6 @@ export default {
 	background-color: $tequila;
 	height: 100%;
 	text-align: center;
-
-	.first-slogan {
-		color: $tawny-port;
-		font-weight: 600;
-	}
-
-	.second-slogan {
-		color: $tawny-port;
-		font-weight: 400;
-	}
 }
 
 .login-form {

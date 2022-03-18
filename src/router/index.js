@@ -15,7 +15,7 @@ import setting from './modules/setting';
 export const constantRoutes = [
     {
         path: '/',
-        redirect: { name: 'DashboardIndex' },
+        redirect: { name: 'Login' },
         hidden: true,
     },
     login,
