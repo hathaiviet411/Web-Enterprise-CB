@@ -10,7 +10,7 @@
 				<v-toolbar
 					flat
 				>
-					<v-toolbar-title>Ideal Management</v-toolbar-title>
+					<v-toolbar-title>idea Management</v-toolbar-title>
 
 					<v-divider class="mx-4" inset vertical />
 
@@ -18,7 +18,7 @@
 
 					<v-btn color="primary" dark class="mb-2 btn-register">
 						<span class="mdi mdi-account-plus pr-1" />
-						<span>New Ideal</span>
+						<span>New idea</span>
 					</v-btn>
 
 					<v-dialog v-model="dialogDelete" max-width="500px">
@@ -104,13 +104,13 @@
 
 <script>
 export default {
-    name: 'IdealManagement',
+    name: 'IdeaManagement',
     data() {
         return {
             dialog: false,
             dialogDelete: false,
             headers: [
-                { text: 'Ideal', align: 'start', sortable: false, value: 'ideal_name' },
+                { text: 'idea', align: 'start', sortable: false, value: 'idea_name' },
                 { text: 'Category', value: 'category' },
                 { text: 'Views (k)', value: 'view' },
                 { text: 'Comments (k)', value: 'comment' },
@@ -160,7 +160,7 @@ export default {
         initialize() {
             this.desserts = [
                 {
-                    ideal_name: 'Frozen Yogurt',
+                    idea_name: 'Frozen Yogurt',
                     category: 159,
                     view: 6,
                     comment: 24,
@@ -168,7 +168,7 @@ export default {
                     dislike: 2,
                 },
                 {
-                    ideal_name: 'Ice cream sandwich',
+                    idea_name: 'Ice cream sandwich',
                     category: 237,
                     view: 9,
                     comment: 37,
@@ -176,7 +176,7 @@ export default {
                     dislike: 9,
                 },
                 {
-                    ideal_name: 'Eclair',
+                    idea_name: 'Eclair',
                     category: 262,
                     view: 16,
                     comment: 23,
@@ -184,7 +184,7 @@ export default {
                     dislike: 2,
                 },
                 {
-                    ideal_name: 'Cupcake',
+                    idea_name: 'Cupcake',
                     category: 305,
                     view: 3.7,
                     comment: 67,
@@ -192,7 +192,7 @@ export default {
                     dislike: 8,
                 },
                 {
-                    ideal_name: 'Gingerbread',
+                    idea_name: 'Gingerbread',
                     category: 356,
                     view: 16,
                     comment: 49,
@@ -200,7 +200,7 @@ export default {
                     dislike: 16,
                 },
                 {
-                    ideal_name: 'Jelly bean',
+                    idea_name: 'Jelly bean',
                     category: 375,
                     view: 2,
                     comment: 94,
@@ -208,7 +208,7 @@ export default {
                     dislike: 1,
                 },
                 {
-                    ideal_name: 'Lollipop',
+                    idea_name: 'Lollipop',
                     category: 392,
                     view: 0.2,
                     comment: 98,
@@ -216,7 +216,7 @@ export default {
                     dislike: 2,
                 },
                 {
-                    ideal_name: 'Honeycomb',
+                    idea_name: 'Honeycomb',
                     category: 408,
                     view: 3.2,
                     comment: 87,
@@ -224,7 +224,7 @@ export default {
                     dislike: 21,
                 },
                 {
-                    ideal_name: 'Donut',
+                    idea_name: 'Donut',
                     category: 452,
                     view: 25,
                     comment: 51,
@@ -232,7 +232,7 @@ export default {
                     dislike: 22,
                 },
                 {
-                    ideal_name: 'KitKat',
+                    idea_name: 'KitKat',
                     category: 518,
                     view: 26,
                     comment: 65,

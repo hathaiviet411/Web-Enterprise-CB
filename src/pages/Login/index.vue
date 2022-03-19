@@ -35,7 +35,7 @@
 											<b-row class="login-description">
 												<b-col cols="12">
 													<h2>Join us</h2>
-													<span>To contribute your ideals to the community</span>
+													<span>To contribute your ideas to the community</span>
 												</b-col>
 											</b-row>
 
