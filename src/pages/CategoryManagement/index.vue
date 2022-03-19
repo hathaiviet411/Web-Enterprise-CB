@@ -41,8 +41,8 @@
 										</v-col>
 										<v-col lg="11" sm="11" md="11">
 											<v-menu
-												ref="created_date_menu"
-												v-model="created_date_menu"
+												ref="filter_created_date_menu"
+												v-model="filter_created_date_menu"
 												:close-on-content-click="false"
 												transition="scale-transition"
 												offset-y
@@ -67,7 +67,7 @@
 													v-model="filter.created_date"
 													no-title
 													:max="filter.expired_date"
-													@input="created_date_menu = false"
+													@input="filter_created_date_menu = false"
 												/>
 											</v-menu>
 										</v-col>
@@ -79,8 +79,8 @@
 										</v-col>
 										<v-col lg="11" sm="11" md="11">
 											<v-menu
-												ref="expired_date_menu"
-												v-model="expired_date_menu"
+												ref="filter_expired_date_menu"
+												v-model="filter_expired_date_menu"
 												:close-on-content-click="false"
 												transition="scale-transition"
 												offset-y
@@ -105,7 +105,7 @@
 													v-model="filter.expired_date"
 													no-title
 													:min="filter.created_date"
-													@input="expired_date_menu = false"
+													@input="filter_expired_date_menu = false"
 												/>
 											</v-menu>
 										</v-col>
@@ -138,6 +138,7 @@
 			:items="vItems"
 			sort-by="categoryName"
 			class="elevation-12"
+			:search="search"
 		>
 			<template v-slot:top>
 				<v-toolbar flat>
@@ -146,6 +147,16 @@
 					</v-toolbar-title>
 
 					<v-divider class="mx-4" inset vertical />
+
+					<v-spacer />
+
+					<v-text-field
+						v-model="search"
+						append-icon="mdi-magnify"
+						label="Search"
+						single-line
+						hide-details
+					/>
 
 					<v-spacer />
 
@@ -173,8 +184,8 @@
 										</v-col>
 										<v-col cols="12" sm="12" md="12">
 											<v-menu
-												ref="created_date_menu"
-												v-model="created_date_menu"
+												ref="add_created_date_menu"
+												v-model="add_created_date_menu"
 												:close-on-content-click="false"
 												transition="scale-transition"
 												offset-y
@@ -192,21 +203,21 @@
 														v-bind="attrs"
 														v-on="on"
 													>
-														<v-icon v-show="created_date_menu === true" slot="append" color="red" @click="editedItem.firstClosureDate = ''">mdi-close-box</v-icon>
+														<v-icon v-show="add_created_date_menu === true" slot="append" color="red" @click="editedItem.firstClosureDate = ''">mdi-close-box</v-icon>
 													</v-text-field>
 												</template>
 												<v-date-picker
 													v-model="editedItem.firstClosureDate"
 													no-title
 													:max="editedItem.finalClosureDate"
-													@input="created_date_menu = false"
+													@input="add_created_date_menu = false"
 												/>
 											</v-menu>
 										</v-col>
 										<v-col cols="12" sm="12" md="12">
 											<v-menu
-												ref="expired_date_menu"
-												v-model="expired_date_menu"
+												ref="add_expired_date_menu"
+												v-model="add_expired_date_menu"
 												:close-on-content-click="false"
 												transition="scale-transition"
 												offset-y
@@ -224,14 +235,14 @@
 														readonly
 														v-on="on"
 													>
-														<v-icon v-show="expired_date_menu === true" slot="append" color="red" @click="editedItem.finalClosureDate = ''">mdi-close-box</v-icon>
+														<v-icon v-show="add_expired_date_menu === true" slot="append" color="red" @click="editedItem.finalClosureDate = ''">mdi-close-box</v-icon>
 													</v-text-field>
 												</template>
 												<v-date-picker
 													v-model="editedItem.finalClosureDate"
 													no-title
 													:min="editedItem.firstClosureDate"
-													@input="expired_date_menu = false"
+													@input="add_expired_date_menu = false"
 												/>
 											</v-menu>
 										</v-col>
@@ -318,6 +329,16 @@
 			<template v-slot:no-data>
 				<span>{{ 'Table is Empty' }}</span>
 			</template>
+
+			<!-- <template v-slot:footer class="mt-3">
+				<div class="text-center pb-3 pt-3">
+					<v-pagination
+						v-model="pagination.currentPage"
+						:length="pagination.totalPage"
+						circle
+					/>
+				</div>
+			</template> -->
 		</v-data-table>
 	</div>
 </template>
@@ -359,16 +380,22 @@ export default {
             dialogDelete: false,
 
             vFields: [
-                { text: 'Category Name', value: 'categoryName', sortable: true, align: 'center' },
-                { text: 'Created Date', value: 'firstClosureDate', sortable: true, align: 'center' },
-                { text: 'Expired Date', value: 'finalClosureDate', sortable: true, align: 'center' },
-                { text: 'Actions', value: 'actions', sortable: false, align: 'center' },
+                { text: 'Category Name', value: 'categoryName', sortable: true, align: 'start' },
+                { text: 'Created Date', value: 'firstClosureDate', sortable: true },
+                { text: 'Expired Date', value: 'finalClosureDate', sortable: true },
+                { text: 'Actions', value: 'actions', sortable: false },
             ],
 
             vItems: [],
 
-            created_date_menu: false,
-            expired_date_menu: false,
+            filter_created_date_menu: false,
+            filter_expired_date_menu: false,
+
+            edit_created_date_menu: false,
+            edit_expired_date_menu: false,
+
+            add_created_date_menu: false,
+            add_expired_date_menu: false,
 
             editedIndex: -1,
 
@@ -385,6 +412,14 @@ export default {
                 firstClosureDate: '',
                 finalClosureDate: '',
             },
+
+            pagination: {
+                currentPage: 1,
+                perPage: 10,
+                totalPage: 2,
+            },
+
+            search: '',
         };
     },
 
