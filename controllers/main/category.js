@@ -58,9 +58,16 @@ module.exports = {
             });
         }
 
-        await Category.deleteOne({
+        const deleteCategory = await Category.deleteOne({
             _id: id,
         });
+        console.log(deleteCategory)
+        if(deleteCategory.deletedCount === 0 ) {
+            return (ctx.body = {
+                status: false,
+                message: 'no category found',
+            });
+        }
         return (ctx.body = {
             status: true,
             message: 'delete category success',
