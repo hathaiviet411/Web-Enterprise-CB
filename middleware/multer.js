@@ -9,7 +9,5 @@ const storage = multer.diskStorage({
         cb(null, `${file.fieldname}-${Date.now().toString(16)}.${type}`)
     }
 });
-const limits = {
-    fileSize: 5000000, //File Size Unit
-}
-module.exports = multer({ storage, limits });
+
+module.exports = multer({ storage });
