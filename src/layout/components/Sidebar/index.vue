@@ -57,8 +57,8 @@ export default {
                 },
                 {
                     icon: 'mdi-card-account-details-outline',
-                    name: 'Ideal',
-                    url: '/ideal/index',
+                    name: 'Idea',
+                    url: '/idea/index',
                     disabled: false,
                 },
                 {

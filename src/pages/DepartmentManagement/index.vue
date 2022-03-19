@@ -111,7 +111,7 @@ export default {
             dialogDelete: false,
             vFields: [
                 { text: 'Department Name', align: 'start', sortable: false, value: 'name' },
-                { text: 'Ideal Contributed', value: 'ideal' },
+                { text: 'Idea Contributed', value: 'idea' },
                 { text: 'Staff', value: 'staff' },
                 { text: 'Actions', value: 'actions', sortable: false },
             ],
@@ -159,12 +159,12 @@ export default {
                 {
                     name: 'Hanoi',
                     staff: '6k',
-                    ideal: '24123k',
+                    idea: '24123k',
                 },
                 {
                     name: 'Hochiminh City',
                     staff: 'k',
-                    ideal: '9k',
+                    idea: '9k',
                 },
             ];
         },

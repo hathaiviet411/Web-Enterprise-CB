@@ -8,7 +8,7 @@ import login from './modules/login';
 import dashboard from './modules/dashboard';
 import user from './modules/user';
 import category from './modules/category';
-import ideal from './modules/ideal';
+import idea from './modules/idea';
 import department from './modules/department';
 import setting from './modules/setting';
 
@@ -25,7 +25,7 @@ export const asyncRoutes = [
     dashboard,
     user,
     category,
-    ideal,
+    idea,
     department,
     setting,
 ];

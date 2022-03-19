@@ -10,7 +10,7 @@
 		<v-row>
 			<v-col lg="7" cols="12">
 				<v-alert dense text type="success">
-					Login Successfully! Welcome to <strong>Collect Ideal System</strong>
+					Login Successfully! Welcome to <strong>Collect Idea System</strong>
 				</v-alert>
 				<v-row>
 					<v-col v-for="(item,index) in activityLog" :key="index" lg="6" cols="12">
@@ -51,14 +51,14 @@
 							<v-timeline-item color="yellow" small>
 								<strong>44 Minutes ago</strong>
 								<div class="text-caption">
-									A new ideal has been added to Sport category!
+									A new idea has been added to Sport category!
 								</div>
 							</v-timeline-item>
 
 							<v-timeline-item color="red" small>
 								<strong>1,5 hours ago</strong>
 								<div class="text-caption">
-									An ideal has been removed from Food category!
+									An idea has been removed from Food category!
 								</div>
 							</v-timeline-item>
 						</v-timeline>
@@ -87,17 +87,17 @@
 
 <script>
 export default {
-    ideal_name: 'Dashboard',
+    idea_name: 'Dashboard',
     data() {
         return {
             activityLog: [
                 { title: 'Total User', amount: 50, icon: 'mdi-account', color: 'cyan lighten-3' },
-                { title: 'Total Ideal', amount: '245.7k', icon: 'mdi-account-group-outline', color: 'green darken-2' },
+                { title: 'Total Idea', amount: '245.7k', icon: 'mdi-account-group-outline', color: 'green darken-2' },
                 { title: 'Total Category', amount: 237, icon: 'mdi-account-group-outline', color: 'blue-grey darken-1' },
                 { title: 'Staffs', amount: 3433, icon: 'mdi-account-group-outline', color: 'deep-orange darken-1' },
             ],
             headers: [
-                { text: 'Ideal', align: 'start', sortable: false, value: 'ideal_name' },
+                { text: 'Idea', align: 'start', sortable: false, value: 'idea_name' },
                 { text: 'Category', value: 'category' },
                 { text: 'Views (k)', value: 'view' },
                 { text: 'Comments (k)', value: 'comment' },
@@ -107,7 +107,7 @@ export default {
             ],
             desserts: [
                 {
-                    ideal_name: 'Frozen Yogurt',
+                    idea_name: 'Frozen Yogurt',
                     category: 159,
                     view: 6,
                     comment: 24,
@@ -115,7 +115,7 @@ export default {
                     dislike: 2,
                 },
                 {
-                    ideal_name: 'Ice cream sandwich',
+                    idea_name: 'Ice cream sandwich',
                     category: 237,
                     view: 9,
                     comment: 37,
@@ -123,7 +123,7 @@ export default {
                     dislike: 9,
                 },
                 {
-                    ideal_name: 'Eclair',
+                    idea_name: 'Eclair',
                     category: 262,
                     view: 16,
                     comment: 23,
@@ -131,7 +131,7 @@ export default {
                     dislike: 2,
                 },
                 {
-                    ideal_name: 'Cupcake',
+                    idea_name: 'Cupcake',
                     category: 305,
                     view: 3.7,
                     comment: 67,
@@ -139,7 +139,7 @@ export default {
                     dislike: 8,
                 },
                 {
-                    ideal_name: 'Gingerbread',
+                    idea_name: 'Gingerbread',
                     category: 356,
                     view: 16,
                     comment: 49,
@@ -147,7 +147,7 @@ export default {
                     dislike: 16,
                 },
                 {
-                    ideal_name: 'Jelly bean',
+                    idea_name: 'Jelly bean',
                     category: 375,
                     view: 2,
                     comment: 94,
@@ -155,7 +155,7 @@ export default {
                     dislike: 1,
                 },
                 {
-                    ideal_name: 'Lollipop',
+                    idea_name: 'Lollipop',
                     category: 392,
                     view: 0.2,
                     comment: 98,
@@ -163,7 +163,7 @@ export default {
                     dislike: 2,
                 },
                 {
-                    ideal_name: 'Honeycomb',
+                    idea_name: 'Honeycomb',
                     category: 408,
                     view: 3.2,
                     comment: 87,
@@ -171,7 +171,7 @@ export default {
                     dislike: 21,
                 },
                 {
-                    ideal_name: 'Donut',
+                    idea_name: 'Donut',
                     category: 452,
                     view: 25,
                     comment: 51,
@@ -179,7 +179,7 @@ export default {
                     dislike: 22,
                 },
                 {
-                    ideal_name: 'KitKat',
+                    idea_name: 'KitKat',
                     category: 518,
                     view: 26,
                     comment: 65,
