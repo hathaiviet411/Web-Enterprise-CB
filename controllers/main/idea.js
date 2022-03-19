@@ -3,6 +3,11 @@ const User = require("../../models/user");
 const UserRole = require("../../models/userRole");
 const Role = require("../../models/role");
 const sendEmail = require("../../middleware/nodemailer")
+require('dotenv').config();
+
+const getPath = (path) => {
+    return process.env.BASE_URL + "/" + path[path.length - 2] + "/" + path[path.length - 1];
+};
 
 module.exports = {
     getIdea: async (ctx) => {
@@ -16,8 +21,14 @@ module.exports = {
 
     createIdea: async (ctx) => {
         const idea = new Idea(ctx.request.body);
-        // console.log(ctx.request.files)
-        // await Idea.save();
+        console.log(ctx.request.files)
+        for (let i = 0; i < ctx.request.files.ideaFile.length; i++) {
+            let ideaFilePath = ctx.request.files.ideaFile[i].path.split("\\");
+            idea.ideaFile[i] = getPath(ideaFilePath);
+        }
+
+        const a = await idea.save();
+        console.log(a)
         const user = ctx.state.user;
         const role = await Role.findOne({
             roleName: "Quality Assurance Coordinator"
@@ -83,9 +94,17 @@ module.exports = {
                 message: "cannot delete others' idea",
             });
         }
-        await Idea.deleteOne({
+        const deleteIdea = await Idea.deleteOne({
             _id: id
         })
+
+        if (deleteIdea.deletedCount === 0) {
+            return (ctx.body = {
+                status: false,
+                message: 'no idea found',
+            });
+        }
+
         return (ctx.body = {
             status: true,
             message: "delete idea success",

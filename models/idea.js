@@ -19,14 +19,6 @@ const idea = new Schema({
         type: String,
         trim: true,
     }],
-    likeCount: {
-        type: Number,
-        default: 0,
-    },
-    dislikeCount: {
-        type: Number,
-        default: 0,
-    },
     isAnonymous: {
         type: Boolean,
         default: false,
