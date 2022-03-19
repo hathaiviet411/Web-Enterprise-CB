@@ -27,7 +27,7 @@ app.use(
 );
 app.use(koaStatic(__dirname + '/public'));
 
-app.use(async function(ctx, next) {
+app.use(async function (ctx, next) {
     // Website you wish to allow to connect
     ctx.set('Access-Control-Allow-Origin', '*');
 
@@ -53,7 +53,7 @@ app.use(async function(ctx, next) {
     await next();
 });
 
-app.use(async(ctx, next) => {
+app.use(async (ctx, next) => {
     // ERROR HANLDER
 
     try {

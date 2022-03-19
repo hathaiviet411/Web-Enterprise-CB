@@ -58,7 +58,7 @@ module.exports = {
             });
         }
 
-        await category.deleteOne({
+        await Category.deleteOne({
             _id: id,
         });
         return (ctx.body = {

@@ -14,19 +14,25 @@ router.use('/auth', auth);
 // Admin api
 router.use(
     '/admin',
-    passport.authenticate('jwt-access', { failWithError: true }),
+    passport.authenticate('jwt-access', {
+        failWithError: true
+    }),
     checkRole.checkAdmin,
     admin
 );
 
 router.use(
     '/qamanager',
-    passport.authenticate('jwt-access', { failWithError: true }),
+    passport.authenticate('jwt-access', {
+        failWithError: true
+    }),
     checkRole.checkQAM,
     QAM
 );
 
-router.use(passport.authenticate("jwt-access", { failWithError: true }), idea)
+router.use(passport.authenticate("jwt-access", {
+    failWithError: true
+}), idea)
 
 
 

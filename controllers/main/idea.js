@@ -19,9 +19,16 @@ module.exports = {
         // console.log(ctx.request.files)
         // await Idea.save();
         const user = ctx.state.user;
-        const role = await Role.findOne({ roleName: "Quality Assurance Coordinator" }).lean();
-        const userRole = await UserRole.findOne({ user: user.user._id }).lean();
-        const QAC = await UserRole.findOne({ role: role._id, department: userRole.department }).populate("user", "email").lean();
+        const role = await Role.findOne({
+            roleName: "Quality Assurance Coordinator"
+        }).lean();
+        const userRole = await UserRole.findOne({
+            user: user.user._id
+        }).lean();
+        const QAC = await UserRole.findOne({
+            role: role._id,
+            department: userRole.department
+        }).populate("user", "email").lean();
         sendEmail({
             to: QAC.user.email,
             subject: "New idea"
@@ -38,7 +45,9 @@ module.exports = {
             ideaContent
         } = ctx.request.body
         const user = ctx.state.user
-        const idea = await Idea.findOne({ _id: id }).lean()
+        const idea = await Idea.findOne({
+            _id: id
+        }).lean()
         if (idea.user.toString() !== user.toString()) {
             return (ctx.body = {
                 status: false,
@@ -65,7 +74,9 @@ module.exports = {
                 message: "id not found"
             })
         }
-        const idea = await Idea.findOne({ _id: id }).lean()
+        const idea = await Idea.findOne({
+            _id: id
+        }).lean()
         if (idea.user.toString() !== user.toString()) {
             return (ctx.body = {
                 status: false,
