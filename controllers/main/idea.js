@@ -11,12 +11,30 @@ const getPath = (path) => {
 
 module.exports = {
     getIdea: async (ctx) => {
+        const page = ctx.params.page
+        const pageSize = 5;
+        if (page) {
+            page = parseInt(page)
+            const skip = (page - 1) * pageSize;
+            const idea = await Idea.find({}).skip(skip).limit(pageSize).lean();
+            const totalPage = parseInt(idea.length()/5);
+            const totalRecord = idea.length()
+            return (ctx.body = {
+                status: true,
+                message: "get idea success",
+                page,
+                totalPage,
+                totalRecord,
+                idea
+            })
+        }
         const idea = await Idea.find({}).lean();
         return (ctx.body = {
             status: true,
             message: "get idea success",
             idea
         })
+
     },
 
     createIdea: async (ctx) => {
