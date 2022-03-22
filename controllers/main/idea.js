@@ -12,7 +12,8 @@ const getPath = (path) => {
 
 module.exports = {
     getIdea: async (ctx) => {
-        let page = ctx.params.page
+        let page = ctx.query.page;
+        let filter = ctx.params.filter;
         const pageSize = 5;
         if (page) {
             page = parseInt(page)
@@ -81,7 +82,7 @@ module.exports = {
     },
 
     updateIdea: async (ctx) => {
-        const id = ctx.request.params.id;
+        const id = ctx.params.id;
         const {
             ideaContent
         } = ctx.request.body
@@ -113,7 +114,7 @@ module.exports = {
     },
 
     deleteIdea: async (ctx) => {
-        const id = ctx.request.params.id;
+        const id = ctx.params.id;
         const user = ctx.state.user
         if (!id || id === undefined) {
             return (ctx.body = {
@@ -149,7 +150,7 @@ module.exports = {
 
     agreeTerm: async (ctx) => {
         const isAgreedTerm = ctx.request.body.isAgreedTerm;
-        const user = ctx.request.params.user
+        const user = ctx.params.user
         console.log(isAgreedTerm)
         if (isAgreedTerm === 'true') {
             await User.updateOne({

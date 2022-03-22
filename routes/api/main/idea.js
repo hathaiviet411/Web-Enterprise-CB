@@ -3,7 +3,7 @@ const router = new Router();
 const controller = require("../../../controllers/main/idea")
 const multer = require("../../../middleware/multer");
 
-router.get("/idea/:page", controller.getIdea)
+router.get("/idea/:filter", controller.getIdea)
 
 router.post("/idea", multer.fields([{ name: 'ideaFile' }]), controller.createIdea)
 

@@ -4,6 +4,7 @@ const admin = require("./admin");
 const QAM = require("./QA manager")
 const auth = require("./auth/auth");
 const idea = require("./main/idea")
+const comment = require("./main/comment")
 const passport = require("koa-passport");
 const checkRole = require("../../middleware/checkRole");
 require("../../middleware/passport");
@@ -35,6 +36,13 @@ router.use(
         failWithError: true
     }),
     idea
+);
+
+router.use(
+    passport.authenticate("jwt-access", {
+        failWithError: true
+    }),
+    comment
 );
 
 

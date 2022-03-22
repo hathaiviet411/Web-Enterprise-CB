@@ -7,6 +7,13 @@ const koaStatic = require('koa-static');
 const morgan = require('koa-morgan');
 const fs = require('fs');
 const passport = require('koa-passport');
+const {
+    createServer
+} = require("http");
+const {
+    Server
+} = require("socket.io");
+
 db.connect();
 
 app.use(passport.initialize());
@@ -84,7 +91,13 @@ app.use(async (ctx, next) => {
 
 app.use(router);
 
+const httpServer = createServer(app.callback());
+const io = new Server(httpServer, {
+    /* options */ });
+io.on("connection", (socket) => {
+    // ...
+});
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
     console.log('Server is running on port: ' + PORT);
 });
