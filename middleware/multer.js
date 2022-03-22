@@ -9,4 +9,17 @@ const storage = multer.diskStorage({
         cb(null, `${file.fieldname}-${Date.now().toString(16)}.${type}`)
     }
 });
-module.exports = multer({ storage });
+
+const limits = {
+    fileSize: 5000000, //File Size Unit
+}
+
+const fileFilter = (ctx, file, cb) => {
+    if (!file.mimetype.startsWith('image/')) {
+        return cb(new Error('Image error'))
+    }
+    // Only allow images pass
+    cb(null, true);
+}
+
+module.exports = multer({ storage, limits,  });

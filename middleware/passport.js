@@ -14,9 +14,11 @@ const isValidPassword = (user, password) => {
 
 passport.use(
     'local',
-    new LocalStrategy(async function(username, password, done) {
+    new LocalStrategy(async function (username, password, done) {
         try {
-            const user = await User.findOne({ username: username }).select(
+            const user = await User.findOne({
+                username: username
+            }).select(
                 '-__v -createdAt -updateAt'
             );
             if (user === null) {
@@ -40,10 +42,15 @@ accessOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 accessOptions.secretOrKey = process.env.ACCESS_TOKEN_SECRET || 'access_token';
 passport.use(
     'jwt-access',
-    new JwtStrategy(accessOptions, async function(jwt_payload, done) {
+    new JwtStrategy(accessOptions, async function (jwt_payload, done) {
         try {
-            const user = await UserRole.findOne({ user: jwt_payload.payload })
-                .populate({ path: 'role', select: '-__v' })
+            const user = await UserRole.findOne({
+                    user: jwt_payload.payload
+                })
+                .populate({
+                    path: 'role',
+                    select: '-__v'
+                })
                 .populate({
                     path: 'user',
                     select: '-__v -createdAt -updatedAt -password',
@@ -64,11 +71,13 @@ passport.use(
 const refreshOptions = {};
 refreshOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 refreshOptions.secretOrKey =
-  process.env.REFRESH_TOKEN_SECRET || 'refresh_token';
+    process.env.REFRESH_TOKEN_SECRET || 'refresh_token';
 passport.use(
     'jwt-refresh',
-    new JwtStrategy(refreshOptions, async function(jwt_payload, done) {
-        User.findOne({ _id: jwt_payload.payload }, function(err, user) {
+    new JwtStrategy(refreshOptions, async function (jwt_payload, done) {
+        User.findOne({
+            _id: jwt_payload.payload
+        }, function (err, user) {
             if (err) {
                 return done(err, false);
             }

@@ -2,7 +2,7 @@ const Category = require("../../models/category");
 const Idea = require("../../models/idea");
 
 module.exports = {
-    getCategory: async(ctx) => {
+    getCategory: async (ctx) => {
         const category = await Category.find({}).lean();
         return (ctx.body = {
             status: true,
@@ -11,7 +11,7 @@ module.exports = {
         });
     },
 
-    updateCategory: async(ctx) => {
+    updateCategory: async (ctx) => {
         const id = ctx.request.params.id;
         const {
             startDate,
@@ -24,14 +24,31 @@ module.exports = {
             startDate: startDate,
             firstClosureDate: firstClosureDate,
             finalClosureDate: finalClosureDate,
+            isDisabled: false,
         });
+        /*
+        cronjob(firstClosureDate {
+            await Category.updateOne({
+            _id: id,
+        }, {
+            isDisabled: true,
+        }));
+        cronjob(finalClosureDate {
+            await Idea.updateMany({
+                category: id
+            }, {
+                isDisabled: true,
+            })
+        }));
+            
+        */
         return (ctx.body = {
             status: true,
             message: "update category success",
         });
     },
 
-    createCategory: async(ctx) => {
+    createCategory: async (ctx) => {
         const category = new Category(ctx.request.body);
         await category.save();
         return (ctx.body = {
@@ -50,8 +67,10 @@ module.exports = {
             });
         }
 
-        const idea = await Idea.findOne({ category: id }).lean()
-        if(idea) {
+        const idea = await Idea.findOne({
+            category: id
+        }).lean()
+        if (idea) {
             return (ctx.body = {
                 status: false,
                 message: "category is being used",
@@ -61,8 +80,8 @@ module.exports = {
         const deleteCategory = await Category.deleteOne({
             _id: id,
         });
-        console.log(deleteCategory)
-        if(deleteCategory.deletedCount === 0 ) {
+        
+        if (deleteCategory.deletedCount === 0) {
             return (ctx.body = {
                 status: false,
                 message: 'no category found',

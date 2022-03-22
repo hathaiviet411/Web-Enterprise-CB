@@ -11,4 +11,6 @@ router.put("/idea/:id", multer.fields([{ name: 'ideaFile' }]), controller.update
 
 router.delete("/idea/:id", controller.deleteIdea)
 
+router.post("/idea/term/:user", controller.agreeTerm)
+
 module.exports = router.routes();

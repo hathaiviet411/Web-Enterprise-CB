@@ -19,6 +19,10 @@ const category = new Schema({
         type: Date,
         default: Date.now(),
     },
+    isDisabled: {
+        type: Boolean,
+        default: false,
+    },
 }, {
     timestamps: {
         createdAt: 'createdAt',

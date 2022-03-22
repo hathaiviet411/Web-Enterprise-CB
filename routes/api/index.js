@@ -30,9 +30,12 @@ router.use(
     QAM
 );
 
-router.use(passport.authenticate("jwt-access", {
-    failWithError: true
-}), idea)
+router.use(
+    passport.authenticate("jwt-access", {
+        failWithError: true
+    }),
+    idea
+);
 
 
 
