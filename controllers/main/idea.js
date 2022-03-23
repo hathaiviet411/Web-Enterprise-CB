@@ -18,23 +18,27 @@ module.exports = {
         if (page) {
             page = parseInt(page)
             const skip = (page - 1) * pageSize;
-            const idea = await Idea.find({}).skip(skip).limit(pageSize).lean();
+            const idea = await Idea.find({}).skip(skip).limit(pageSize).populate("user").lean();
             const totalPage = parseInt(idea.length / 5);
             const totalRecord = idea.length
             return (ctx.body = {
                 status: true,
                 message: "get idea success",
-                page,
-                totalPage,
-                totalRecord,
-                idea
+                data: {
+                    page,
+                    totalPage,
+                    totalRecord,
+                    idea
+                }
             })
         }
         const idea = await Idea.find({}).lean();
         return (ctx.body = {
             status: true,
             message: "get idea success",
-            idea
+            data: {
+                idea
+            }
         })
 
     },
@@ -59,7 +63,7 @@ module.exports = {
         const user = ctx.state.user;
         idea.user = user.user._id
         await idea.save();
-        
+
         const role = await Role.findOne({
             roleName: "Quality Assurance Coordinator"
         }).lean();
