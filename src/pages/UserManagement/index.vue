@@ -16,10 +16,98 @@
 
 					<v-spacer />
 
-					<v-btn color="primary" dark class="mb-2 btn-register">
+					<v-dialog v-model="dialogNewUser" max-width="800px">
+						<template v-slot:activator="{ on, attrs }">
+							<v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+								<v-icon left>mdi-plus-box</v-icon>
+								<span>New User</span>
+							</v-btn>
+						</template>
+
+						<v-card>
+							<v-card-title>
+								<span class="text-h5">{{ 'New User' }}</span>
+							</v-card-title>
+
+							<v-card-text>
+								<v-container>
+									<v-row>
+										<v-col cols="12" sm="12" md="12">
+											<v-text-field
+												v-model="editedItem.username"
+												prepend-inner-icon="mdi-account"
+												label="Username"
+											/>
+										</v-col>
+
+										<v-col cols="12" sm="12" md="12">
+											<v-text-field
+												v-model="editedItem.user_email"
+												prepend-inner-icon="mdi-email"
+												label="Email"
+											/>
+										</v-col>
+
+										<v-col cols="12" sm="12" md="12">
+											<v-text-field
+												v-model="editedItem.name"
+												prepend-inner-icon="mdi-border-color"
+												label="Name"
+											/>
+										</v-col>
+
+										<v-col cols="12" sm="12" md="12">
+											<v-select
+												v-model="editedItem.role"
+												:items="roleOptions"
+												label="Role"
+												prepend-inner-icon="mdi-account-key"
+												dense
+											/>
+										</v-col>
+
+										<v-col cols="12" sm="12" md="12">
+											<v-select
+												v-model="editedItem.department"
+												:items="departmentOptions"
+												label="Department"
+												prepend-inner-icon="mdi-domain"
+												dense
+											/>
+										</v-col>
+
+										<v-col cols="12" sm="12" md="12">
+											<v-text-field
+												v-model="editedItem.password"
+												prepend-inner-icon="mdi-lock"
+												label="Password"
+											/>
+										</v-col>
+
+									</v-row>
+								</v-container>
+							</v-card-text>
+
+							<v-card-actions>
+								<v-spacer />
+
+								<v-btn color="red darken-1" text @click="close()">
+									<v-icon left>mdi-exit-to-app</v-icon>
+									<span>Cancel</span>
+								</v-btn>
+
+								<v-btn color="blue darken-1" text @click="create()">
+									<v-icon left>mdi-lead-pencil</v-icon>
+									<span>{{ 'Register' }}</span>
+								</v-btn>
+							</v-card-actions>
+						</v-card>
+					</v-dialog>
+
+					<!-- <v-btn color="primary" dark class="mb-2 btn-register">
 						<span class="mdi mdi-account-plus pr-1" />
 						<span>New User</span>
-					</v-btn>
+					</v-btn> -->
 
 					<v-dialog v-model="dialogDelete" max-width="500px">
 						<v-card>
@@ -107,7 +195,7 @@ export default {
     name: 'UserManagement',
     data() {
         return {
-            dialog: false,
+            dialogNewUser: false,
             dialogDelete: false,
             vFields: [
                 { text: 'User Name', align: 'start', sortable: false, value: 'name' },
@@ -118,11 +206,12 @@ export default {
             vItems: [],
             editedIndex: -1,
             editedItem: {
+                username: '',
+                email: '',
                 name: '',
-                role: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0,
+                password: '',
+                role: null,
+                department: null,
             },
             defaultItem: {
                 name: '',
@@ -131,6 +220,8 @@ export default {
                 carbs: 0,
                 protein: 0,
             },
+            roleOptions: [],
+            departmentOptions: [],
         };
     },
 
@@ -141,7 +232,7 @@ export default {
     },
 
     watch: {
-        dialog(val) {
+        dialogNewUser(val) {
             val || this.close();
         },
         dialogDelete(val) {
@@ -182,7 +273,7 @@ export default {
         editItem(item) {
             this.editedIndex = this.vItems.indexOf(item);
             this.editedItem = Object.assign({}, item);
-            this.dialog = true;
+            this.dialogNewUser = true;
         },
 
         deleteItem(item) {
@@ -197,7 +288,7 @@ export default {
         },
 
         close() {
-            this.dialog = false;
+            this.dialogNewUser = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
                 this.editedIndex = -1;
@@ -212,7 +303,7 @@ export default {
             });
         },
 
-        save() {
+        create() {
             if (this.editedIndex > -1) {
                 Object.assign(this.vItems[this.editedIndex], this.editedItem);
             } else {
