@@ -191,6 +191,15 @@
 </template>
 
 <script>
+// Apis import
+import { getRole } from '@/api/modules/role';
+import { getDepartment } from '@/api/modules/department';
+
+const urlAPI = {
+    apiGetListRole: '/role',
+    apiGetListDepartment: '/department',
+};
+
 export default {
     name: 'UserManagement',
     data() {
@@ -241,10 +250,30 @@ export default {
     },
 
     created() {
+        this.getListRole();
+        this.getListDepartment();
         this.initialize();
     },
 
     methods: {
+        async getListRole() {
+            try {
+                const response = await getRole(urlAPI.apiGetListRole);
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async getListDepartment() {
+            try {
+                const response = await getDepartment(urlAPI.apiGetListDepartment);
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         initialize() {
             this.vItems = [
                 {

@@ -10,6 +10,7 @@ import user from './modules/user';
 import category from './modules/category';
 import idea from './modules/idea';
 import department from './modules/department';
+import role from './modules/role';
 import setting from './modules/setting';
 
 export const constantRoutes = [
@@ -27,6 +28,7 @@ export const asyncRoutes = [
     category,
     idea,
     department,
+    role,
     setting,
 ];
 

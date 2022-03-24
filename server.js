@@ -8,11 +8,11 @@ const morgan = require('koa-morgan');
 const fs = require('fs');
 const passport = require('koa-passport');
 const {
-    createServer
-} = require("http");
+    createServer,
+} = require('http');
 const {
-    Server
-} = require("socket.io");
+    Server,
+} = require('socket.io');
 
 db.connect();
 
@@ -34,7 +34,7 @@ app.use(
 );
 app.use(koaStatic(__dirname + '/public'));
 
-app.use(async function (ctx, next) {
+app.use(async function(ctx, next) {
     // Website you wish to allow to connect
     ctx.set('Access-Control-Allow-Origin', '*');
 
@@ -60,7 +60,7 @@ app.use(async function (ctx, next) {
     await next();
 });
 
-app.use(async (ctx, next) => {
+app.use(async(ctx, next) => {
     // ERROR HANLDER
 
     try {
@@ -94,7 +94,7 @@ app.use(router);
 const httpServer = createServer(app.callback());
 const io = new Server(httpServer, {
     /* options */ });
-io.on("connection", (socket) => {
+io.on('connection', (socket) => {
     // ...
 });
 const PORT = process.env.PORT || 8000;
