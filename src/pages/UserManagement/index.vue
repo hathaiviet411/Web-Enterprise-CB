@@ -35,7 +35,7 @@
 										<v-col cols="12" sm="12" md="12">
 											<v-text-field
 												v-model="editedItem.username"
-												prepend-inner-icon="mdi-account"
+												prepend-icon="mdi-account"
 												label="Username"
 											/>
 										</v-col>
@@ -43,7 +43,7 @@
 										<v-col cols="12" sm="12" md="12">
 											<v-text-field
 												v-model="editedItem.user_email"
-												prepend-inner-icon="mdi-email"
+												prepend-icon="mdi-email"
 												label="Email"
 											/>
 										</v-col>
@@ -51,7 +51,7 @@
 										<v-col cols="12" sm="12" md="12">
 											<v-text-field
 												v-model="editedItem.name"
-												prepend-inner-icon="mdi-border-color"
+												prepend-icon="mdi-border-color"
 												label="Name"
 											/>
 										</v-col>
@@ -61,7 +61,7 @@
 												v-model="editedItem.role"
 												:items="roleOptions"
 												label="Role"
-												prepend-inner-icon="mdi-account-key"
+												prepend-icon="mdi-account-key"
 												dense
 											/>
 										</v-col>
@@ -71,7 +71,7 @@
 												v-model="editedItem.department"
 												:items="departmentOptions"
 												label="Department"
-												prepend-inner-icon="mdi-domain"
+												prepend-icon="mdi-domain"
 												dense
 											/>
 										</v-col>
@@ -79,7 +79,7 @@
 										<v-col cols="12" sm="12" md="12">
 											<v-text-field
 												v-model="editedItem.password"
-												prepend-inner-icon="mdi-lock"
+												prepend-icon="mdi-lock"
 												label="Password"
 											/>
 										</v-col>
@@ -196,8 +196,8 @@ import { getRole } from '@/api/modules/role';
 import { getDepartment } from '@/api/modules/department';
 
 const urlAPI = {
-    apiGetListRole: '/role',
-    apiGetListDepartment: '/department',
+    apiGetListRole: 'admin/role',
+    apiGetListDepartment: 'admin/department',
 };
 
 export default {
@@ -251,7 +251,7 @@ export default {
 
     created() {
         this.getListRole();
-        this.getListDepartment();
+        // this.getListDepartment();
         this.initialize();
     },
 
@@ -259,7 +259,16 @@ export default {
         async getListRole() {
             try {
                 const response = await getRole(urlAPI.apiGetListRole);
-                console.log(response);
+
+                if (response.status === true) {
+                    const DATA = response.role;
+                    for (let i = 0; i < DATA.length; i++) {
+                        this.roleOptions.push(
+                            { value: DATA[i]._id, text: DATA[i].roleName }
+                        );
+                    }
+                }
+                console.log(this.roleOptions);
             } catch (error) {
                 console.log(error);
             }
