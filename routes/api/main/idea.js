@@ -3,7 +3,7 @@ const router = new Router();
 const controller = require("../../../controllers/main/idea")
 const multer = require("../../../middleware/multer");
 
-router.get("/idea/:filter", controller.getIdea)
+router.get("/idea", controller.getIdea)
 
 router.get("/idea/:id", controller.getIdeaComment)
 

@@ -56,15 +56,16 @@ module.exports = {
         const departments = await Department.find({}).select("-__v").lean();
         let departmentStatistic = []
         for (let department of departments) {
-            const user = await UserRole.find({ department: department._id }).populate("user").lean()
-            const departmentIdea = await Idea.find({ department: department._id }).lean()
-            // console.log(departmentIdea)
+            const departmentIdea = await Idea.find({ department: department._id }).count()
+            const contributor = await Idea.find({ department: department._id }).distinct("user")
             department = {
                 ...department,
-                numberOfIdea: departmentIdea.length
+                numberOfIdea: departmentIdea,
+                numberOfContributor: contributor.length,
             }
             departmentStatistic.push(department)
         }
+        
 
         return (ctx.body = {
             status: true,
