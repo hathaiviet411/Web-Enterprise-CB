@@ -3,22 +3,23 @@ const User = require("../../models/user");
 const UserRole = require("../../models/userRole");
 const Role = require("../../models/role");
 const Category = require("../../models/category")
+const Comment = require("../../models/comment")
 const sendEmail = require("../../middleware/nodemailer")
 require('dotenv').config();
 
 const getPath = (path) => {
     return process.env.BASE_URL + "/" + path[path.length - 2] + "/" + path[path.length - 1];
 };
-
+// /api/list-baiviet?limit=5&page=2&filter=like&sort=desc&q=
 module.exports = {
     getIdea: async (ctx) => {
         let page = ctx.query.page;
-        let filter = ctx.params.filter;
+        // let filter = ctx.query.filter;
         const pageSize = 5;
         if (page) {
             page = parseInt(page)
             const skip = (page - 1) * pageSize;
-            const idea = await Idea.find({}).skip(skip).limit(pageSize).populate("user").lean();
+            const idea = await Idea.find({}).skip(skip).limit(pageSize).populate("user").sort("DESC").lean();
             const totalPage = parseInt(idea.length / 5);
             const totalRecord = idea.length
             return (ctx.body = {
@@ -43,6 +44,41 @@ module.exports = {
 
     },
 
+    getIdeaComment: async (ctx) => {
+        const ideaId = ctx.params.id
+        if (!ideaId) {
+            return (ctx.body = {
+                status: false,
+                message: "id not found",
+            })
+        }
+        const idea = await Idea.findOne({
+            _id: ideaId
+        }).lean();
+        const comments = await Comment.find({
+            idea: ideaId
+        }).sort({
+            createdAt: 'DESC'
+        }).lean();
+
+        if (!idea) {
+            return (ctx.body = {
+                status: false,
+                message: "idea not found",
+            })
+        }
+
+        return (ctx.body = {
+            status: true,
+            message: "get idea and comments success",
+            data: {
+                idea,
+                comments
+            }
+        })
+    },
+
+
     createIdea: async (ctx) => {
         const idea = new Idea(ctx.request.body);
         const category = ctx.request.body.category;
@@ -62,6 +98,7 @@ module.exports = {
         }
         const user = ctx.state.user;
         idea.user = user.user._id
+        idea.department = user.department._id
         await idea.save();
 
         const role = await Role.findOne({
@@ -142,7 +179,7 @@ module.exports = {
         if (deleteIdea.deletedCount === 0) {
             return (ctx.body = {
                 status: false,
-                message: 'no idea found',
+                message: 'no idea found to delete',
             });
         }
 
@@ -154,11 +191,11 @@ module.exports = {
 
     agreeTerm: async (ctx) => {
         const isAgreedTerm = ctx.request.body.isAgreedTerm;
-        const user = ctx.params.user
+        const user = ctx.state.user
         console.log(isAgreedTerm)
         if (isAgreedTerm === 'true') {
             await User.updateOne({
-                _id: user
+                _id: user.user._id
             }, {
                 isAgreedTerm: true
             });

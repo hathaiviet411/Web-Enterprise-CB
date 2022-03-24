@@ -55,6 +55,10 @@ passport.use(
                     path: 'user',
                     select: '-__v -createdAt -updatedAt -password',
                 })
+                .populate({
+                    path: 'department',
+                    select: '-__v -createdAt -updatedAt',
+                })
                 .select('-__v -_id');
             if (user) {
                 return done(null, user);

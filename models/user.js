@@ -26,12 +26,6 @@ const user = new Schema({
         trim: true,
         default: null,
     },
-    department: {
-        type: String,
-        trim: true,
-        default: null,
-        // enum: ['Accounting', 'Human Resource', 'Lecturers'],
-    },
     isAgreedTerm: {
         type: Boolean,
         default: false,

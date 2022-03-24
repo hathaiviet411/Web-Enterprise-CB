@@ -1,6 +1,6 @@
 const Comment = require("../../models/comment");
 
-const socket = io();
+// const socket = io();
 
 module.exports = {
     createComment: async (ctx) => {

@@ -10,10 +10,18 @@ const idea = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'category',
     },
+    department: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'department',
+    },
     ideaContent: {
         type: String,
         trim: true,
         require: true,
+    },
+    viewCount: {
+        type: Number,
+        default: 0,
     },
     ideaFile: [{
         type: String,
