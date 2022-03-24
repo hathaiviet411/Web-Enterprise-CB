@@ -21,6 +21,7 @@ service.interceptors.request.use(
 
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
+            // config.header['Content-Type'] = 'multipart/form-data';
         } else {
             if (router.currentRoute.path !== '/login') {
                 router.push({ path: '/login' });

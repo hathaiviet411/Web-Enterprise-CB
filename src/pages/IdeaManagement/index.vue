@@ -16,7 +16,7 @@
 
 					<v-spacer />
 
-					<v-dialog v-model="dialogCreateIdea" max-width="80%" persistent>
+					<v-dialog v-model="dialogCreateIdea" max-width="90%" persistent>
 						<template v-slot:activator="{ on, attrs }">
 							<v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="delay()">
 								<v-icon left>mdi-plus-box</v-icon>
@@ -24,13 +24,69 @@
 							</v-btn>
 						</template>
 
-						<v-card height="500" :class="ckeditor">
+						<v-card :class="ckeditor">
 							<v-card-title>
 								<span class="text-h5">New Idea</span>
 							</v-card-title>
 
 							<v-card-text>
-								<ckeditor v-model="editorData" :editor="editor" :config="editorConfig" />
+								<v-row>
+									<v-col cols="12" sm="12" md="12">
+										<v-file-input
+											ref="file"
+											v-model="editedItem.file"
+											counter
+											show-size
+											truncate-length="15"
+											chips
+											@change="uploadFile()"
+										/>
+									</v-col>
+
+									<v-col cols="12" sm="12" md="12">
+										<v-text-field
+											v-model="editedItem.title"
+											label="Title"
+											prepend-icon="mdi-label"
+											type="text"
+											required
+										/>
+									</v-col>
+
+									<v-col cols="12" sm="12" md="12">
+										<v-select
+											v-model="editedItem.category"
+											:items="categoryOptions"
+											label="Category"
+											prepend-icon="mdi-library"
+											required
+										/>
+									</v-col>
+
+									<v-col cols="12" sm="12" md="12">
+										<div class="mb-3">
+											<v-icon left>mdi-keyboard</v-icon>
+											<span style="font-size: 16px;">Idea Content</span>
+										</div>
+										<ckeditor
+											v-model="editedItem.editorData"
+											:editor="editor"
+											:config="editorConfig"
+											@focus="onEditorFocus()"
+											@blur="onEditorBlur()"
+										/>
+									</v-col>
+
+									<v-col cols="12" sm="12" md="12">
+										<v-text-field
+											v-model="editedItem.author"
+											label="Author"
+											prepend-icon="mdi-book-open-page-variant"
+											type="text"
+											required
+										/>
+									</v-col>
+								</v-row>
 							</v-card-text>
 
 							<v-card-actions>
@@ -134,6 +190,21 @@
 // Components import
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
+// Apis import
+import { getCategory } from '@/api/modules/category';
+// import { postIdea } from '@/api/modules/idea';
+
+// Const APIs Url
+const urlAPI = {
+    getCategoryList: '/admin/category',
+    postIdea: '/idea',
+};
+
+// Helper functions import
+import { convertDateToISO } from '@/utils/handleConvertDateFormat';
+// import { MakeToast } from '@/toast/toastMessage';
+// import { isPassValidation } from './helper';
+
 export default {
     name: 'IdeaManagement',
     data() {
@@ -155,25 +226,26 @@ export default {
 
             editedIndex: -1,
             editedItem: {
-                name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0,
+                file: null,
+                title: '',
+                category: null,
+                editorData: 'Enter your idea content here...',
+                author: '',
             },
 
             defaultItem: {
-                name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0,
+                file: null,
+                title: '',
+                category: null,
+                editorData: 'Enter your idea content here...',
+                author: '',
             },
 
             editor: ClassicEditor,
-            editorData: '<p>Enter your idea content here...</p>',
             editorConfig: {},
             ckeditor: '',
+
+            categoryOptions: [],
         };
     },
 
@@ -194,6 +266,7 @@ export default {
 
     created() {
         this.initialize();
+        this.getCategoryData();
     },
 
     methods: {
@@ -282,13 +355,52 @@ export default {
             ];
         },
 
+        async getCategoryData() {
+            try {
+                const response = await getCategory(urlAPI.getCategoryList);
+                if (response.status === true) {
+                    const RAW_DATA = [...response.category];
+                    for (let i = 0; i < RAW_DATA.length; i++) {
+                        RAW_DATA[i].firstClosureDate = convertDateToISO(RAW_DATA[i].firstClosureDate);
+                        RAW_DATA[i].finalClosureDate = convertDateToISO(RAW_DATA[i].finalClosureDate);
+
+                        this.categoryOptions.push(
+                            { value: RAW_DATA[i]._id, text: RAW_DATA[i].categoryName }
+                        );
+                    }
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        },
+
+        onEditorFocus() {
+            if (this.editedItem.editorData === 'Enter your idea content here...') {
+                this.editedItem.editorData = '';
+            }
+        },
+
+        async createNewIdea() {
+            console.log(this.editedItem.file);
+        },
+
+        uploadFile() {
+            this.editedItem.file = this.$refs.file;
+        },
+
+        onEditorBlur() {
+            if (this.editedItem.editorData === '') {
+                this.editedItem.editorData = 'Enter your idea content here...';
+            }
+        },
+
         sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         },
 
         async delay() {
             this.ckeditor = 'ckeditor_before';
-            await this.sleep(100);
+            await this.sleep(200);
             this.ckeditor = 'ckeditor_after';
         },
 
@@ -329,7 +441,7 @@ export default {
             if (this.editedIndex > -1) {
                 Object.assign(this.vItems[this.editedIndex], this.editedItem);
             } else {
-                this.vItems.push(this.editedItem);
+                this.createNewIdea();
             }
         },
     },
@@ -342,7 +454,7 @@ export default {
     }
 
     .ckeditor_before {
-        width: 99%;
+        width: 90%;
     }
 
     .ckeditor_after {
