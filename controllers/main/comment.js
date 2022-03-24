@@ -4,14 +4,15 @@ const Comment = require("../../models/comment");
 
 module.exports = {
     createComment: async (ctx) => {
-        const comment = new Comment(ctx.request.body)
+        const comment = new Comment(ctx.request.body);
         const user = ctx.state.user;
-        comment.user = user.user._id
+        comment.user = user.user._id;
         await comment.save()
 
         return (ctx.body = {
-            status: true
-        })
+            status: true,
+            message: "create comment success"
+        })  
     },
 
     deleteComment: async (ctx) => {

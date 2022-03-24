@@ -19,7 +19,7 @@ module.exports = {
         if (page) {
             page = parseInt(page)
             const skip = (page - 1) * pageSize;
-            const idea = await Idea.find({}).skip(skip).limit(pageSize).populate("user").sort("DESC").lean();
+            const idea = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").sort("DESC").lean();
             const totalPage = parseInt(idea.length / 5);
             const totalRecord = idea.length
             return (ctx.body = {
@@ -91,11 +91,14 @@ module.exports = {
                 message: "this category has been disabled"
             })
         }
-
-        for (let i = 0; i < ctx.request.files.ideaFile.length; i++) {
-            let ideaFilePath = ctx.request.files.ideaFile[i].path.split("\\");
-            idea.ideaFile[i] = getPath(ideaFilePath);
+        if (ctx.request.files.ideaFile) {
+            for (let i = 0; i < ctx.request.files.ideaFile.length; i++) {
+                let ideaFilePath = ctx.request.files.ideaFile[i].path.split("\\");
+                idea.ideaFile[i] = getPath(ideaFilePath);
+            }
         }
+
+
         const user = ctx.state.user;
         idea.user = user.user._id
         idea.department = user.department._id
