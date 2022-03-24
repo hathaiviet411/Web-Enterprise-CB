@@ -5,12 +5,14 @@ const multer = require("../../../middleware/multer");
 
 router.get("/idea/:filter", controller.getIdea)
 
+router.get("/idea/:id", controller.getIdeaComment)
+
 router.post("/idea", multer.fields([{ name: 'ideaFile' }]), controller.createIdea)
 
 router.put("/idea/:id", multer.fields([{ name: 'ideaFile' }]), controller.updateIdea)
 
 router.delete("/idea/:id", controller.deleteIdea)
 
-router.post("/idea/term/:user", controller.agreeTerm)
+router.post("/idea/term/", controller.agreeTerm)
 
 module.exports = router.routes();
