@@ -28,7 +28,6 @@ module.exports = {
 
   getRole: async (ctx) => {
     const role = await Role.find({}).select("-__v").lean();
-    console.log(role)
     return (ctx.body = {
       status: true,
       message: "Get all role success",
