@@ -1,8 +1,4 @@
-const User = require("../../models/user");
 const Role = require("../../models/role");
-const UserRole = require("../../models/userRole");
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
 
 module.exports = {
   addRole: async (ctx) => {
