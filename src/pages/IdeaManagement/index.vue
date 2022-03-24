@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<v-data-table
-			:headers="headers"
-			:items="desserts"
+			:headers="vFields"
+			:items="vItems"
 			sort-by="calories"
 			class="elevation-12"
 		>
@@ -10,16 +10,44 @@
 				<v-toolbar
 					flat
 				>
-					<v-toolbar-title>idea Management</v-toolbar-title>
+					<v-toolbar-title>Idea Management</v-toolbar-title>
 
 					<v-divider class="mx-4" inset vertical />
 
 					<v-spacer />
 
-					<v-btn color="primary" dark class="mb-2 btn-register">
-						<span class="mdi mdi-account-plus pr-1" />
-						<span>New idea</span>
-					</v-btn>
+					<v-dialog v-model="dialogCreateIdea" max-width="80%" persistent>
+						<template v-slot:activator="{ on, attrs }">
+							<v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="delay()">
+								<v-icon left>mdi-plus-box</v-icon>
+								<span>New Idea</span>
+							</v-btn>
+						</template>
+
+						<v-card height="500" :class="ckeditor">
+							<v-card-title>
+								<span class="text-h5">New Idea</span>
+							</v-card-title>
+
+							<v-card-text>
+								<ckeditor v-model="editorData" :editor="editor" :config="editorConfig" />
+							</v-card-text>
+
+							<v-card-actions>
+								<v-spacer />
+
+								<v-btn color="red darken-1" text @click="close()">
+									<v-icon left>mdi-exit-to-app</v-icon>
+									<span>Cancel</span>
+								</v-btn>
+
+								<v-btn color="blue darken-1" text @click="save()">
+									<v-icon left>mdi-lead-pencil</v-icon>
+									<span>{{ editedIndex === -1 ? 'Register' : 'Save' }}</span>
+								</v-btn>
+							</v-card-actions>
+						</v-card>
+					</v-dialog>
 
 					<v-dialog v-model="dialogDelete" max-width="500px">
 						<v-card>
@@ -103,14 +131,18 @@
 </template>
 
 <script>
+// Components import
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 export default {
     name: 'IdeaManagement',
     data() {
         return {
-            dialog: false,
+            dialogCreateIdea: false,
             dialogDelete: false,
-            headers: [
-                { text: 'idea', align: 'start', sortable: false, value: 'idea_name' },
+
+            vFields: [
+                { text: 'Idea', align: 'start', sortable: false, value: 'idea_name' },
                 { text: 'Category', value: 'category' },
                 { text: 'Views (k)', value: 'view' },
                 { text: 'Comments (k)', value: 'comment' },
@@ -118,7 +150,9 @@ export default {
                 { text: 'Dislikes (k)', value: 'dislike' },
                 { text: 'Actions', value: 'actions' },
             ],
-            desserts: [],
+
+            vItems: [],
+
             editedIndex: -1,
             editedItem: {
                 name: '',
@@ -127,6 +161,7 @@ export default {
                 carbs: 0,
                 protein: 0,
             },
+
             defaultItem: {
                 name: '',
                 calories: 0,
@@ -134,17 +169,22 @@ export default {
                 carbs: 0,
                 protein: 0,
             },
+
+            editor: ClassicEditor,
+            editorData: '<p>Enter your idea content here...</p>',
+            editorConfig: {},
+            ckeditor: '',
         };
     },
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+            return this.editedIndex === -1 ? 'New Idea' : 'Edit Idea';
         },
     },
 
     watch: {
-        dialog(val) {
+        dialogCreateIdea(val) {
             val || this.close();
         },
         dialogDelete(val) {
@@ -158,7 +198,7 @@ export default {
 
     methods: {
         initialize() {
-            this.desserts = [
+            this.vItems = [
                 {
                     idea_name: 'Frozen Yogurt',
                     category: 159,
@@ -242,25 +282,35 @@ export default {
             ];
         },
 
+        sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        },
+
+        async delay() {
+            this.ckeditor = 'ckeditor_before';
+            await this.sleep(100);
+            this.ckeditor = 'ckeditor_after';
+        },
+
         editItem(item) {
-            this.editedIndex = this.desserts.indexOf(item);
+            this.editedIndex = this.vItems.indexOf(item);
             this.editedItem = Object.assign({}, item);
-            this.dialog = true;
+            this.dialogCreateIdea = true;
         },
 
         deleteItem(item) {
-            this.editedIndex = this.desserts.indexOf(item);
+            this.editedIndex = this.vItems.indexOf(item);
             this.editedItem = Object.assign({}, item);
             this.dialogDelete = true;
         },
 
         deleteItemConfirm() {
-            this.desserts.splice(this.editedIndex, 1);
+            this.vItems.splice(this.editedIndex, 1);
             this.closeDelete();
         },
 
         close() {
-            this.dialog = false;
+            this.dialogCreateIdea = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
                 this.editedIndex = -1;
@@ -277,11 +327,10 @@ export default {
 
         save() {
             if (this.editedIndex > -1) {
-                Object.assign(this.desserts[this.editedIndex], this.editedItem);
+                Object.assign(this.vItems[this.editedIndex], this.editedItem);
             } else {
-                this.desserts.push(this.editedItem);
+                this.vItems.push(this.editedItem);
             }
-            this.close();
         },
     },
 };
@@ -290,5 +339,13 @@ export default {
 <style lang="scss" scoped>
     .btn-register {
         box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    }
+
+    .ckeditor_before {
+        width: 99%;
+    }
+
+    .ckeditor_after {
+        width: 100%;
     }
 </style>
