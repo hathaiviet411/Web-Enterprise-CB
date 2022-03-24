@@ -1,6 +1,6 @@
 const Department = require("../../models/department");
-const userRole = require("../../models/userRole");
 const UserRole = require("../../models/userRole")
+const Idea = require("../../models/idea")
 
 module.exports = {
     addDepartment: async (ctx) => {
@@ -54,15 +54,22 @@ module.exports = {
 
     getDepartment: async (ctx) => {
         const departments = await Department.find({}).select("-__v").lean();
-        const departmentStatistic = []
+        let departmentStatistic = []
         for (let department of departments) {
-            const user = await userRole.find({ department: department._id }).populate("user").lean()
-            departmentStatistic.push(user)
+            const user = await UserRole.find({ department: department._id }).populate("user").lean()
+            const departmentIdea = await Idea.find({ department: department._id }).lean()
+            // console.log(departmentIdea)
+            department = {
+                ...department,
+                numberOfIdea: departmentIdea.length
+            }
+            departmentStatistic.push(department)
         }
+
         return (ctx.body = {
             status: true,
-            message: "Get all role success",
-            department,
+            message: "Get department info success",
+            departmentStatistic,
         });
     }
 }

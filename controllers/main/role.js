@@ -1,8 +1,4 @@
-const User = require("../../models/user");
 const Role = require("../../models/role");
-const UserRole = require("../../models/userRole");
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
 
 module.exports = {
   addRole: async (ctx) => {
@@ -28,7 +24,6 @@ module.exports = {
 
   getRole: async (ctx) => {
     const role = await Role.find({}).select("-__v").lean();
-    console.log(role)
     return (ctx.body = {
       status: true,
       message: "Get all role success",
