@@ -16,7 +16,7 @@
 
 					<v-spacer />
 
-					<v-dialog v-model="dialogNewUser" max-width="800px">
+					<v-dialog v-model="dialogNewUser" max-width="800px" persistent>
 						<template v-slot:activator="{ on, attrs }">
 							<v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
 								<v-icon left>mdi-plus-box</v-icon>
@@ -37,14 +37,18 @@
 												v-model="editedItem.username"
 												prepend-icon="mdi-account"
 												label="Username"
+												required
+												type="text"
 											/>
 										</v-col>
 
 										<v-col cols="12" sm="12" md="12">
 											<v-text-field
-												v-model="editedItem.user_email"
+												v-model="editedItem.email"
 												prepend-icon="mdi-email"
 												label="Email"
+												required
+												type="email"
 											/>
 										</v-col>
 
@@ -53,6 +57,8 @@
 												v-model="editedItem.name"
 												prepend-icon="mdi-border-color"
 												label="Name"
+												required
+												type="text"
 											/>
 										</v-col>
 
@@ -63,6 +69,7 @@
 												label="Role"
 												prepend-icon="mdi-account-key"
 												dense
+												required
 											/>
 										</v-col>
 
@@ -81,6 +88,8 @@
 												v-model="editedItem.password"
 												prepend-icon="mdi-lock"
 												label="Password"
+												required
+												type="password"
 											/>
 										</v-col>
 
@@ -96,9 +105,9 @@
 									<span>Cancel</span>
 								</v-btn>
 
-								<v-btn color="blue darken-1" text @click="create()">
+								<v-btn color="blue darken-1" text @click="save()">
 									<v-icon left>mdi-lead-pencil</v-icon>
-									<span>{{ 'Register' }}</span>
+									<span>{{ editedIndex === -1 ? 'Register' : 'Save' }}</span>
 								</v-btn>
 							</v-card-actions>
 						</v-card>
@@ -194,10 +203,17 @@
 // Apis import
 import { getRole } from '@/api/modules/role';
 import { getDepartment } from '@/api/modules/department';
+import { getUser, postUser } from '@/api/modules/user';
+
+// Helper functions import
+import { isPassValidation } from './helper';
+import { MakeToast } from '@/toast/toastMessage';
 
 const urlAPI = {
     apiGetListRole: 'admin/role',
     apiGetListDepartment: 'admin/department',
+    apiGetListUser: 'admin/user',
+    apiPostUser: 'admin/register',
 };
 
 export default {
@@ -206,13 +222,16 @@ export default {
         return {
             dialogNewUser: false,
             dialogDelete: false,
+
             vFields: [
                 { text: 'User Name', align: 'start', sortable: false, value: 'name' },
                 { text: 'User Role', value: 'role' },
                 { text: 'Department', value: 'department' },
                 { text: 'Actions', value: 'actions', sortable: false },
             ],
+
             vItems: [],
+
             editedIndex: -1,
             editedItem: {
                 username: '',
@@ -222,13 +241,16 @@ export default {
                 role: null,
                 department: null,
             },
+
             defaultItem: {
+                username: '',
+                email: '',
                 name: '',
-                role: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0,
+                password: '',
+                role: null,
+                department: null,
             },
+
             roleOptions: [],
             departmentOptions: [],
         };
@@ -251,11 +273,20 @@ export default {
 
     created() {
         this.getListRole();
-        // this.getListDepartment();
-        this.initialize();
+        this.getListDepartment();
+        this.getListUsers();
     },
 
     methods: {
+        async getListUsers() {
+            try {
+                const response = await getUser(urlAPI.apiGetListUser);
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         async getListRole() {
             try {
                 const response = await getRole(urlAPI.apiGetListRole);
@@ -268,44 +299,61 @@ export default {
                         );
                     }
                 }
-                console.log(this.roleOptions);
             } catch (error) {
                 console.log(error);
+            }
+        },
+
+        validateEmail() {
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.editedItem.email)) {
+                console.log('Please enter a valid email address');
+            } else {
+                console.log('Good job bitch!');
             }
         },
 
         async getListDepartment() {
             try {
                 const response = await getDepartment(urlAPI.apiGetListDepartment);
-                console.log(response);
+
+                if (response.status === true) {
+                    const DATA = response.departmentStatistic;
+                    for (let i = 0; i < DATA.length; i++) {
+                        this.departmentOptions.push(
+                            { value: DATA[i]._id, text: DATA[i].departmentName }
+                        );
+                    }
+                }
             } catch (error) {
                 console.log(error);
             }
         },
 
-        initialize() {
-            this.vItems = [
-                {
-                    name: 'Frozen Yogurt',
-                    role: 'Admin',
-                    department: 'Hochiminh City',
-                },
-                {
-                    name: 'Ice cream sandwich',
-                    role: 'Staff',
-                    department: 'Hanoi',
-                },
-                {
-                    name: 'Eclair',
-                    role: 'Quality Assurance Manager ',
-                    department: 'Hochiminh City',
-                },
-                {
-                    name: 'Cupcake',
-                    role: 'Quality Assurance Coordinator',
-                    department: 'Hanoi',
-                },
-            ];
+        async createUser() {
+            if (isPassValidation(this.editedItem) === true) {
+                this.close();
+
+                try {
+                    const response = await postUser(urlAPI.apiPostUser, this.editedItem);
+                    if (response.status === true) {
+                        MakeToast({
+                            variant: 'success',
+                            title: 'Success',
+                            content: 'Create User Successful',
+                        });
+
+                        this.getListUsers();
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        },
+
+        async updateUser() {
+            if (isPassValidation(this.editedItem) === true) {
+                //
+            }
         },
 
         editItem(item) {
@@ -341,13 +389,12 @@ export default {
             });
         },
 
-        create() {
+        save() {
             if (this.editedIndex > -1) {
-                Object.assign(this.vItems[this.editedIndex], this.editedItem);
+                this.updateUser(this.editedItem);
             } else {
-                this.vItems.push(this.editedItem);
+                this.createUser();
             }
-            this.close();
         },
     },
 };
