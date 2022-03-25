@@ -1,25 +1,72 @@
 const Comment = require("../../models/comment");
+const Idea = require("../../models/idea")
+const sendEmail = require("../../middleware/nodemailer")
 
-// const socket = io();
+module.exports = (io, socket) => {
+    userReadIdea = async (payload) => {
+        const { ideaId } = payload
 
-module.exports = {
-    createComment: async (ctx) => {
-        const comment = new Comment(ctx.request.body);
-        const user = ctx.state.user;
-        comment.user = user.user._id;
-        await comment.save()
+        await Idea.findByIdAndUpdate(ideaId, { $inc: { viewCount: 1 } })
 
-        return (ctx.body = {
-            status: true,
-            message: "create comment success"
-        })  
-    },
+        socket.join(ideaId);
+    }
 
-    deleteComment: async (ctx) => {
+    createComment = async (payload) => {
+        const { commentContent, ideaId, isAnonymous } = payload;
+        const user = socket.decoded.payload;
+        const idea = await Idea.findOne({ _id: ideaId }).populate('user').lean();
+        if (idea) {
+            const comment = new Comment({
+                commentContent: commentContent,
+                idea: ideaId,
+                user: user,
+                isAnonymous: isAnonymous,
+            });
 
-    },
+            console.log(comment)
 
-    updateComment: async (ctx) => {
+            // await comment.save()
 
-    },
+            socket.broadcast.to(ideaId).emit("renderComment", comment)
+        }
+
+        else {
+            throw new Error('idea not found');
+        }
+
+        sendEmail({
+            to: idea.user.email,
+            subject: "New Comment",
+            html: '<p>A person just commented on your idea</p>'
+        })
+    }
+
+    deleteComment = async (payload) => {
+        const { commentId, ideaId } = payload;
+        if (!commentId) {
+            throw new Error('comment not found');
+        }
+
+        await Comment.deleteOne({ _id: commentId })
+
+        socket.broadcast.to(ideaId).emit("renderComment", comment)
+    }
+
+    updateComment = async (ctx) => {
+        const { commentContent, commentId } = payload;
+
+        if(!commentId || commentContent) {
+            throw new Error('comment not found');
+        }
+
+        const comment = await Comment.findByIdAndUpdate({ _id: commentId }, { commentContent: commentContent });
+
+        socket.broadcast.to(ideaId).emit("renderComment", comment)
+    }
+
+
+    socket.on("comment:create", createComment);
+    socket.on("comment:delete", deleteComment);
+    socket.on("comment:update", updateComment);
+    socket.on("idea", userReadIdea)
 }

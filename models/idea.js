@@ -5,14 +5,17 @@ const idea = new Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
+        require: true,
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'category',
+        require: true,
     },
     department: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'department',
+        require: true,
     },
     ideaContent: {
         type: String,

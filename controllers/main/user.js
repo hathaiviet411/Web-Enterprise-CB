@@ -55,4 +55,25 @@ module.exports = {
       });
     }
   },
+
+  getAllUser: async (ctx) => {
+    const user = await UserRole.find({}).populate({
+      path: 'role',
+      select: '-__v'
+    })
+      .populate({
+        path: 'user',
+        select: '-__v -createdAt -updatedAt -password',
+      })
+      .populate({
+        path: 'department',
+        select: '-__v -createdAt -updatedAt',
+      })
+      .select('-__v -_id').lean();
+    return (ctx.body = {
+      status: true,
+      message: "get all user success",
+      user
+    })
+  },
 };

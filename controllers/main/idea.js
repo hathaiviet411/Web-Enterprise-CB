@@ -46,6 +46,7 @@ module.exports = {
 
     getIdeaComment: async (ctx) => {
         const ideaId = ctx.params.id
+
         if (!ideaId) {
             return (ctx.body = {
                 status: false,
@@ -178,6 +179,9 @@ module.exports = {
         const deleteIdea = await Idea.deleteOne({
             _id: id
         })
+        await Comment.deleteMany({ idea: id })
+        // await Like.deleteMany({ idea: id })
+        // await Dislike.deleteMany({ idea: id })
 
         if (deleteIdea.deletedCount === 0) {
             return (ctx.body = {

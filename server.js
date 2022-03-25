@@ -13,6 +13,7 @@ const {
 const {
     Server,
 } = require('socket.io');
+const cors = require('@koa/cors');
 
 db.connect();
 
@@ -25,7 +26,7 @@ const accessLogStream = fs.createWriteStream(__dirname + '/access.log', {
 app.use(morgan('combined', {
     stream: accessLogStream,
 }));
-
+app.use(cors());
 app.use(
     koaBody({
         urlencoded: true,
@@ -34,7 +35,7 @@ app.use(
 );
 app.use(koaStatic(__dirname + '/public'));
 
-app.use(async function(ctx, next) {
+app.use(async function (ctx, next) {
     // Website you wish to allow to connect
     ctx.set('Access-Control-Allow-Origin', '*');
 
@@ -60,7 +61,7 @@ app.use(async function(ctx, next) {
     await next();
 });
 
-app.use(async(ctx, next) => {
+app.use(async (ctx, next) => {
     // ERROR HANLDER
 
     try {
@@ -91,12 +92,44 @@ app.use(async(ctx, next) => {
 
 app.use(router);
 
+const { verifyToken } = require("./config/jwt")
+
 const httpServer = createServer(app.callback());
 const io = new Server(httpServer, {
-    /* options */ });
-io.on('connection', (socket) => {
-    // ...
+    cors: {
+        origin: "*",
+        allowedHeaders: ['Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Authorization, Access-Control-Request-Method, Access-Control-Request-Headers'],
+        credentials: true
+    }
 });
+
+const registerCommentHandlers = require("./controllers/main/comment")
+
+const onConnection = (socket) => {
+    console.log(socket.id)
+    registerCommentHandlers(io, socket);
+
+}
+
+io.use(async function (socket, next) {
+    if (socket.handshake.auth && socket.handshake.auth.token) {
+        const accessToken = socket.handshake.auth.token;
+        try {
+            const decoded = await verifyToken(accessToken, "access")
+            socket.decoded = decoded;
+            next();
+        }
+        catch (err) {
+            return next(new Error('Authentication error'));
+        }
+    }
+    else {
+        next(new Error('Authentication error'));
+    }
+}).on('connection', onConnection);
+
+
+
 const PORT = process.env.PORT || 8000;
 httpServer.listen(PORT, () => {
     console.log('Server is running on port: ' + PORT);
