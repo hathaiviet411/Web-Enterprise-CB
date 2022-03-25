@@ -26,6 +26,10 @@ const idea = new Schema({
         type: Number,
         default: 0,
     },
+    pointCount: {
+        type: Number,
+        default: 0,
+    },
     ideaFile: [{
         type: String,
         trim: true,

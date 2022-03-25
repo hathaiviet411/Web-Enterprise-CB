@@ -4,9 +4,11 @@ const sendEmail = require("../../middleware/nodemailer")
 
 module.exports = (io, socket) => {
     userReadIdea = async (payload) => {
-        const { ideaId } = payload
+        const { ideaId } = payload;
 
-        await Idea.findByIdAndUpdate(ideaId, { $inc: { viewCount: 1 } })
+        console.log(payload);
+
+        await Idea.findByIdAndUpdate(ideaId, { $inc: { viewCount: 1 } });
 
         socket.join(ideaId);
     }
