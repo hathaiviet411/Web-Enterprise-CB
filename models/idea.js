@@ -17,6 +17,11 @@ const idea = new Schema({
         ref: 'department',
         require: true,
     },
+    ideaTitle: {
+        type: String,
+        trim: true,
+        require: true,
+    },
     ideaContent: {
         type: String,
         trim: true,

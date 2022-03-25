@@ -129,6 +129,7 @@ module.exports = {
     updateIdea: async (ctx) => {
         const id = ctx.params.id;
         const {
+            ideaTitle,
             ideaContent
         } = ctx.request.body
         const user = ctx.state.user
@@ -150,6 +151,7 @@ module.exports = {
         await Idea.updateOne({
             _id: id
         }, {
+            ideaTitle: ideaTitle,
             ideaContent: ideaContent,
         });
         return (ctx.body = {
