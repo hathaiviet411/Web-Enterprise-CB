@@ -7,9 +7,7 @@
 			class="elevation-12"
 		>
 			<template v-slot:top>
-				<v-toolbar
-					flat
-				>
+				<v-toolbar flat>
 					<v-toolbar-title>Department Management</v-toolbar-title>
 
 					<v-divider class="mx-4" inset vertical />
@@ -23,7 +21,9 @@
 
 					<v-dialog v-model="dialogDelete" max-width="500px">
 						<v-card>
-							<v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+							<v-card-title
+								class="text-h5"
+							>Are you sure you want to delete this item?</v-card-title>
 
 							<v-card-text>
 								<v-container>
@@ -87,12 +87,8 @@
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-icon small class="mr-2" @click="editItem(item)">
-					mdi-pencil
-				</v-icon>
-				<v-icon small @click="deleteItem(item)">
-					mdi-delete
-				</v-icon>
+				<v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+				<v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
 			</template>
 
 			<template v-slot:no-data>
@@ -103,6 +99,11 @@
 </template>
 
 <script>
+import { getDepartment } from '@/api/modules/department';
+
+const URL_GET_DEPARTMENT = '/admin/department';
+// const URL_POST_DEPARTMENT = '/admin/department';
+// const URL_DELETE_DEPARTMENT = '/admin/department';
 export default {
     name: 'DepartmentManagement',
     data() {
@@ -110,9 +111,14 @@ export default {
             dialog: false,
             dialogDelete: false,
             vFields: [
-                { text: 'Department Name', align: 'start', sortable: false, value: 'name' },
-                { text: 'Idea Contributed', value: 'idea' },
-                { text: 'Staff', value: 'staff' },
+                {
+                    text: 'Department Name',
+                    align: 'start',
+                    sortable: false,
+                    value: 'departmentName',
+                },
+                { text: 'Idea Contributed', value: 'numberOfIdea' },
+                { text: 'Staff Contributed', value: 'numberOfContributor' },
                 { text: 'Actions', value: 'actions', sortable: false },
             ],
             vItems: [],
@@ -150,23 +156,22 @@ export default {
     },
 
     created() {
-        this.initialize();
+        this.getDepartmentData();
     },
 
     methods: {
-        initialize() {
-            this.vItems = [
-                {
-                    name: 'Hanoi',
-                    staff: '6k',
-                    idea: '24123k',
-                },
-                {
-                    name: 'Hochiminh City',
-                    staff: 'k',
-                    idea: '9k',
-                },
-            ];
+        async getDepartmentData() {
+            try {
+                const response = await getDepartment(URL_GET_DEPARTMENT);
+                if (response.status === true) {
+                    const RAW_DATA = [...response.departmentStatistic];
+                    for (let i = 0; i < RAW_DATA.length; i++) {
+                        this.vItems = RAW_DATA;
+                    }
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
         },
 
         editItem(item) {
@@ -215,7 +220,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .btn-register {
-        box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
-    }
+.btn-register {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+    rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+}
 </style>
