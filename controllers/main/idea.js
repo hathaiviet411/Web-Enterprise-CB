@@ -20,7 +20,7 @@ module.exports = {
             page = parseInt(page)
             const skip = (page - 1) * pageSize;
             const idea = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").sort("DESC").lean();
-            const totalPage = parseInt(idea.length / 5);
+            const totalPage = Math.ceil(idea.length / 5);
             const totalRecord = idea.length
             return (ctx.body = {
                 status: true,
