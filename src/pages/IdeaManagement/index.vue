@@ -33,13 +33,13 @@
 								<v-row>
 									<v-col cols="12" sm="12" md="12">
 										<v-file-input
+											id="file_input"
 											ref="file"
 											v-model="editedItem.file"
 											counter
 											show-size
 											truncate-length="15"
 											chips
-											@change="uploadFile()"
 										/>
 									</v-col>
 
@@ -192,7 +192,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 // Apis import
 import { getCategory } from '@/api/modules/category';
-// import { postIdea } from '@/api/modules/idea';
+import { postIdea } from '@/api/modules/idea';
 
 // Const APIs Url
 const urlAPI = {
@@ -202,8 +202,8 @@ const urlAPI = {
 
 // Helper functions import
 import { convertDateToISO } from '@/utils/handleConvertDateFormat';
-// import { MakeToast } from '@/toast/toastMessage';
-// import { isPassValidation } from './helper';
+import { MakeToast } from '@/toast/toastMessage';
+import { isPassValidation } from './helper';
 
 export default {
     name: 'IdeaManagement',
@@ -226,7 +226,7 @@ export default {
 
             editedIndex: -1,
             editedItem: {
-                file: null,
+                file: [],
                 title: '',
                 category: null,
                 editorData: 'Enter your idea content here...',
@@ -234,7 +234,7 @@ export default {
             },
 
             defaultItem: {
-                file: null,
+                file: [],
                 title: '',
                 category: null,
                 editorData: 'Enter your idea content here...',
@@ -265,96 +265,10 @@ export default {
     },
 
     created() {
-        this.initialize();
         this.getCategoryData();
     },
 
     methods: {
-        initialize() {
-            this.vItems = [
-                {
-                    idea_name: 'Frozen Yogurt',
-                    category: 159,
-                    view: 6,
-                    comment: 24,
-                    like: 4,
-                    dislike: 2,
-                },
-                {
-                    idea_name: 'Ice cream sandwich',
-                    category: 237,
-                    view: 9,
-                    comment: 37,
-                    like: 4.3,
-                    dislike: 9,
-                },
-                {
-                    idea_name: 'Eclair',
-                    category: 262,
-                    view: 16,
-                    comment: 23,
-                    like: 6,
-                    dislike: 2,
-                },
-                {
-                    idea_name: 'Cupcake',
-                    category: 305,
-                    view: 3.7,
-                    comment: 67,
-                    like: 4.3,
-                    dislike: 8,
-                },
-                {
-                    idea_name: 'Gingerbread',
-                    category: 356,
-                    view: 16,
-                    comment: 49,
-                    like: 3.9,
-                    dislike: 16,
-                },
-                {
-                    idea_name: 'Jelly bean',
-                    category: 375,
-                    view: 2,
-                    comment: 94,
-                    like: 9,
-                    dislike: 1,
-                },
-                {
-                    idea_name: 'Lollipop',
-                    category: 392,
-                    view: 0.2,
-                    comment: 98,
-                    like: 2,
-                    dislike: 2,
-                },
-                {
-                    idea_name: 'Honeycomb',
-                    category: 408,
-                    view: 3.2,
-                    comment: 87,
-                    like: 6.5,
-                    dislike: 21,
-                },
-                {
-                    idea_name: 'Donut',
-                    category: 452,
-                    view: 25,
-                    comment: 51,
-                    like: 4.9,
-                    dislike: 22,
-                },
-                {
-                    idea_name: 'KitKat',
-                    category: 518,
-                    view: 26,
-                    comment: 65,
-                    like: 7,
-                    dislike: 6,
-                },
-            ];
-        },
-
         async getCategoryData() {
             try {
                 const response = await getCategory(urlAPI.getCategoryList);
@@ -381,7 +295,45 @@ export default {
         },
 
         async createNewIdea() {
-            console.log(this.editedItem.file);
+            const formData = new FormData();
+            this.editedItem.file = document.getElementById('file_input').files[0];
+            const fileSize = this.editedItem.file.size;
+            const fileName = this.editedItem.file.name;
+
+            console.log(fileSize);
+            console.log(fileName);
+
+            if (fileSize > 50000000) {
+                MakeToast({
+                    variant: 'warning',
+                    title: 'Warning',
+                    content: 'File size must be less than 50MB',
+                });
+            } else {
+                if (this.editedItem.file && isPassValidation(this.editedItem) === true) {
+                    formData.append('ideaFile', this.editedItem.file);
+                    formData.append('ideaTitle', this.editedItem.title);
+                    formData.append('ideaContent', this.editedItem.editorData);
+                    formData.append('isAnonymous', false);
+                    formData.append('category', this.editedItem.category);
+                    formData.append('author', this.editedItem.author);
+
+                    try {
+                        const response = await postIdea(urlAPI.postIdea, formData);
+                        if (response.status === true) {
+                            MakeToast({
+                                variant: 'success',
+                                title: 'Success',
+                                content: 'Idea created successfully',
+                            });
+                            this.dialogCreateIdea = false;
+                            this.getCategoryData();
+                        }
+                    } catch (error) {
+                        console.log(error.message);
+                    }
+                }
+            }
         },
 
         uploadFile() {
