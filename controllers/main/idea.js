@@ -19,9 +19,9 @@ module.exports = {
         if (page) {
             page = parseInt(page)
             const skip = (page - 1) * pageSize;
-            const idea = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").sort("DESC").lean();
-            const totalPage = parseInt(idea.length / 5);
-            const totalRecord = idea.length
+            const idea = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").sort("-createAt").lean();
+            const totalPage = Math.ceil(idea.length / 5);
+            const totalRecord = idea.length;
             return (ctx.body = {
                 status: true,
                 message: "get idea success",
@@ -46,6 +46,7 @@ module.exports = {
 
     getIdeaComment: async (ctx) => {
         const ideaId = ctx.params.id
+
         if (!ideaId) {
             return (ctx.body = {
                 status: false,
@@ -128,6 +129,7 @@ module.exports = {
     updateIdea: async (ctx) => {
         const id = ctx.params.id;
         const {
+            ideaTitle,
             ideaContent
         } = ctx.request.body
         const user = ctx.state.user
@@ -149,6 +151,7 @@ module.exports = {
         await Idea.updateOne({
             _id: id
         }, {
+            ideaTitle: ideaTitle,
             ideaContent: ideaContent,
         });
         return (ctx.body = {
@@ -178,6 +181,9 @@ module.exports = {
         const deleteIdea = await Idea.deleteOne({
             _id: id
         })
+        await Comment.deleteMany({ idea: id })
+        // await Like.deleteMany({ idea: id })
+        // await Dislike.deleteMany({ idea: id })
 
         if (deleteIdea.deletedCount === 0) {
             return (ctx.body = {

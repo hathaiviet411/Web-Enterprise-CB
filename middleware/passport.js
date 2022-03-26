@@ -59,7 +59,7 @@ passport.use(
                     path: 'department',
                     select: '-__v -createdAt -updatedAt',
                 })
-                .select('-__v -_id');
+                .select('-__v -_id').lean();
             if (user) {
                 return done(null, user);
             } else {

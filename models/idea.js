@@ -5,14 +5,22 @@ const idea = new Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
+        require: true,
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'category',
+        require: true,
     },
     department: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'department',
+        require: true,
+    },
+    ideaTitle: {
+        type: String,
+        trim: true,
+        require: true,
     },
     ideaContent: {
         type: String,
@@ -20,6 +28,10 @@ const idea = new Schema({
         require: true,
     },
     viewCount: {
+        type: Number,
+        default: 0,
+    },
+    pointCount: {
         type: Number,
         default: 0,
     },
