@@ -6,6 +6,7 @@ import axios from 'axios';
 import i18n from '@/lang';
 import store from '@/store';
 import CKEditor from '@ckeditor/ckeditor5-vue2';
+import VueObserveVisibility from 'vue-observe-visibility';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -20,6 +21,7 @@ Vue.prototype.$axios = axios;
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(CKEditor);
+Vue.use(VueObserveVisibility);
 
 new Vue({
     vuetify,
