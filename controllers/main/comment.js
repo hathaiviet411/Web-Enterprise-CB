@@ -30,6 +30,9 @@ module.exports = (io, socket) => {
             // await comment.save()
 
             socket.broadcast.to(ideaId).emit("renderComment", comment)
+            socket.emit("renderComment", comment)
+
+            io.to(ideaId).emit("renderComment", comment)
         }
 
         else {
@@ -51,7 +54,7 @@ module.exports = (io, socket) => {
 
         await Comment.deleteOne({ _id: commentId })
 
-        socket.broadcast.to(ideaId).emit("renderComment", comment)
+        socket.broadcast.to(ideaId).emit("renderComment", commentId)
     }
 
     updateComment = async (ctx) => {
