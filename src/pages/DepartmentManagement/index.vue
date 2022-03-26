@@ -101,9 +101,9 @@
 <script>
 import { getDepartment } from '@/api/modules/department';
 
-const URL_GET_DEPARTMENT = '/admin/department';
-// const URL_POST_DEPARTMENT = '/admin/department';
-// const URL_DELETE_DEPARTMENT = '/admin/department';
+const URL_GET_DEPARTMENT = '/department';
+// const URL_POST_DEPARTMENT = '/department';
+// const URL_DELETE_DEPARTMENT = '/department';
 export default {
     name: 'DepartmentManagement',
     data() {

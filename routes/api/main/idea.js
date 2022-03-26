@@ -7,7 +7,7 @@ router.get("/idea", controller.getIdea)
 
 router.get("/idea/:id", controller.getIdeaComment)
 
-router.post("/idea", multer.fields([{ name: 'ideaFile' }]), controller.createIdea)
+router.post("/idea", multer.fields([{ name: 'ideaFile', }, { name: "ideaPicture", maxCount: 1 }]), controller.createIdea)
 
 router.put("/idea/:id", multer.fields([{ name: 'ideaFile' }]), controller.updateIdea)
 

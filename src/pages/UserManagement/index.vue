@@ -210,10 +210,10 @@ import { isPassValidation } from './helper';
 import { MakeToast } from '@/toast/toastMessage';
 
 const urlAPI = {
-    apiGetListRole: 'admin/role',
-    apiGetListDepartment: 'admin/department',
-    apiGetListUser: 'admin/user',
-    apiPostUser: 'admin/register',
+    apiGetListRole: '/role',
+    apiGetListDepartment: '/department',
+    apiGetListUser: '/user',
+    apiPostUser: '/register',
 };
 
 export default {

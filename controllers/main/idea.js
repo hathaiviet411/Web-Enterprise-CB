@@ -19,7 +19,9 @@ module.exports = {
         if (page) {
             page = parseInt(page)
             const skip = (page - 1) * pageSize;
-            const idea = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").sort("-createAt").lean();
+            const idea = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").sort({
+                createdAt: 'DESC'
+            }).lean();
             const totalPage = Math.ceil(idea.length / 5);
             const totalRecord = idea.length;
             return (ctx.body = {
@@ -60,7 +62,7 @@ module.exports = {
             idea: ideaId
         }).sort({
             createdAt: 'DESC'
-        }).lean();
+        }).populate("user").lean();
 
         if (!idea) {
             return (ctx.body = {
@@ -97,6 +99,11 @@ module.exports = {
                 let ideaFilePath = ctx.request.files.ideaFile[i].path.split("\\");
                 idea.ideaFile[i] = getPath(ideaFilePath);
             }
+        }
+
+        if (ctx.request.files.ideaPicture) {
+            let ideaPicturePath = ctx.request.files.ideaPicture[0].path.split("\\");
+            idea.ideaPicture = getPath(ideaPicturePath);
         }
 
 

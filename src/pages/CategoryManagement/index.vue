@@ -353,10 +353,10 @@ import { MakeToast } from '@/toast/toastMessage';
 import { isPassValidation } from './helper';
 
 // Const APIs Url
-const URL_GET_CATEGORY = '/admin/category';
-const URL_POST_CATEGORY = '/admin/category';
-const URL_PUT_CATEGORY = '/admin/category';
-const URL_DELETE_CATEGORY = '/admin/category';
+const URL_GET_CATEGORY = '/category';
+const URL_POST_CATEGORY = '/category';
+const URL_PUT_CATEGORY = '/category';
+const URL_DELETE_CATEGORY = '/category';
 
 export default {
     name: 'CategoryManagement',

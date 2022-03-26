@@ -1,6 +1,7 @@
 const Comment = require("../../models/comment");
 const Idea = require("../../models/idea")
-const sendEmail = require("../../middleware/nodemailer")
+const sendEmail = require("../../middleware/nodemailer");
+const userRole = require("../../models/userRole");
 
 module.exports = (io, socket) => {
     userReadIdea = async (payload) => {
@@ -10,13 +11,26 @@ module.exports = (io, socket) => {
 
         await Idea.findByIdAndUpdate(ideaId, { $inc: { viewCount: 1 } });
 
-        socket.join(ideaId);
+        socket.join("idea:" + ideaId);
     }
 
     createComment = async (payload) => {
         const { commentContent, ideaId, isAnonymous } = payload;
-        const user = socket.decoded.payload;
+        const userId = socket.decoded.payload;
         const idea = await Idea.findOne({ _id: ideaId }).populate('user').lean();
+        const user = await userRole.findOne({ user: userId })
+            .populate({
+                path: 'role',
+                select: '-__v'
+            })
+            .populate({
+                path: 'user',
+                select: '-__v -createdAt -updatedAt -password',
+            })
+            .populate({
+                path: 'department',
+                select: '-__v -createdAt -updatedAt',
+            })
         if (idea) {
             const comment = new Comment({
                 commentContent: commentContent,
@@ -25,14 +39,19 @@ module.exports = (io, socket) => {
                 isAnonymous: isAnonymous,
             });
 
-            console.log(comment)
+            const payload = {
+                user,
+                comment
+            }
 
-            // await comment.save()
+            console.log(payload)
 
-            socket.broadcast.to(ideaId).emit("renderComment", comment)
-            socket.emit("renderComment", comment)
+            await comment.save()
 
-            io.to(ideaId).emit("renderComment", comment)
+            // socket.broadcast.to(ideaId).emit("renderComment", payload)
+            // socket.emit("renderComment", payload)
+
+            socket.to(ideaId).emit("renderComment", payload)
         }
 
         else {
@@ -60,7 +79,7 @@ module.exports = (io, socket) => {
     updateComment = async (ctx) => {
         const { commentContent, commentId } = payload;
 
-        if(!commentId || commentContent) {
+        if (!commentId || commentContent) {
             throw new Error('comment not found');
         }
 

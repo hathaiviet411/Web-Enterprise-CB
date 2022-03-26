@@ -25,7 +25,10 @@ const idea = new Schema({
     ideaContent: {
         type: String,
         trim: true,
-        require: true,
+    },
+    ideaPicture: {
+        type: String,
+        trim: true,
     },
     viewCount: {
         type: Number,

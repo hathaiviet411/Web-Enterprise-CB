@@ -196,7 +196,7 @@ import { postIdea } from '@/api/modules/idea';
 
 // Const APIs Url
 const urlAPI = {
-    getCategoryList: '/admin/category',
+    getCategoryList: '/category',
     postIdea: '/idea',
 };
 

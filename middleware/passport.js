@@ -45,8 +45,8 @@ passport.use(
     new JwtStrategy(accessOptions, async function (jwt_payload, done) {
         try {
             const user = await UserRole.findOne({
-                    user: jwt_payload.payload
-                })
+                user: jwt_payload.payload
+            })
                 .populate({
                     path: 'role',
                     select: '-__v'
