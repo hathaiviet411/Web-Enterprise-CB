@@ -104,11 +104,17 @@ const io = new Server(httpServer, {
 });
 
 const registerCommentHandlers = require('./controllers/main/comment');
+const registeLikeHandlers = require('./controllers/main/like')
+const registeDislikeHandlers = require('./controllers/main/dislike')
 
 const onConnection = (socket) => {
     console.log(socket.id);
     registerCommentHandlers(io, socket);
+    registeLikeHandlers(io, socket);
+    registeDislikeHandlers(io, socket);
 };
+
+io.sockets.setMaxListeners(0);
 
 io.use(async function(socket, next) {
     if (socket.handshake.auth && socket.handshake.auth.token) {

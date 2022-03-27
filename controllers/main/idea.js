@@ -4,6 +4,8 @@ const UserRole = require("../../models/userRole");
 const Role = require("../../models/role");
 const Category = require("../../models/category")
 const Comment = require("../../models/comment")
+const Like = require("../../models/like");
+const Dislike = require("../../models/dislike");
 const sendEmail = require("../../middleware/nodemailer")
 require('dotenv').config();
 
@@ -14,16 +16,30 @@ const getPath = (path) => {
 module.exports = {
     getIdea: async (ctx) => {
         let page = ctx.query.page;
-        // let filter = ctx.query.filter;
         const pageSize = 5;
+        const ideas = []
         if (page) {
             page = parseInt(page)
             const skip = (page - 1) * pageSize;
-            const idea = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").sort({
+            const count = await Idea.find({}).count().lean()
+            const allIdeas = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").sort({
                 createdAt: 'DESC'
             }).lean();
-            const totalPage = Math.ceil(idea.length / 5);
-            const totalRecord = idea.length;
+            const totalPage = count / 5 === 0 ? parseInt(count / 5) : parseInt(count / 5) + 1;
+            const totalRecord = count;
+            for (allIdea of allIdeas) {
+                const comments = await Comment.find({ idea: allIdea._id }).populate("user", "-password -idea").lean();
+                const likes = await Like.find({ idea: allIdea._id }).count();
+                const dislikes = await Dislike.find({ idea: allIdea._id }).count();
+                allIdea = {
+                    ...allIdea,
+                    likes: likes,
+                    dislikes: dislikes,
+                    comments: comments,
+                }
+                ideas.push(allIdea)
+            }
+
             return (ctx.body = {
                 status: true,
                 message: "get idea success",
@@ -31,7 +47,7 @@ module.exports = {
                     page,
                     totalPage,
                     totalRecord,
-                    idea
+                    ideas
                 }
             })
         }
@@ -62,8 +78,9 @@ module.exports = {
             idea: ideaId
         }).sort({
             createdAt: 'DESC'
-        }).populate("user").lean();
-
+        }).populate("user", "-password").lean();
+        const likes = await Like.find({ idea: ideaId }).count();
+        const dislikes = await Dislike.find({ idea: ideaId }).count();
         if (!idea) {
             return (ctx.body = {
                 status: false,
@@ -76,7 +93,9 @@ module.exports = {
             message: "get idea and comments success",
             data: {
                 idea,
-                comments
+                likes,
+                dislikes,
+                comments,
             }
         })
     },
@@ -187,10 +206,10 @@ module.exports = {
         }
         const deleteIdea = await Idea.deleteOne({
             _id: id
-        })
-        await Comment.deleteMany({ idea: id })
-        // await Like.deleteMany({ idea: id })
-        // await Dislike.deleteMany({ idea: id })
+        });
+        await Comment.deleteMany({ idea: id });
+        await Like.deleteMany({ idea: id });
+        await Dislike.deleteMany({ idea: id });
 
         if (deleteIdea.deletedCount === 0) {
             return (ctx.body = {
