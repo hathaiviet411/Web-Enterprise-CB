@@ -228,7 +228,7 @@ module.exports = {
         const isAgreedTerm = ctx.request.body.isAgreedTerm;
         const user = ctx.state.user
         console.log(isAgreedTerm)
-        if (isAgreedTerm === 'true') {
+        if (Boolean(isAgreedTerm) === true) {
             await User.updateOne({
                 _id: user.user._id
             }, {
