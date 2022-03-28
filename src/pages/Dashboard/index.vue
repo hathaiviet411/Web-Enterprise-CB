@@ -2,10 +2,10 @@
 	<div class="dashboard">
 		<v-row>
 			<v-col v-for="(post, index) in DATA" :key="index" cols="12">
-				<v-card id="cat" elevation="20" class="rounded-lg mx-auto" max-width="800px">
+				<v-card id="cat" elevation="20" class="rounded-lg mx-auto" max-width="1000px">
 					<v-card-title>
 						<v-row>
-							<v-col cols="2" lg="1" class="text-center">
+							<v-col cols="12" lg="1" class="text-center">
 								<v-img
 									min-width="40"
 									min-height="40"
@@ -17,9 +17,9 @@
 								/>
 							</v-col>
 
-							<v-col cols="8" lg="10">
+							<v-col cols="12" lg="3">
 								<div class="author-info">
-									<span class="author-name">{{ post.author }}</span>
+									<span class="author-name">{{ post.user.name + ' - ' + post.user.username }}</span>
 									<br>
 									<span class="uploaded-time">{{ post.uploadedTime }}
 										<span>·</span>
@@ -28,17 +28,46 @@
 								</div>
 							</v-col>
 
-							<v-col cols="2" lg="1">
-								<v-btn class="mx-2" fab dark small color="#7366FF" style="float: right;">
-									<v-icon dark>mdi-dots-horizontal</v-icon>
-								</v-btn>
+							<v-col cols="12" lg="8" class="text-align: right;">
+								<v-row>
+									<v-col cols="12" lg="5">
+										<span class="text-small">Department: {{ post.department }}</span>
+									</v-col>
+
+									<v-col cols="12" lg="5">
+										<span class="text-small">Category: {{ post.category }}</span>
+									</v-col>
+
+									<v-col cols="12" lg="2">
+										<v-btn class="mx-2" fab dark small color="#7366FF" style="float: right;">
+											<v-icon dark>mdi-dots-horizontal</v-icon>
+										</v-btn>
+									</v-col>
+								</v-row>
 							</v-col>
 						</v-row>
 					</v-card-title>
 
-					<v-card-text class="content">
+					<v-card-text v-if="post.ideaPicture" class="content">
+						<v-row>
+							<v-col cols="12">
+								<h5 class="post-content ml-3">{{ post.ideaContent }}</h5>
+							</v-col>
+						</v-row>
+
 						<div class="text-center">
-							<h4 class="post-content">Khung giờ vàng của tôi: 23h-4h sáng: <br> Chạy tất cả các deadline cùng 1 lúc.  <br> 🙃🙃🙃</h4>
+							<v-img
+								width="1168"
+								height="472"
+								contain
+								:src="post.ideaPicture"
+							/>
+						</div>
+					</v-card-text>
+
+					<v-card-text v-else class="random-background" :style="setBg()">
+						<div class="text-center">
+							<h5 class="post-content ml-3">{{ post.ideaContent }}</h5>
 						</div>
 					</v-card-text>
 
@@ -46,27 +75,27 @@
 						<v-row>
 							<v-col cols="3" lg="6">
 								<v-icon color="red" class="p-1" style="margin-bottom: 2px;">mdi-heart</v-icon>
-								<span class="like-total text-underline">{{ post.likeTotal + 'K' + ' yêu thích' }}</span>
+								<span class="like-total text-underline">{{ post.likes + ' yêu thích' }}</span>
 							</v-col>
 
 							<v-col cols="3" lg="2" class="pr-0 pl-0">
 								<div style="float: right;">
 									<v-icon class="p-1">mdi-eye</v-icon>
-									<span class="comment-total text-underline">{{ post.viewTotal + 'K' + ' lượt xem' }}</span>
+									<span class="comment-total text-underline">{{ post.viewCount + ' lượt xem' }}</span>
 								</div>
 							</v-col>
 
 							<v-col cols="3" lg="2" class="pr-0 pl-0">
 								<div style="float: right;">
 									<v-icon class="p-1">mdi-message</v-icon>
-									<span class="comment-total text-underline">{{ post.commentTotal + 'K' + ' bình luận' }}</span>
+									<span class="comment-total text-underline">{{ (post.comments.length === 0 ? 0 : (post.comments.length + 1)) + ' bình luận' }}</span>
 								</div>
 							</v-col>
 
 							<v-col cols="3" lg="2">
 								<div style="float: right;">
 									<v-icon class="p-1" style="margin-bottom: 2px;">mdi-share</v-icon>
-									<span class="share-total text-underline mr-3">{{ post.shareTotal + ' chia sẻ' }}</span>
+									<span class="share-total text-underline mr-3">{{ 411 + ' chia sẻ' }}</span>
 								</div>
 							</v-col>
 						</v-row>
@@ -168,19 +197,22 @@
 				</v-card>
 			</v-col>
 
-			<div v-if="DATA.length" v-observe-visibility="handleScrolledBottom" />
+			<!-- <div v-if="DATA.length" v-observe-visibility="handleScrolledBottom" />
 
-			<v-col cols="12" class="text-center">
+			<v-col v-if="isLoading === true" cols="12" class="text-center">
 				<v-btn class="btn-loading rounded-xl" elevation="12" color="#7366FF">
 					<b-icon style="color: #FFFFFF" icon="arrow-clockwise" animation="spin-pulse" font-scale="2" />
 					<span style="color: #FFFFFF">Loading...</span>
 				</v-btn>
-			</v-col>
+			</v-col> -->
 		</v-row>
 	</div>
 </template>
 
 <script>
+import { getListIdea } from '@/api/modules/idea';
+
+const apiGetListIdea = '/idea?page=';
 
 export default {
     name: 'Dashboard',
@@ -197,79 +229,56 @@ export default {
                 dislike: '',
             },
 
-            isLoading: false,
+            page: 1,
+            totalPage: 1,
+
+            // isLoading: false,
         };
     },
     watch: {
-        isLoading(val) {
-            val && setTimeout(() => {
-                this.isLoading = false;
-                this.getListIdea();
-            }, 3000);
-        },
+        // isLoading(val) {
+        //     val && setTimeout(() => {
+        //         this.isLoading = false;
+        //         this.getIdeaList();
+        //     }, 3000);
+        // },
     },
     created() {
-        this.getListIdea();
+        this.getIdeaList();
     },
     methods: {
-        getListIdea() {
-            const sampleObj = {
-                id: 1,
-                author: 'Biết thế éo đi làm',
-                avatar: 'https://scontent.fhan5-6.fna.fbcdn.net/v/t39.30808-6/245215277_325485209338808_3583214672850400057_n.png?_nc_cat=1&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=bn5RHMAitl8AX9rWbht&_nc_ht=scontent.fhan5-6.fna&oh=00_AT-AGPHkEgezLvCitFX_UXNyI-QvDbT4T77KZsPt1WxLDQ&oe=6242F758',
-                uploadedTime: '23 phút',
-                content: 'Top các nghề hay bị dí Deadline: Kế toán, Marketing, Sale, IT, Designer, HR,.... và tất cả các ngành còn lại ở Việt Nam.',
-                image: '',
-                likeTotal: 15,
-                viewTotal: 42,
-                commentTotal: 63,
-                shareTotal: 131,
-                comments: [
-                    {
-                        id: 1,
-                        author: 'Nghiệp quật đấyyy dmm?',
-                        avatar: 'https://scontent.fhan5-11.fna.fbcdn.net/v/t39.30808-6/272800001_957227341847102_852898675806413068_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=Sx5gRuWMcV0AX87eA76&_nc_ht=scontent.fhan5-11.fna&oh=00_AT9-Sn0uXH8HWoV4mYLxJ13QdxVDN41gEoEAeZMXL63I9A&oe=6242D845',
-                        uploadedTime: '2 giờ',
-                        content: 'Dù chỉ là designer thôi mà t tưởng bọn leader là mẹ t ấy ',
-                        image: '',
-                        reactionTotal: 131,
-                    },
-                    {
-                        id: 2,
-                        author: 'Trang Trang',
-                        avatar: 'https://scontent.fhan5-6.fna.fbcdn.net/v/t39.30808-6/276141415_675164433569960_5349981220649122425_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=WKIME7nIVN8AX-FlLTO&_nc_ht=scontent.fhan5-6.fna&oh=00_AT_QlKmSRixCAfZn05FBICBVxrnFw0q0FMBCAeop7kPtwA&oe=62445AA3',
-                        uploadedTime: '1 ngày',
-                        content: 'Nếu mụt ngừi thứ 6 khóc trên cty thì tức là thứ 2 nên nộp đơn xin nghỉ việc, nhưng vẫn không nộp thì tức là họ nghèo vcl nên hèn 😃',
-                        image: '',
-                        reactionTotal: 72,
-                    },
-                    {
-                        id: 3,
-                        author: 'Ngọc Linh',
-                        avatar: 'https://scontent.fhan5-6.fna.fbcdn.net/v/t39.30808-6/275297600_1394310004330418_1305950219585731961_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=-QQQ6LjJBi4AX8S9z72&_nc_oc=AQlOQUtrUkJNoXFOFBc6BAwjGkuwGwqSAv4sLCsUP2JIzLfmSXf3XmpMm86X8OUs7MA&_nc_ht=scontent.fhan5-6.fna&oh=00_AT8qGRRjRBJtHmqA6LoixshEcGxtbQERfVQqGj4tBXFivg&oe=6243182A',
-                        uploadedTime: '1 ngày',
-                        content: 'Mục tiêu ngủ trước 23h từ năm này qua năm khác không bao giờ thành hiện thực',
-                        image: 'https://scontent.fhan5-11.fna.fbcdn.net/v/t39.30808-6/276131927_1404933626601389_1977106158637679823_n.jpg?_nc_cat=103&ccb=1-5&_nc_sid=dbeb18&_nc_ohc=ZC5A1SSXg1MAX-lFaxh&_nc_ht=scontent.fhan5-11.fna&oh=00_AT_LbOEDmqh-XEK6iYqXWVxqDKz4qvkSpEAiuLudfTmRYA&oe=62443DD7',
-                        reactionTotal: 6,
-                    },
-                ],
-            };
-
-            let index = 0;
-
-            while (index < 2) {
-                this.DATA.push(sampleObj);
-                index++;
-            }
-        },
-
-        handleScrolledBottom(isVisible) {
-            if (!isVisible) {
-                return;
-            }
-
+        async getIdeaList() {
             this.isLoading = true;
+
+            const URL = `${apiGetListIdea}${this.page}`;
+            try {
+                const response = await getListIdea(URL);
+
+                if (response.status === true) {
+                    this.DATA = response.data.ideas;
+                    this.totalPage = response.totalPage;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+
+            this.isLoading = false;
         },
+
+        setBg() {
+            const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+            const style = '#' + randomColor;
+            return `background-color: ${style}`;
+        },
+
+        // handleScrolledBottom(isVisible) {
+        //     if (!isVisible) {
+        //         return;
+        //     }
+
+        //     this.page += 1;
+        //     this.isLoading = true;
+        // },
     },
 };
 </script>
@@ -299,11 +308,10 @@ export default {
 	align-content: center;
 	flex-direction: column;
 	height: 472px;
-	background-color: #165348;
 }
 
 .post-content {
-	color: $white;
+	color: $black;
 	line-height: 40px;
 }
 
@@ -358,6 +366,18 @@ export default {
 
 .btn-loading {
 	opacity: .8;
+}
+
+.text-small {
+	font-size: 12px;
+}
+
+.random-background {
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	flex-direction: column;
+	height: 472px;
 }
 
 </style>
