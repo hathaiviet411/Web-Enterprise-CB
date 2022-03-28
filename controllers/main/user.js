@@ -42,13 +42,14 @@ module.exports = {
         password: hash,
         name: name,
       });
-      await user.save();
+      
       let userRole = new UserRole({
         user: user._id,
         role: roleId,
         department: departmentId
       });
       await userRole.save();
+      await user.save();
       return (ctx.body = {
         status: true,
         message: "Account successfully created",
