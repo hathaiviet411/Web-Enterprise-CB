@@ -3,8 +3,8 @@
 		<v-data-table
 			:headers="vFields"
 			:items="vItems"
-			sort-by="calories"
 			class="elevation-12"
+			:search="search"
 		>
 			<template v-slot:top>
 				<v-toolbar flat>
@@ -14,53 +14,40 @@
 
 					<v-spacer />
 
-					<v-btn color="primary" dark class="mb-2 btn-register">
-						<span class="mdi mdi-account-plus pr-1" />
-						<span>New Department</span>
-					</v-btn>
+					<v-text-field
+						v-model="search"
+						append-icon="mdi-magnify"
+						label="Search"
+						single-line
+						hide-details
+					/>
 
-					<v-dialog v-model="dialogDelete" max-width="500px">
+					<v-spacer />
+
+					<v-dialog v-model="dialogNewDepartment" max-width="500px" persistent>
+						<template v-slot:activator="{ on, attrs }">
+							<v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+								<v-icon left>mdi-plus-box</v-icon>
+								<span>New Department</span>
+							</v-btn>
+						</template>
 						<v-card>
-							<v-card-title
-								class="text-h5"
-							>Are you sure you want to delete this item?</v-card-title>
+							<v-card-title>
+								<v-row>
+									<v-col cols="12" class="text-center">
+										<span>{{ formTitle }}</span>
+									</v-col>
+								</v-row>
+							</v-card-title>
 
 							<v-card-text>
 								<v-container>
 									<v-row>
 										<v-col cols="12" sm="12" md="12">
 											<v-text-field
-												:value="editedItem.name"
-												label="Dessert name"
-												disabled
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												:value="editedItem.calories"
-												label="Calories"
-												disabled
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												:value="editedItem.fat"
-												label="Fat (g)"
-												disabled
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												:value="editedItem.carbs"
-												label="Carbs (g)"
-												disabled
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												:value="editedItem.protein"
-												label="Protein (g)"
-												disabled
+												v-model="editedItem.departmentName"
+												prepend-inner-icon="mdi-library"
+												label="Department Name"
 											/>
 										</v-col>
 									</v-row>
@@ -69,17 +56,53 @@
 
 							<v-card-actions>
 								<v-spacer />
-
-								<v-btn tile color="success" @click="closeDelete">
-									<v-icon left>mdi-delete-empty</v-icon>
+								<v-btn color="red darken-1" text @click="close()">
+									<v-icon left>mdi-exit-to-app</v-icon>
 									<span>Cancel</span>
 								</v-btn>
-
-								<v-btn tile color="success" @click="deleteItemConfirm">
-									<v-icon left>mdi-delete-empty</v-icon>
-									<span>OK</span>
+								<v-btn color="blue darken-1" text @click="save()">
+									<v-icon left>mdi-lead-pencil</v-icon>
+									<span>{{ editedIndex === -1 ? 'Register' : 'Save' }}</span>
 								</v-btn>
+							</v-card-actions>
+						</v-card>
+					</v-dialog>
+
+					<v-dialog v-model="dialogDeleteDepartment" max-width="500px">
+						<v-card>
+							<v-card-title>
+								<v-row>
+									<v-col cols="12" class="text-center">
+										<span>Are you sure to delete this department?</span>
+									</v-col>
+								</v-row>
+							</v-card-title>
+
+							<v-card-text>
+								<v-container>
+									<v-row>
+										<v-col cols="12" sm="12" md="12">
+											<v-text-field
+												:value="editedItem.departmentName"
+												label="Department name"
+												prepend-inner-icon="fa-building"
+												readonly
+											/>
+										</v-col>
+									</v-row>
+								</v-container>
+							</v-card-text>
+
+							<v-card-actions>
 								<v-spacer />
+								<v-btn color="blue darken-1" text @click="closeDelete()">
+									<v-icon left>mdi-exit-to-app</v-icon>
+									<span>Cancel</span>
+								</v-btn>
+								<v-btn color="red darken-1" text @click="deleteItemConfirm()">
+									<v-icon left>mdi-delete-empty</v-icon>
+									<span>{{ 'Confirm' }}</span>
+								</v-btn>
 							</v-card-actions>
 						</v-card>
 					</v-dialog>
@@ -87,8 +110,8 @@
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-				<v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+				<v-icon small class="mr-2" style="color: #051367;" @click="editItem(item)">mdi-pencil</v-icon>
+				<v-icon small style="color: #E84545;" @click="deleteItem(item)">mdi-delete</v-icon>
 			</template>
 
 			<template v-slot:no-data>
@@ -99,17 +122,28 @@
 </template>
 
 <script>
-import { getDepartment } from '@/api/modules/department';
+// Apis import
+import { getDepartment, postDepartment, deleteDepartment } from '@/api/modules/department';
 
-const URL_GET_DEPARTMENT = '/department';
-// const URL_POST_DEPARTMENT = '/department';
-// const URL_DELETE_DEPARTMENT = '/department';
+// URL apis
+const urlAPI = {
+    apiGetListDepartment: '/department',
+    apiCreateNewDepartment: '/department',
+    // apiUpdateDepartment: '/department',
+    apiDeleteDepartment: '/department',
+};
+
+// Helper functions import
+import { isPassValidation } from './helper';
+import { MakeToast } from '@/toast/toastMessage';
+
 export default {
     name: 'DepartmentManagement',
     data() {
         return {
-            dialog: false,
-            dialogDelete: false,
+            dialogNewDepartment: false,
+            dialogDeleteDepartment: false,
+
             vFields: [
                 {
                     text: 'Department Name',
@@ -117,40 +151,39 @@ export default {
                     sortable: false,
                     value: 'departmentName',
                 },
-                { text: 'Idea Contributed', value: 'numberOfIdea' },
-                { text: 'Staff Contributed', value: 'numberOfContributor' },
+                { text: 'Idea Contributed', value: 'numberOfIdea', align: 'center' },
+                { text: 'Staff Contributed', value: 'numberOfContributor', align: 'center' },
                 { text: 'Actions', value: 'actions', sortable: false },
             ],
+
             vItems: [],
+
             editedIndex: -1,
             editedItem: {
-                name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0,
+                id: '',
+                departmentName: '',
             },
+
             defaultItem: {
-                name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0,
+                id: '',
+                departmentName: '',
             },
+
+            search: '',
         };
     },
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+            return this.editedIndex === -1 ? 'New Department' : 'Edit Department';
         },
     },
 
     watch: {
-        dialog(val) {
+        dialogNewDepartment(val) {
             val || this.close();
         },
-        dialogDelete(val) {
+        dialogDeleteDepartment(val) {
             val || this.closeDelete();
         },
     },
@@ -162,7 +195,7 @@ export default {
     methods: {
         async getDepartmentData() {
             try {
-                const response = await getDepartment(URL_GET_DEPARTMENT);
+                const response = await getDepartment(urlAPI.apiGetListDepartment);
                 if (response.status === true) {
                     const RAW_DATA = [...response.departmentStatistic];
                     for (let i = 0; i < RAW_DATA.length; i++) {
@@ -174,25 +207,82 @@ export default {
             }
         },
 
+        async createNewDepartment() {
+            if (isPassValidation(this.editedItem) === true) {
+                this.close();
+                try {
+                    const response = await postDepartment(urlAPI.apiCreateNewDepartment, this.editedItem);
+                    if (response.status === true) {
+                        MakeToast({
+                            variant: 'success',
+                            title: 'Success',
+                            content: 'Create New Department Successful',
+                        });
+
+                        this.getDepartmentData();
+                    }
+                } catch (error) {
+                    console.log(error.message);
+                }
+            }
+        },
+
+        // async updateDepartment() {
+        //     try {
+        //         const response = await postDepartment(urlAPI.apiUpdateDepartment, this.editedItem);
+        //         console.log(response);
+        //         if (response.status === true) {
+        //             this.getDepartmentData();
+        //             this.close();
+        //         }
+        //     } catch (error) {
+        //         console.log(error.message);
+        //     }
+        // },
+
+        async deleteDepartment(id) {
+            this.closeDelete();
+            const URL = `${urlAPI.apiDeleteDepartment}/${id}`;
+            try {
+                const response = await deleteDepartment(URL);
+                if (response.status === true) {
+                    MakeToast({
+                        variant: 'success',
+                        title: 'Success',
+                        content: 'Delete Department Successful',
+                    });
+
+                    this.getDepartmentData();
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        },
+
         editItem(item) {
-            this.editedIndex = this.desserts.indexOf(item);
-            this.editedItem = Object.assign({}, item);
-            this.dialog = true;
+            this.editedIndex = this.vItems.indexOf(item);
+            this.editedItem = {
+                id: item._id,
+                departmentName: item.departmentName,
+            };
+            this.dialogNewDepartment = true;
         },
 
         deleteItem(item) {
-            this.editedIndex = this.desserts.indexOf(item);
-            this.editedItem = Object.assign({}, item);
-            this.dialogDelete = true;
+            this.editedIndex = this.vItems.indexOf(item);
+            this.editedItem = {
+                id: item._id,
+                departmentName: item.departmentName,
+            };
+            this.dialogDeleteDepartment = true;
         },
 
         deleteItemConfirm() {
-            this.desserts.splice(this.editedIndex, 1);
-            this.closeDelete();
+            this.deleteDepartment(this.editedItem.id);
         },
 
         close() {
-            this.dialog = false;
+            this.dialogNewDepartment = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
                 this.editedIndex = -1;
@@ -200,7 +290,7 @@ export default {
         },
 
         closeDelete() {
-            this.dialogDelete = false;
+            this.dialogDeleteDepartment = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
                 this.editedIndex = -1;
@@ -209,11 +299,10 @@ export default {
 
         save() {
             if (this.editedIndex > -1) {
-                Object.assign(this.desserts[this.editedIndex], this.editedItem);
+                this.updateDepartment(this.editedItem);
             } else {
-                this.desserts.push(this.editedItem);
+                this.createNewDepartment(this.editedItem);
             }
-            this.close();
         },
     },
 };
@@ -221,7 +310,6 @@ export default {
 
 <style lang="scss" scoped>
 .btn-register {
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
-    rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
 }
 </style>

@@ -3,7 +3,6 @@
 		<v-data-table
 			:headers="vFields"
 			:items="vItems"
-			sort-by="calories"
 			class="elevation-12"
 		>
 			<template v-slot:top>
@@ -107,7 +106,7 @@
 
 					<v-dialog v-model="dialogDelete" max-width="500px">
 						<v-card>
-							<v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+							<v-card-title class="text-h5">Are you sure you want to delete this idea?</v-card-title>
 
 							<v-card-text>
 								<v-container>
@@ -153,17 +152,14 @@
 
 							<v-card-actions>
 								<v-spacer />
-
-								<v-btn tile color="success" @click="closeDelete">
-									<v-icon left>mdi-delete-empty</v-icon>
+								<v-btn color="blue darken-1" text @click="closeDelete()">
+									<v-icon left>mdi-exit-to-app</v-icon>
 									<span>Cancel</span>
 								</v-btn>
-
-								<v-btn tile color="success" @click="deleteItemConfirm">
+								<v-btn color="red darken-1" text @click="deleteItemConfirm()">
 									<v-icon left>mdi-delete-empty</v-icon>
-									<span>OK</span>
+									<span>{{ 'Confirm' }}</span>
 								</v-btn>
-								<v-spacer />
 							</v-card-actions>
 						</v-card>
 					</v-dialog>
@@ -171,12 +167,8 @@
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-icon small class="mr-2" @click="editItem(item)">
-					mdi-pencil
-				</v-icon>
-				<v-icon small @click="deleteItem(item)">
-					mdi-delete
-				</v-icon>
+				<v-icon small class="mr-2" style="color: #051367;" @click="editItem(item)">mdi-pencil</v-icon>
+				<v-icon small style="color: #E84545;" @click="deleteItem(item)">mdi-delete</v-icon>
 			</template>
 
 			<template v-slot:no-data>
