@@ -17,7 +17,10 @@ module.exports = (io, socket) => {
     createComment = async (payload) => {
         const { commentContent, ideaId, isAnonymous } = payload;
         const userId = socket.decoded.payload;
-        const idea = await Idea.findOne({ _id: ideaId }).populate('user').lean();
+        const idea = await Idea.findOne({ _id: ideaId }).lean();
+        if (idea.isDisabled === true) {
+            socket.to("idea:" + ideaId).emit("comment:create", "this idea is closed");
+        }
         const user = await userRole.findOne({ user: userId })
             .populate({
                 path: 'role',
@@ -31,6 +34,7 @@ module.exports = (io, socket) => {
                 path: 'department',
                 select: '-__v -createdAt -updatedAt',
             })
+            .lean();
         if (idea) {
             const comment = new Comment({
                 commentContent: commentContent,
@@ -44,14 +48,12 @@ module.exports = (io, socket) => {
                 comment
             }
 
-            console.log(payload)
-
-            await comment.save()
+            await comment.save();
 
             // socket.broadcast.to(ideaId).emit("renderComment", payload)
             // socket.emit("renderComment", payload)
 
-            socket.to(ideaId).emit("renderComment", payload)
+            socket.to("idea:" + ideaId).emit("comment:create", payload);
         }
 
         else {
@@ -71,13 +73,13 @@ module.exports = (io, socket) => {
             throw new Error('comment not found');
         }
 
-        await Comment.deleteOne({ _id: commentId })
+        await Comment.deleteOne({ _id: commentId });
 
-        socket.broadcast.to(ideaId).emit("renderComment", commentId)
+        socket.to("idea:" + ideaId).emit("comment:delete", commentId);
     }
 
     updateComment = async (ctx) => {
-        const { commentContent, commentId } = payload;
+        const { commentContent, commentId, ideaId } = payload;
 
         if (!commentId || commentContent) {
             throw new Error('comment not found');
@@ -85,7 +87,7 @@ module.exports = (io, socket) => {
 
         const comment = await Comment.findByIdAndUpdate({ _id: commentId }, { commentContent: commentContent });
 
-        socket.broadcast.to(ideaId).emit("renderComment", comment)
+        socket.to("idea:" + ideaId).emit("comment:update", comment);
     }
 
 

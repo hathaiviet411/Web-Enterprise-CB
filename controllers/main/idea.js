@@ -16,17 +16,15 @@ const getPath = (path) => {
 module.exports = {
     getIdea: async (ctx) => {
         let page = ctx.query.page;
+        let sort = ctx.query.page;
         const pageSize = 5;
         const ideas = []
         if (page) {
             page = parseInt(page)
             const skip = (page - 1) * pageSize;
-            const count = await Idea.find({}).count().lean()
-            const allIdeas = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").sort({
-                createdAt: 'DESC'
-            }).lean();
-            const totalPage = count / 5 === 0 ? parseInt(count / 5) : parseInt(count / 5) + 1;
-            const totalRecord = count;
+            const totalRecord = await Idea.find({}).count().lean()
+            const allIdeas = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").populate("category").populate("department").sort({ createdAt: 'DESC' }).lean();
+            const totalPage = totalRecord % 5 === 0 ? parseInt(totalRecord / 5) : parseInt(totalRecord / 5) + 1;
             for (allIdea of allIdeas) {
                 const comments = await Comment.find({ idea: allIdea._id }).populate("user", "-password -idea").lean();
                 const likes = await Like.find({ idea: allIdea._id }).count();
@@ -227,7 +225,6 @@ module.exports = {
     agreeTerm: async (ctx) => {
         const isAgreedTerm = ctx.request.body.isAgreedTerm;
         const user = ctx.state.user
-        console.log(isAgreedTerm)
         if (Boolean(isAgreedTerm) === true) {
             await User.updateOne({
                 _id: user.user._id

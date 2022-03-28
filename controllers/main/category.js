@@ -33,6 +33,7 @@ module.exports = {
         }, {
             isDisabled: true,
         }));
+
         cronjob(finalClosureDate {
             await Idea.updateMany({
                 category: id
@@ -40,7 +41,6 @@ module.exports = {
                 isDisabled: true,
             })
         }));
-            
         */
         return (ctx.body = {
             status: true,
