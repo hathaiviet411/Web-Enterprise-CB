@@ -34,7 +34,7 @@ export default {
             };
             socket.emit('comment:create', payload);
 
-            socket.on("renderComment", (payload) => {
+            socket.on('renderComment', (payload) => {
                 console.log(payload);
                 // then renderComent
             });
