@@ -236,6 +236,8 @@
 // Apis import
 import { getListIdea } from '@/api/modules/idea';
 
+import socket from '@/socket/socket';
+
 // Const APIs Url
 const urlAPI = {
     apiGetListIdea: '/idea?page=',
@@ -248,6 +250,8 @@ export default {
             DATA: [],
 
             isShowCommentSector: false,
+
+            isClickLikeButton: false,
 
             user: {
                 comment: '',
@@ -325,11 +329,36 @@ export default {
         },
 
         handleLikeIdea(data) {
+            this.isClickLikeButton = !this.isClickLikeButton;
             const payload = {
                 ideaId: data._id,
             };
-            console.log('do like');
-            console.log(payload);
+            let responseSocket = {};
+
+            if (this.isClickLikeButton === true) {
+                socket.emit('like:create', payload);
+
+                socket.on('like', (likes) => {
+                    responseSocket = likes;
+                    for (let i = 0; i < this.DATA.length; i++) {
+                        if (this.DATA[i]._id === responseSocket['ideaId']) {
+                            this.DATA[i].likes = responseSocket['likes'];
+                        }
+                    }
+                });
+            } else {
+                socket.emit('like:delete', payload);
+
+                socket.on('like', (likes) => {
+                    responseSocket = likes;
+                    console.log(responseSocket);
+                    // for (let i = 0; i < this.DATA.length; i++) {
+                    //     if (this.DATA[i]._id === responseSocket['ideaId']) {
+                    //         this.DATA[i].likes = responseSocket['likes'];
+                    //     }
+                    // }
+                });
+            }
         },
     },
 };
