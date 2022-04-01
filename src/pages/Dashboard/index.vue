@@ -127,7 +127,7 @@
 
 						<v-row class="ml-1">
 							<v-col cols="3" lg="4" class="text-center pl-0 pr-0">
-								<v-btn x-small class="card-button">
+								<v-btn x-small class="card-button" @click="handleLikeIdea(post)">
 									<v-icon small>mdi-thumb-up</v-icon>
 									<span class="button-text">Thích</span>
 								</v-btn>
@@ -289,8 +289,6 @@ export default {
                 console.log(error);
             }
 
-            console.log(this.DATA);
-
             this.overlay.show = false;
         },
 
@@ -324,7 +322,14 @@ export default {
             }
 
             this.isLoading = false;
-            console.log(this.DATA);
+        },
+
+        handleLikeIdea(data) {
+            const payload = {
+                ideaId: data._id,
+            };
+            console.log('do like');
+            console.log(payload);
         },
     },
 };

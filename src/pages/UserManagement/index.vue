@@ -64,7 +64,7 @@
 										</v-col>
 										<v-col cols="12" sm="12" md="12">
 											<v-select
-												v-model="editedItem.role"
+												v-model="editedItem.roleId"
 												:items="roleOptions"
 												label="Role"
 												prepend-icon="mdi-account-key"
@@ -74,7 +74,7 @@
 										</v-col>
 										<v-col cols="12" sm="12" md="12">
 											<v-select
-												v-model="editedItem.department"
+												v-model="editedItem.departmentId"
 												:items="departmentOptions"
 												label="Department"
 												prepend-icon="mdi-domain"
@@ -90,7 +90,12 @@
 												type="password"
 											/>
 										</v-col>
-
+										<v-col cols="12" sm="12" md="12">
+											<v-checkbox
+												v-model="editedItem.isAgreedTerm"
+												label="Is Agreed Term"
+											/>
+										</v-col>
 									</v-row>
 								</v-container>
 							</v-card-text>
@@ -153,7 +158,7 @@
 										</v-col>
 										<v-col cols="12" sm="12" md="12">
 											<v-select
-												v-model="editedItem.role"
+												v-model="editedItem.roleId"
 												:items="roleOptions"
 												label="Role"
 												prepend-icon="mdi-account-key"
@@ -163,7 +168,7 @@
 										</v-col>
 										<v-col cols="12" sm="12" md="12">
 											<v-select
-												v-model="editedItem.department"
+												v-model="editedItem.departmentId"
 												:items="departmentOptions"
 												label="Department"
 												prepend-icon="mdi-domain"
@@ -203,6 +208,11 @@
 			<template v-slot:[`item.actions`]="{ item }">
 				<v-icon small class="mr-2" style="color: #051367;" @click="editItem(item)">mdi-pencil</v-icon>
 				<v-icon small style="color: #E84545;" @click="deleteItem(item)">mdi-delete</v-icon>
+			</template>
+
+			<template v-slot:[`item.user.isAgreedTerm`]="{ isAgreedTerm }">
+				<span v-if="isAgreedTerm === 'true'" style="color: #3DC238; font-weight: bold;">{{ 'Agreed' }}</span>
+				<span v-else style="color: #D11515; font-weight: bold;">{{ 'Disagreed' }}</span>
 			</template>
 
 			<template v-slot:no-data>
@@ -257,8 +267,9 @@ export default {
                 name: '',
                 email: '',
                 password: '',
-                role: null,
-                department: null,
+                isAgreedTerm: false,
+                roleId: null,
+                departmentId: null,
             },
 
             defaultItem: {
@@ -267,8 +278,9 @@ export default {
                 name: '',
                 email: '',
                 password: '',
-                role: null,
-                department: null,
+                isAgreedTerm: false,
+                roleId: null,
+                departmentId: null,
             },
 
             roleOptions: [],
@@ -364,12 +376,12 @@ export default {
             }
         },
 
-        async updateUser(DATA) {
-            const URL = `${urlAPI.apiUpdateUser}/${DATA.id}`;
+        async updateUser(ID) {
+            const URL = `${urlAPI.apiUpdateUser}/${ID}`;
             if (isPassValidation(this.editedItem) === true) {
                 this.close();
                 try {
-                    const response = await putUser(URL, DATA);
+                    const response = await putUser(URL, this.editedItem);
                     console.log(response);
                 } catch (error) {
                     console.log(error);
@@ -397,8 +409,8 @@ export default {
                 email: item.user.email,
                 name: item.user.name,
                 password: item.password,
-                role: item.role._id,
-                department: item.department._id,
+                roleId: item.role._id,
+                departmentId: item.department._id,
             };
             this.dialog = true;
         },
@@ -411,8 +423,8 @@ export default {
                 email: item.user.email,
                 name: item.user.name,
                 password: item.password,
-                role: item.role._id,
-                department: item.department._id,
+                roleId: item.role._id,
+                departmentId: item.department._id,
             };
             this.dialogDelete = true;
         },
