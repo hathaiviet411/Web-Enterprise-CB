@@ -104,23 +104,19 @@
 				<v-card-actions>
 					<v-row class="mt-3">
 						<v-col cols="3" lg="3" class="text-center">
-							<v-icon class="p-1" style="margin-bottom: 2px;">mdi-thumb-up</v-icon>
 							<span class="like-total text-underline">{{ totalLikes + ' likes' }}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
-							<v-icon class="p-1">mdi-eye</v-icon>
 							<span class="comment-total text-underline">{{ DATA.idea.viewCount + ' views' }}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
-							<v-icon class="p-1">mdi-message</v-icon>
 							<span class="comment-total text-underline">{{ (DATA.comments.length === 0 ? 0 : (post.comments.length + 1)) + ' comments' }}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
-							<v-icon class="p-1" style="margin-bottom: 2px;">mdi-thumb-down</v-icon>
-							<span class="share-total text-underline mr-3">{{ DATA.dislikes + ' dislike' }}</span>
+							<span class="share-total text-underline mr-3">{{ totalDislikes + ' dislike' }}</span>
 						</v-col>
 					</v-row>
 				</v-card-actions>
@@ -133,7 +129,7 @@
 							<v-icon color="blue" small>mdi-thumb-up</v-icon>
 							<span class="button-text">Like</span>
 						</v-btn>
-						<v-btn v-else x-small class="card-button" @click="handleLike()">
+						<v-btn v-else x-small class="card-button" @click.prevent="handleLike()">
 							<v-icon color="black" small>mdi-thumb-up</v-icon>
 							<span class="button-text">Like</span>
 						</v-btn>
@@ -147,12 +143,12 @@
 					</v-col>
 
 					<v-col cols="4" lg="4" class="text-center pl-0 pr-0">
-						<v-btn v-if="isDisliked === true" x-small class="card-button" @click="isLiked = true">
-							<v-icon color="red" small>mdi-message</v-icon>
+						<v-btn v-if="isDisliked === true" x-small class="card-button" @click.prevent="handleUnDislike()">
+							<v-icon color="red" small>mdi-thumb-down</v-icon>
 							<span class="button-text">Dislike</span>
 						</v-btn>
 
-						<v-btn v-else x-small class="card-button" @click="isLiked = false">
+						<v-btn v-else x-small class="card-button" @click.prevent="handleDislike()">
 							<v-icon color="black" small>mdi-thumb-down</v-icon>
 							<span class="button-text">Dislike</span>
 						</v-btn>
@@ -268,6 +264,7 @@ export default {
             isDisliked: false,
 
             totalLikes: '',
+            totalDislikes: '',
         };
     },
     created() {
@@ -286,6 +283,7 @@ export default {
                     this.isDisked = this.DATA.disliked;
 
                     this.totalLikes = this.DATA.likes;
+                    this.totalDislikes = this.DATA.dislikes;
                 }
             } catch (error) {
                 console.log(error);
@@ -339,6 +337,7 @@ export default {
                 const response = await postDislike(urlAPI.apiPostDislike, {
                     ideaId: this.id,
                 });
+                this.totalDislikes = response.dislike;
                 console.log(response);
             } catch (error) {
                 console.log(error);
@@ -350,6 +349,7 @@ export default {
 
             try {
                 const response = await deleteDislike(`${urlAPI.apiDeleteDislike}/${this.id}`);
+                this.totalDislikes = response.dislike;
                 console.log(response);
             } catch (error) {
                 console.log(error);

@@ -105,7 +105,7 @@
 									</div>
 								</v-card-text>
 
-								<v-card-text v-else class="random-background" :style="setBg()">
+								<v-card-text v-else v-once class="random-background" :style="setBg()">
 									<div class="text-center">
 										<v-row>
 											<v-col cols="12">
@@ -138,8 +138,6 @@
 <script>
 // Apis import
 import { getAllIdea } from '@/api/modules/idea';
-
-import socket from '@/socket/socket';
 
 // Const APIs Url
 const urlAPI = {
@@ -229,44 +227,6 @@ export default {
             }
 
             this.isLoading = false;
-        },
-
-        handleLikeIdea(data) {
-            this.isClickLikeButton = true;
-            const payload = {
-                ideaId: data._id,
-            };
-            let responseSocket = {};
-
-            socket.emit('like:create', payload);
-
-            socket.on('like', (likes) => {
-                responseSocket = likes;
-                for (let i = 0; i < this.DATA.length; i++) {
-                    if (this.DATA[i]._id === responseSocket['ideaId']) {
-                        this.DATA[i].likes = responseSocket['likes'];
-                    }
-                }
-            });
-        },
-
-        handleUnLikeIdea(data) {
-            this.isClickLikeButton = false;
-            const payload = {
-                ideaId: data._id,
-            };
-            let responseSocket = {};
-            socket.emit('like:delete', payload);
-
-            socket.on('like', (likes) => {
-                responseSocket = likes;
-                console.log(responseSocket);
-                for (let i = 0; i < this.DATA.length; i++) {
-                    if (this.DATA[i]._id === responseSocket['ideaId']) {
-                        this.DATA[i].likes = responseSocket['likes'];
-                    }
-                }
-            });
         },
 
         toDetailScreen(id) {
