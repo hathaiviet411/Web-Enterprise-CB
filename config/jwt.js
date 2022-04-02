@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const configJWT = Object.freeze({
-    accessTokenLife: process.env.ACCESS_TOKEN_LIFE || 60 * 60, // 1 hours
+    accessTokenLife: process.env.ACCESS_TOKEN_LIFE || 60 * 60 * 24, // 1 hours
     accessTokenSecret: process.env.ACCESS_TOKEN_SECRET || 'access_token',
     refreshTokenLife: process.env.REFRESH_TOKEN_LIFE || 7 * 24 * 60 * 60, // 7 days
     refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET || 'refresh_token',
