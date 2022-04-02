@@ -77,7 +77,7 @@
 										v-if="hover"
 										absolute
 										color="#000000"
-										:opacity=".9"
+										:opacity=".5"
 									>
 										<v-btn color="#FFD154" @click.prevent="userReadIdea(post._id)">
 											<span style="color: #002795; font-weight: bold;">See more info</span>
@@ -105,14 +105,14 @@
 									</div>
 								</v-card-text>
 
-								<v-card-text v-else class="random-background" :style="setBg()">
+								<v-card-text v-else class="random-background" :style="`background-color: #3D3D3D;`">
 									<div class="text-center">
 										<v-row>
 											<v-col cols="12">
-												<h5 class="post-content">{{ post.ideaTitle }}</h5>
+												<h5 style="color: #FFD154;" class="post-content">{{ post.ideaTitle }}</h5>
 											</v-col>
 											<v-col cols="12">
-												<h5 class="post-content">{{ post.ideaContent }}</h5>
+												<h5 style="color: #FFD154;" class="post-content">{{ post.ideaContent }}</h5>
 											</v-col>
 										</v-row>
 									</div>
@@ -139,6 +139,8 @@
 // Apis import
 import { getAllIdea } from '@/api/modules/idea';
 
+import DefaultCutCho from '@/assets/images/default-cut-cho.png';
+
 import socket from '@/socket/socket';
 
 // Const APIs Url
@@ -150,6 +152,8 @@ export default {
     name: 'Dashboard',
     data() {
         return {
+            DefaultCutCho: DefaultCutCho,
+
             DATA: [],
 
             isShowCommentSector: false,
@@ -199,12 +203,6 @@ export default {
             this.overlay.show = false;
         },
 
-        setBg() {
-            const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-            const style = '#' + randomColor;
-            return `background-color: ${style}`;
-        },
-
         async handleScrolledBottom(isVisible) {
             if (!isVisible) {
                 return;
@@ -235,7 +233,6 @@ export default {
             const payload = {
                 ideaId: data,
             };
-            console.log(data);
             socket.emit('idea', payload);
         },
 

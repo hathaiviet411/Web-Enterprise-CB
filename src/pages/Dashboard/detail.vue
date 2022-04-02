@@ -88,14 +88,14 @@
 					</div>
 				</v-card-text>
 
-				<v-card-text v-else class="random-background" :style="setBg()">
+				<v-card-text v-else class="random-background" :style="`background-color: #3D3D3D;`">
 					<div class="text-center">
 						<v-row>
 							<v-col cols="12">
-								<h5 class="post-content">{{ DATA.idea.ideaTitle }}</h5>
+								<h5 style="color: #FFD154;" class="post-content">{{ DATA.idea.ideaTitle }}</h5>
 							</v-col>
 							<v-col cols="12">
-								<h5 class="post-content">{{ DATA.idea.ideaContent }}</h5>
+								<h5 style="color: #FFD154;" class="post-content">{{ DATA.idea.ideaContent }}</h5>
 							</v-col>
 						</v-row>
 					</div>
@@ -104,22 +104,18 @@
 				<v-card-actions>
 					<v-row class="mt-3">
 						<v-col cols="3" lg="3" class="text-center">
-							<v-icon class="p-1" style="margin-bottom: 2px;">mdi-thumb-up</v-icon>
 							<span class="like-total text-underline">{{ totalLikes + ' likes' }}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
-							<v-icon class="p-1">mdi-eye</v-icon>
 							<span class="comment-total text-underline">{{ DATA.idea.viewCount + ' views' }}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
-							<v-icon class="p-1">mdi-message</v-icon>
 							<span class="comment-total text-underline">{{ (DATA.comments.length === 0 ? 0 : (DATA.comments.length + 1)) + ' comments' }}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
-							<v-icon class="p-1" style="margin-bottom: 2px;">mdi-thumb-down</v-icon>
 							<span class="share-total text-underline mr-3">{{ totalDislikes + ' dislike' }}</span>
 						</v-col>
 					</v-row>
@@ -254,9 +250,7 @@ export default {
     data() {
         return {
             id: this.$route.params.id,
-
             DATA: [],
-
             overlay: {
                 show: false,
                 variant: 'light',
@@ -264,18 +258,15 @@ export default {
                 blur: '1rem',
                 rounded: 'sm',
             },
-
             isShowCommentSector: false,
-
             isLiked: false,
             isDisliked: false,
-
             totalLikes: '',
             totalDislikes: '',
-
             commentContent: '',
-
             listComment: [],
+            isAnonymously: false,
+            isDisabled: false,
         };
     },
     created() {
@@ -286,7 +277,6 @@ export default {
             const URL = `${urlAPI.apiGetListIdea}/${this.$route.params.id}`;
             try {
                 const response = await getOneIdea(URL);
-                console.log(response);
                 if (response.status === true) {
                     this.DATA = response.data;
 
@@ -297,19 +287,17 @@ export default {
                     this.totalDislikes = this.DATA.dislikes;
 
                     this.listComment = this.DATA.comments;
+
+                    this.isAnonymously = this.DATA.isAnonymous;
+                    this.isDisabled = this.DATA.isDisabled;
                 }
             } catch (error) {
                 console.log(error);
             }
         },
 
-        setBg() {
-            const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-            const style = '#' + randomColor;
-            return `background-color: ${style}`;
-        },
-
         submitComment(id) {
+            this.listComment = [];
             const payload = {
                 commentContent: this.commentContent,
                 ideaId: id,
