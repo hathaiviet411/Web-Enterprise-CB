@@ -81,12 +81,12 @@ module.exports = {
         }
         const idea = await Idea.findOne({
             _id: ideaId
-        }).lean();
+        }).populate("user", "-password").populate("category").populate("department").lean();
         const comments = await Comment.find({
             idea: ideaId
         }).sort({
             createdAt: 'DESC'
-        }).populate("user", "-password").populate("category").populate("department").lean();
+        }).populate("user", "-password").lean();
         const likes = await Like.find({ idea: ideaId }).count();
         const dislikes = await Dislike.find({ idea: ideaId }).count();
         const liked = await Like.findOne({ user: user, idea: ideaId }).count();
