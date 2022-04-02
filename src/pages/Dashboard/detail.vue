@@ -153,7 +153,7 @@
 						</v-btn>
 
 						<v-btn v-else x-small class="card-button" @click="isLiked = false">
-							<v-icon color="black" small>mdi-message</v-icon>
+							<v-icon color="black" small>mdi-thumb-down</v-icon>
 							<span class="button-text">Dislike</span>
 						</v-btn>
 					</v-col>
@@ -320,9 +320,7 @@ export default {
             this.isLiked = false;
 
             try {
-                const response = await deleteLike(urlAPI.apiDeleteLike, {
-                    ideaId: this.id,
-                });
+                const response = await deleteLike(`${urlAPI.apiDeleteLike}/${this.id}`);
                 console.log(response);
                 this.totalLikes = response.like;
             } catch (error) {
@@ -351,7 +349,7 @@ export default {
             this.isDisliked = false;
 
             try {
-                const response = await deleteDislike(urlAPI.apiDeleteDislike, this.id);
+                const response = await deleteDislike(`${urlAPI.apiDeleteDislike}/${this.id}`);
                 console.log(response);
             } catch (error) {
                 console.log(error);
