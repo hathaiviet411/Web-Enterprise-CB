@@ -315,9 +315,7 @@ export default {
             this.isLiked = false;
 
             try {
-                const response = await deleteLike(urlAPI.apiDeleteLike, {
-                    ideaId: this.id,
-                });
+                const response = await deleteLike(`${urlAPI.apiDeleteLike}/${this.id}`);
                 console.log(response);
             } catch (error) {
                 console.log(error);
@@ -345,7 +343,7 @@ export default {
             this.isDisliked = false;
 
             try {
-                const response = await deleteDislike(urlAPI.apiDeleteDislike, this.id);
+                const response = await deleteDislike(`${urlAPI.apiDeleteDislike}/${this.id}`);
                 console.log(response);
             } catch (error) {
                 console.log(error);

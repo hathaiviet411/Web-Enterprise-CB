@@ -22,9 +22,11 @@ module.exports = {
     },
 
     unlike: async (ctx) => {
-        const { ideaId } = ctx.request.body;
+        const ideaId = ctx.params.id;
         const userId = ctx.state.user.user._id;
+        console.log(ideaId)
         const deleteAction = await Like.deleteOne({ idea: ideaId, user: userId });
+        console.log(deleteAction)
         if (deleteAction.deletedCount === 1) {
             await Idea.findByIdAndUpdate(ideaId, { $inc: { pointCount: -1 } });
         }
@@ -55,7 +57,7 @@ module.exports = {
     },
 
     undislike: async (ctx) => {
-        const { ideaId } = ctx.request.body;
+        const ideaId = ctx.params.id;
         const userId = ctx.state.user.user._id;
         const deleteAction = await Dislike.deleteOne({ idea: ideaId, user: userId });
         if (deleteAction.deletedCount === 1) {
