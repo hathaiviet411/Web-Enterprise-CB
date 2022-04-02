@@ -1,6 +1,6 @@
 import * as RequestApi from '../request';
 
-export function getListIdea(url, data) {
+export function getAllIdea(url, data) {
     return RequestApi.getAll(url, data);
 }
 

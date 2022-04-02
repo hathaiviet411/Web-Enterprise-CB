@@ -8,6 +8,7 @@ import store from '@/store';
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 import VueObserveVisibility from 'vue-observe-visibility';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+import moment from 'vue-moment';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
@@ -22,6 +23,7 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(CKEditor);
 Vue.use(VueObserveVisibility);
+Vue.use(moment);
 
 new Vue({
     vuetify,

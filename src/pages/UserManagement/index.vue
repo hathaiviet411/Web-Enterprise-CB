@@ -1,14 +1,8 @@
 <template>
 	<div>
-		<v-data-table
-			:headers="vFields"
-			:items="vItems"
-			class="elevation-12"
-		>
+		<v-data-table :headers="vFields" :items="vItems" class="elevation-12">
 			<template v-slot:top>
-				<v-toolbar
-					flat
-				>
+				<v-toolbar flat>
 					<v-toolbar-title>User Management</v-toolbar-title>
 
 					<v-divider class="mx-4" inset vertical />
@@ -90,11 +84,10 @@
 												type="password"
 											/>
 										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-checkbox
-												v-model="editedItem.isAgreedTerm"
-												label="Is Agreed Term"
-											/>
+										<v-col cols="12">
+											<b-form-checkbox v-model="editedItem.isAgreedTerm" size="lg">
+												<span style="font-size: 16px !important;">I agreed with Idea Collecting System's Terms and Conditions agreement.</span>
+											</b-form-checkbox>
 										</v-col>
 									</v-row>
 								</v-container>
@@ -115,104 +108,26 @@
 							</v-card-actions>
 						</v-card>
 					</v-dialog>
-
-					<v-dialog v-model="dialogDelete" max-width="500px">
-						<v-card>
-							<v-card-title>
-								<v-row>
-									<v-col cols="12" class="text-center">
-										<span>Are you sure to delete this user?</span>
-									</v-col>
-								</v-row>
-							</v-card-title>
-
-							<v-card-text>
-								<v-container>
-									<v-row>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												v-model="editedItem.username"
-												prepend-icon="mdi-account"
-												label="Username"
-												readonly
-												type="text"
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												v-model="editedItem.name"
-												prepend-icon="mdi-border-color"
-												label="Full name"
-												readonly
-												type="text"
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												v-model="editedItem.email"
-												prepend-icon="mdi-email"
-												label="Email"
-												readonly
-												type="email"
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-select
-												v-model="editedItem.roleId"
-												:items="roleOptions"
-												label="Role"
-												prepend-icon="mdi-account-key"
-												dense
-												readonly
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-select
-												v-model="editedItem.departmentId"
-												:items="departmentOptions"
-												label="Department"
-												prepend-icon="mdi-domain"
-												readonly
-												dense
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												v-model="editedItem.password"
-												prepend-icon="mdi-lock"
-												label="Password"
-												readonly
-												type="password"
-											/>
-										</v-col>
-									</v-row>
-								</v-container>
-							</v-card-text>
-
-							<v-card-actions>
-								<v-spacer />
-								<v-btn color="blue darken-1" text @click="closeDelete()">
-									<v-icon left>mdi-exit-to-app</v-icon>
-									<span>Cancel</span>
-								</v-btn>
-								<v-btn color="red darken-1" text @click="deleteItemConfirm()">
-									<v-icon left>mdi-delete-empty</v-icon>
-									<span>{{ 'Confirm' }}</span>
-								</v-btn>
-							</v-card-actions>
-						</v-card>
-					</v-dialog>
 				</v-toolbar>
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-icon small class="mr-2" style="color: #051367;" @click="editItem(item)">mdi-pencil</v-icon>
-				<v-icon small style="color: #E84545;" @click="deleteItem(item)">mdi-delete</v-icon>
+				<v-icon
+					small
+					class="mr-2"
+					style="color: #051367"
+					@click="editItem(item)"
+				>mdi-pencil</v-icon>
 			</template>
 
 			<template v-slot:[`item.user.isAgreedTerm`]="{ isAgreedTerm }">
-				<span v-if="isAgreedTerm === 'true'" style="color: #3DC238; font-weight: bold;">{{ 'Agreed' }}</span>
-				<span v-else style="color: #D11515; font-weight: bold;">{{ 'Disagreed' }}</span>
+				<span
+					v-if="isAgreedTerm === true"
+					style="color: #3dc238; font-weight: bold"
+				>{{ "Agreed" }}</span>
+				<span v-else style="color: #d11515; font-weight: bold">{{
+					"Disagreed"
+				}}</span>
 			</template>
 
 			<template v-slot:no-data>
@@ -226,7 +141,7 @@
 // Apis import
 import { getRole } from '@/api/modules/role';
 import { getDepartment } from '@/api/modules/department';
-import { getUser, postUser, putUser, deleteUser } from '@/api/modules/user';
+import { getUser, postUser, putUser } from '@/api/modules/user';
 
 // Helper functions import
 import { isPassValidation } from './helper';
@@ -238,7 +153,6 @@ const urlAPI = {
     apiGetListUser: '/user',
     apiCreateUser: '/register',
     apiUpdateUser: '/user',
-    apiDeleteUser: '/user',
 };
 
 export default {
@@ -249,12 +163,30 @@ export default {
             dialogDelete: false,
 
             vFields: [
-                { text: 'Username', align: 'start', sortable: false, value: 'user.username' },
-                { text: 'Full name', align: 'start', sortable: false, value: 'user.name' },
+                {
+                    text: 'Username',
+                    align: 'start',
+                    sortable: false,
+                    value: 'user.username',
+                },
+                {
+                    text: 'Full name',
+                    align: 'start',
+                    sortable: false,
+                    value: 'user.name',
+                },
                 { text: 'User Email', value: 'user.email', align: 'center' },
                 { text: 'User Role', value: 'role.roleName', align: 'center' },
-                { text: 'Department', value: 'department.departmentName', align: 'center' },
-                { text: 'Agreed with Term', value: 'user.isAgreedTerm', align: 'center' },
+                {
+                    text: 'Department',
+                    value: 'department.departmentName',
+                    align: 'center',
+                },
+                {
+                    text: 'Agreed with Term',
+                    value: 'user.isAgreedTerm',
+                    align: 'center',
+                },
                 { text: 'Actions', value: 'actions', sortable: false, align: 'center' },
             ],
 
@@ -328,9 +260,10 @@ export default {
                 if (response.status === true) {
                     const DATA = response.role;
                     for (let i = 0; i < DATA.length; i++) {
-                        this.roleOptions.push(
-                            { value: DATA[i]._id, text: DATA[i].roleName }
-                        );
+                        this.roleOptions.push({
+                            value: DATA[i]._id,
+                            text: DATA[i].roleName,
+                        });
                     }
                 }
             } catch (error) {
@@ -345,9 +278,10 @@ export default {
                 if (response.status === true) {
                     const DATA = response.departmentStatistic;
                     for (let i = 0; i < DATA.length; i++) {
-                        this.departmentOptions.push(
-                            { value: DATA[i]._id, text: DATA[i].departmentName }
-                        );
+                        this.departmentOptions.push({
+                            value: DATA[i]._id,
+                            text: DATA[i].departmentName,
+                        });
                     }
                 }
             } catch (error) {
@@ -360,7 +294,10 @@ export default {
                 this.close();
 
                 try {
-                    const response = await postUser(urlAPI.apiCreateUser, this.editedItem);
+                    const response = await postUser(
+                        urlAPI.apiCreateUser,
+                        this.editedItem
+                    );
                     if (response.status === true) {
                         MakeToast({
                             variant: 'success',
@@ -389,18 +326,6 @@ export default {
             }
         },
 
-        async deleteUser(ID) {
-            const URL = `${urlAPI.apiDeleteUser}/${ID}`;
-            try {
-                const response = await deleteUser(URL);
-                console.log(response);
-            } catch (error) {
-                console.log(error);
-            }
-
-            this.closeDelete();
-        },
-
         editItem(item) {
             this.editedIndex = this.vItems.indexOf(item);
             this.editedItem = {
@@ -408,41 +333,16 @@ export default {
                 username: item.user.username,
                 email: item.user.email,
                 name: item.user.name,
-                password: item.password,
+                password: '',
+                isAgreedTerm: item.user.isAgreedTerm,
                 roleId: item.role._id,
                 departmentId: item.department._id,
             };
             this.dialog = true;
         },
 
-        deleteItem(item) {
-            this.editedIndex = this.vItems.indexOf(item);
-            this.editedItem = {
-                id: item.user._id,
-                username: item.user.username,
-                email: item.user.email,
-                name: item.user.name,
-                password: item.password,
-                roleId: item.role._id,
-                departmentId: item.department._id,
-            };
-            this.dialogDelete = true;
-        },
-
-        deleteItemConfirm() {
-            this.deleteUser(this.editedItem.id);
-        },
-
         close() {
             this.dialog = false;
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem);
-                this.editedIndex = -1;
-            });
-        },
-
-        closeDelete() {
-            this.dialogDelete = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
                 this.editedIndex = -1;
@@ -461,7 +361,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .btn-register {
-        box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
-    }
+.btn-register { box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px; }
 </style>

@@ -234,7 +234,7 @@
 
 <script>
 // Apis import
-import { getListIdea } from '@/api/modules/idea';
+import { getAllIdea } from '@/api/modules/idea';
 
 import socket from '@/socket/socket';
 
@@ -283,7 +283,7 @@ export default {
 
             const URL = `${urlAPI.apiGetListIdea}${this.page}`;
             try {
-                const response = await getListIdea(URL);
+                const response = await getAllIdea(URL);
 
                 if (response.status === true) {
                     this.DATA = response.data.ideas;
@@ -313,7 +313,7 @@ export default {
             if (this.page <= this.totalPage) {
                 const URL = `${urlAPI.apiGetListIdea}${this.page}`;
                 try {
-                    const response = await getListIdea(URL);
+                    const response = await getAllIdea(URL);
 
                     if (response.status === true) {
                         for (let i = 0; i < response.data.ideas.length; i++) {
