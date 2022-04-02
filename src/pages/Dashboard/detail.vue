@@ -115,7 +115,7 @@
 
 						<v-col cols="3" lg="3" class="text-center">
 							<v-icon class="p-1">mdi-message</v-icon>
-							<span class="comment-total text-underline">{{ (DATA.comments.length === 0 ? 0 : (post.comments.length + 1)) + ' comments' }}</span>
+							<span class="comment-total text-underline">{{ (DATA.comments.length === 0 ? 0 : (DATA.comments.length + 1)) + ' comments' }}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
@@ -178,17 +178,19 @@
 
 							<v-col cols="10" lg="11">
 								<v-text-field
+									v-model="commentContent"
 									label="Write comment here..."
 									filled
 									hide-details
 									rounded
 									dense
 									class="mr-3 ml-3"
+									@keydown.enter.prevent="submitComment(DATA.idea._id)"
 								/>
 							</v-col>
 						</v-row>
 
-						<div v-for="(comment, indexComment) in DATA.comments" :key="indexComment">
+						<div v-for="(comment, indexComment) in listComment" :key="indexComment">
 							<v-row>
 								<v-col cols="2" lg="1">
 									<v-img
@@ -206,20 +208,19 @@
 									<v-textarea
 										readonly
 										filled
-										:label="comment.author"
 										rounded
 										dense
 										hide-details
 										rows="1"
 										auto-grow
 										class="mr-3 ml-3 comment-section"
-										:value="comment.content"
+										:value="comment.commentContent"
 									/>
 
 									<div class="comment-section-button ml-6 mt-1">
 										<span class="text-underline">Like</span>
 										<span class="ml-3 text-underline">Trả lời</span>
-										<span class="ml-3 text-underline">{{ comment.uploadedTime }}</span>
+										<span class="ml-3 text-underline">{{ comment.createdAt }}</span>
 									</div>
 								</v-col>
 							</v-row>
@@ -237,6 +238,8 @@
 import { getOneIdea } from '@/api/modules/idea';
 import { postLike, deleteLike } from '@/api/modules/like';
 import { postDislike, deleteDislike } from '@/api/modules/dislike';
+
+import socket from '@/socket/socket';
 
 const urlAPI = {
     apiGetListIdea: '/idea',
@@ -268,6 +271,10 @@ export default {
             isDisliked: false,
 
             totalLikes: '',
+
+            commentContent: '',
+
+            listComment: [],
         };
     },
     created() {
@@ -278,7 +285,7 @@ export default {
             const URL = `${urlAPI.apiGetListIdea}/${this.$route.params.id}`;
             try {
                 const response = await getOneIdea(URL);
-
+                console.log(response);
                 if (response.status === true) {
                     this.DATA = response.data;
 
@@ -286,6 +293,8 @@ export default {
                     this.isDisked = this.DATA.disliked;
 
                     this.totalLikes = this.DATA.likes;
+
+                    this.listComment = this.DATA.comments;
                 }
             } catch (error) {
                 console.log(error);
@@ -296,6 +305,20 @@ export default {
             const randomColor = Math.floor(Math.random() * 16777215).toString(16);
             const style = '#' + randomColor;
             return `background-color: ${style}`;
+        },
+
+        submitComment(id) {
+            const payload = {
+                commentContent: this.commentContent,
+                ideaId: id,
+                isAnonymous: false,
+            };
+            socket.emit('comment:create', payload);
+
+            socket.on('renderComment', (payload) => {
+                console.log(payload);
+                this.listComment = payload;
+            });
         },
 
         async handleLike() {
