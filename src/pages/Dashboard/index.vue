@@ -16,214 +16,235 @@
 
 			<v-row>
 				<v-col v-for="(post, index) in DATA" :key="index" cols="12">
-					<v-card id="cat" elevation="20" class="rounded-lg mx-auto" max-width="1000px">
-						<v-card-title>
-							<v-row>
-								<v-col cols="12" lg="1" class="text-center">
-									<v-img
-										min-width="40"
-										min-height="40"
-										max-width="60"
-										max-height="60"
-										contain
-										class="rounded-circle"
-										:src="post.avatar"
-									/>
-								</v-col>
-
-								<v-col cols="12" lg="3">
-									<div class="author-info">
-										<span class="author-name">{{ post.user.name + ' - ' + post.user.username }}</span>
-										<br>
-										<span class="uploaded-time">{{ post.uploadedTime }}
-											<span>·</span>
-											<v-icon class="pl-1" color="#999" small>mdi-earth</v-icon>
-										</span>
-									</div>
-								</v-col>
-
-								<v-col cols="12" lg="8" class="text-center">
+					<v-hover>
+						<template v-slot:default="{ hover }">
+							<v-card elevation="24" class="rounded-lg mx-auto" max-width="1000px" @click="toDetailScreen(post._id)">
+								<v-card-title>
 									<v-row>
-										<v-col cols="12" lg="5">
-											<span class="text-small">
-												<strong>
-													<i class="fas fa-building mr-3" />Department:
-												</strong>
-												{{ post.department.departmentName }}
-											</span>
+										<v-col cols="12" lg="1" class="text-center">
+											<v-badge dot bottom color="green" offset-y="10" offset-x="10">
+												<v-avatar size="50">
+													<v-img
+														min-width="40"
+														min-height="40"
+														max-width="60"
+														max-height="60"
+														contain
+														class="rounded-circle"
+														src="@/assets/images/default_avatar.png"
+													/>
+												</v-avatar>
+											</v-badge>
 										</v-col>
 
-										<v-col cols="12" lg="5" class="text-center">
-											<span class="text-small">
-												<strong>
-													<i class="fas fa-box-open mr-3" />Category:
-												</strong>
-												{{ post.category.categoryName }}
-											</span>
-										</v-col>
-									</v-row>
-								</v-col>
-							</v-row>
-						</v-card-title>
-
-						<v-card-text v-if="post.ideaPicture" class="content">
-							<v-row>
-								<v-col cols="12">
-									<h5 class="post-content ml-3">{{ post.ideaTitle }}</h5>
-								</v-col>
-								<v-col cols="12">
-									<h5 class="post-content ml-3">{{ post.ideaContent }}</h5>
-								</v-col>
-							</v-row>
-
-							<div class="text-center">
-								<v-img
-									width="1168"
-									height="472"
-									contain
-									:src="post.ideaPicture"
-								/>
-							</div>
-						</v-card-text>
-
-						<v-card-text v-else class="random-background" :style="setBg()">
-							<div class="text-center">
-								<v-row>
-									<v-col cols="12">
-										<h5 class="post-content">{{ post.ideaTitle }}</h5>
-									</v-col>
-									<v-col cols="12">
-										<h5 class="post-content">{{ post.ideaContent }}</h5>
-									</v-col>
-								</v-row>
-							</div>
-						</v-card-text>
-
-						<v-card-actions>
-							<v-row class="mt-3">
-								<v-col cols="3" lg="3" class="text-center">
-									<v-icon class="p-1" style="margin-bottom: 2px;">mdi-thumb-up</v-icon>
-									<span class="like-total text-underline">{{ post.likes + ' yêu thích' }}</span>
-								</v-col>
-
-								<v-col cols="3" lg="3" class="text-center">
-									<v-icon class="p-1">mdi-eye</v-icon>
-									<span class="comment-total text-underline">{{ post.viewCount + ' lượt xem' }}</span>
-								</v-col>
-
-								<v-col cols="3" lg="3" class="text-center">
-									<v-icon class="p-1">mdi-message</v-icon>
-									<span class="comment-total text-underline">{{ (post.comments.length === 0 ? 0 : (post.comments.length + 1)) + ' bình luận' }}</span>
-								</v-col>
-
-								<v-col cols="3" lg="3" class="text-center">
-									<v-icon class="p-1" style="margin-bottom: 2px;">mdi-thumb-down</v-icon>
-									<span class="share-total text-underline mr-3">{{ post.dislikes + ' lượt không thích' }}</span>
-								</v-col>
-							</v-row>
-						</v-card-actions>
-
-						<v-divider class="mr-3 ml-3" />
-
-						<v-row class="ml-1">
-							<v-col cols="3" lg="4" class="text-center pl-0 pr-0">
-
-								<v-btn v-if="isClickLikeButton === true" x-small class="card-button" @click="handleLikeIdea(post)">
-									<v-icon small color="black">mdi-thumb-up</v-icon>
-									<span class="button-text">Thích</span>
-								</v-btn>
-
-								<v-btn v-else x-small class="card-button" @click="handleUnLikeIdea(post)">
-									<v-icon small color="blue">mdi-thumb-up</v-icon>
-									<span class="button-text">Thích</span>
-								</v-btn>
-
-							</v-col>
-
-							<v-col cols="4" lg="4" class="text-center pl-0 pr-0">
-								<v-btn x-small class="card-button" @click="isShowCommentSector = !isShowCommentSector">
-									<v-icon small>mdi-message</v-icon>
-									<span class="button-text">Bình luận</span>
-								</v-btn>
-							</v-col>
-
-							<v-col cols="4" lg="4" class="text-center pl-0 pr-0">
-								<v-btn x-small class="card-button">
-									<v-icon small>mdi-thumb-down</v-icon>
-									<span class="button-text">Không thích</span>
-								</v-btn>
-							</v-col>
-						</v-row>
-
-						<v-divider class="mr-3 ml-3" />
-
-						<Transition appear name="fade" mode="in-out">
-							<div v-if="isShowCommentSector">
-								<v-row>
-									<v-col cols="2" lg="1">
-										<v-img
-											min-width="50"
-											min-height="50"
-											max-width="60"
-											max-height="60"
-											contain
-											class="rounded-circle ml-3"
-											:src="post.avatar"
-										/>
-									</v-col>
-
-									<v-col cols="10" lg="11">
-										<v-text-field
-											label="Viết bình luận..."
-											filled
-											hide-details
-											rounded
-											dense
-											class="mr-3 ml-3"
-										/>
-									</v-col>
-								</v-row>
-
-								<div v-for="(comment, indexComment) in post.comments" :key="indexComment">
-									<v-row>
-										<v-col cols="2" lg="1">
-											<v-img
-												min-width="50"
-												min-height="50"
-												max-width="60"
-												max-height="60"
-												contain
-												class="rounded-circle ml-3"
-												:src="comment.avatar"
-											/>
-										</v-col>
-
-										<v-col cols="10" lg="11">
-											<v-textarea
-												readonly
-												filled
-												:label="comment.author"
-												rounded
-												dense
-												hide-details
-												rows="1"
-												auto-grow
-												class="mr-3 ml-3 comment-section"
-												:value="comment.content"
-											/>
-
-											<div class="comment-section-button ml-6 mt-1">
-												<span class="text-underline">Like</span>
-												<span class="ml-3 text-underline">Trả lời</span>
-												<span class="ml-3 text-underline">{{ comment.uploadedTime }}</span>
+										<v-col cols="12" lg="3">
+											<div class="author-info">
+												<span class="author-name">{{ post.user.name + ' - ' + post.user.username }}</span>
+												<br>
+												<span class="uploaded-time">{{ post.createdAt | moment('from') }}
+													<span>·</span>
+													<v-icon class="pl-1" color="#999" small>mdi-earth</v-icon>
+												</span>
 											</div>
 										</v-col>
-									</v-row>
-								</div>
 
-							</div>
-						</Transition>
-					</v-card>
+										<v-col cols="12" lg="8" class="text-center">
+											<v-row>
+												<v-col cols="12" lg="5">
+													<span class="text-small">
+														<strong>
+															<i class="fas fa-building mr-3" />Department:
+														</strong>
+														{{ post.department.departmentName }}
+													</span>
+												</v-col>
+
+												<v-col cols="12" lg="5" class="text-center">
+													<span class="text-small">
+														<strong>
+															<i class="fas fa-box-open mr-3" />Category:
+														</strong>
+														{{ post.category.categoryName }}
+													</span>
+												</v-col>
+											</v-row>
+										</v-col>
+									</v-row>
+								</v-card-title>
+
+								<v-fade-transition>
+									<v-overlay
+										v-if="hover"
+										absolute
+										color="#000000"
+										:opacity=".9"
+									>
+										<v-btn color="#FFD154">
+											<span style="color: #002795; font-weight: bold;">See more info</span>
+										</v-btn>
+									</v-overlay>
+								</v-fade-transition>
+
+								<v-card-text v-if="post.ideaPicture" class="content">
+									<v-row>
+										<v-col cols="12">
+											<h5 class="post-content ml-3">{{ post.ideaTitle }}</h5>
+										</v-col>
+										<v-col cols="12">
+											<h5 class="post-content ml-3">{{ post.ideaContent }}</h5>
+										</v-col>
+									</v-row>
+
+									<div class="text-center">
+										<v-img
+											width="1168"
+											height="472"
+											contain
+											:src="post.ideaPicture"
+										/>
+									</div>
+								</v-card-text>
+
+								<v-card-text v-else class="random-background" :style="setBg()">
+									<div class="text-center">
+										<v-row>
+											<v-col cols="12">
+												<h5 class="post-content">{{ post.ideaTitle }}</h5>
+											</v-col>
+											<v-col cols="12">
+												<h5 class="post-content">{{ post.ideaContent }}</h5>
+											</v-col>
+										</v-row>
+									</div>
+								</v-card-text>
+
+							<!-- <v-card-actions>
+                                <v-row class="mt-3">
+                                    <v-col cols="3" lg="3" class="text-center">
+                                        <v-icon class="p-1" style="margin-bottom: 2px;">mdi-thumb-up</v-icon>
+                                        <span class="like-total text-underline">{{ post.likes + ' yêu thích' }}</span>
+                                    </v-col>
+
+                                    <v-col cols="3" lg="3" class="text-center">
+                                        <v-icon class="p-1">mdi-eye</v-icon>
+                                        <span class="comment-total text-underline">{{ post.viewCount + ' lượt xem' }}</span>
+                                    </v-col>
+
+                                    <v-col cols="3" lg="3" class="text-center">
+                                        <v-icon class="p-1">mdi-message</v-icon>
+                                        <span class="comment-total text-underline">{{ (post.comments.length === 0 ? 0 : (post.comments.length + 1)) + ' bình luận' }}</span>
+                                    </v-col>
+
+                                    <v-col cols="3" lg="3" class="text-center">
+                                        <v-icon class="p-1" style="margin-bottom: 2px;">mdi-thumb-down</v-icon>
+                                        <span class="share-total text-underline mr-3">{{ post.dislikes + ' lượt không thích' }}</span>
+                                    </v-col>
+                                </v-row>
+                            </v-card-actions>
+
+                            <v-divider class="mr-3 ml-3" />
+
+                            <v-row class="ml-1">
+                                <v-col cols="3" lg="4" class="text-center pl-0 pr-0">
+
+                                    <v-btn v-if="isClickLikeButton === true" x-small class="card-button" @click="handleLikeIdea(post)">
+                                        <v-icon small color="black">mdi-thumb-up</v-icon>
+                                        <span class="button-text">Thích</span>
+                                    </v-btn>
+
+                                    <v-btn v-else x-small class="card-button" @click="handleUnLikeIdea(post)">
+                                        <v-icon small color="blue">mdi-thumb-up</v-icon>
+                                        <span class="button-text">Thích</span>
+                                    </v-btn>
+
+                                </v-col>
+
+                                <v-col cols="4" lg="4" class="text-center pl-0 pr-0">
+                                    <v-btn x-small class="card-button" @click="isShowCommentSector = !isShowCommentSector">
+                                        <v-icon small>mdi-message</v-icon>
+                                        <span class="button-text">Bình luận</span>
+                                    </v-btn>
+                                </v-col>
+
+                                <v-col cols="4" lg="4" class="text-center pl-0 pr-0">
+                                    <v-btn x-small class="card-button">
+                                        <v-icon small>mdi-thumb-down</v-icon>
+                                        <span class="button-text">Không thích</span>
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+
+                            <v-divider class="mr-3 ml-3" />
+
+                            <Transition appear name="fade" mode="in-out">
+                                <div v-if="isShowCommentSector">
+                                    <v-row>
+                                        <v-col cols="2" lg="1">
+                                            <v-img
+                                                min-width="50"
+                                                min-height="50"
+                                                max-width="60"
+                                                max-height="60"
+                                                contain
+                                                class="rounded-circle ml-3"
+                                                :src="post.avatar"
+                                            />
+                                        </v-col>
+
+                                        <v-col cols="10" lg="11">
+                                            <v-text-field
+                                                label="Viết bình luận..."
+                                                filled
+                                                hide-details
+                                                rounded
+                                                dense
+                                                class="mr-3 ml-3"
+                                            />
+                                        </v-col>
+                                    </v-row>
+
+                                    <div v-for="(comment, indexComment) in post.comments" :key="indexComment">
+                                        <v-row>
+                                            <v-col cols="2" lg="1">
+                                                <v-img
+                                                    min-width="50"
+                                                    min-height="50"
+                                                    max-width="60"
+                                                    max-height="60"
+                                                    contain
+                                                    class="rounded-circle ml-3"
+                                                    :src="comment.avatar"
+                                                />
+                                            </v-col>
+
+                                            <v-col cols="10" lg="11">
+                                                <v-textarea
+                                                    readonly
+                                                    filled
+                                                    :label="comment.author"
+                                                    rounded
+                                                    dense
+                                                    hide-details
+                                                    rows="1"
+                                                    auto-grow
+                                                    class="mr-3 ml-3 comment-section"
+                                                    :value="comment.content"
+                                                />
+
+                                                <div class="comment-section-button ml-6 mt-1">
+                                                    <span class="text-underline">Like</span>
+                                                    <span class="ml-3 text-underline">Trả lời</span>
+                                                    <span class="ml-3 text-underline">{{ comment.uploadedTime }}</span>
+                                                </div>
+                                            </v-col>
+                                        </v-row>
+                                    </div>
+
+                                </div>
+                            </Transition> -->
+							</v-card>
+						</template>
+					</v-hover>
 				</v-col>
 
 				<div v-if="DATA.length" v-observe-visibility="handleScrolledBottom" />
@@ -371,6 +392,10 @@ export default {
                     }
                 }
             });
+        },
+
+        toDetailScreen(id) {
+            this.$router.push({ path: `/dashboard/detail/${id}` });
         },
     },
 };
