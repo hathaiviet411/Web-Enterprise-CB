@@ -24,6 +24,7 @@ module.exports = {
     unlike: async (ctx) => {
         const { ideaId } = ctx.request.body;
         const userId = ctx.state.user.user._id;
+        console.log(userId);
         const deleteAction = await Like.deleteOne({ idea: ideaId, user: userId });
         if (deleteAction.deletedCount === 1) {
             await Idea.findByIdAndUpdate(ideaId, { $inc: { pointCount: -1 } });

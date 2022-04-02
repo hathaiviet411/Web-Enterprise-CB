@@ -105,7 +105,7 @@
 					<v-row class="mt-3">
 						<v-col cols="3" lg="3" class="text-center">
 							<v-icon class="p-1" style="margin-bottom: 2px;">mdi-thumb-up</v-icon>
-							<span class="like-total text-underline">{{ DATA.likes + ' likes' }}</span>
+							<span class="like-total text-underline">{{ totalLikes + ' likes' }}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
@@ -266,6 +266,8 @@ export default {
 
             isLiked: false,
             isDisliked: false,
+
+            totalLikes: '',
         };
     },
     created() {
@@ -282,6 +284,8 @@ export default {
 
                     this.isLiked = this.DATA.liked;
                     this.isDisked = this.DATA.disliked;
+
+                    this.totalLikes = this.DATA.likes;
                 }
             } catch (error) {
                 console.log(error);
@@ -306,6 +310,7 @@ export default {
                     ideaId: this.id,
                 });
                 console.log(response);
+                this.totalLikes = response.like;
             } catch (error) {
                 console.log(error);
             }
@@ -319,6 +324,7 @@ export default {
                     ideaId: this.id,
                 });
                 console.log(response);
+                this.totalLikes = response.like;
             } catch (error) {
                 console.log(error);
             }
