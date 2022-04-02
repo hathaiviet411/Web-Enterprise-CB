@@ -127,10 +127,17 @@
 
 						<v-row class="ml-1">
 							<v-col cols="3" lg="4" class="text-center pl-0 pr-0">
-								<v-btn x-small class="card-button" @click="handleLikeIdea(post)">
-									<v-icon small>mdi-thumb-up</v-icon>
+
+								<v-btn v-if="isClickLikeButton === true" x-small class="card-button" @click="handleLikeIdea(post)">
+									<v-icon small color="black">mdi-thumb-up</v-icon>
 									<span class="button-text">Thích</span>
 								</v-btn>
+
+								<v-btn v-else x-small class="card-button" @click="handleUnLikeIdea(post)">
+									<v-icon small color="blue">mdi-thumb-up</v-icon>
+									<span class="button-text">Thích</span>
+								</v-btn>
+
 							</v-col>
 
 							<v-col cols="4" lg="4" class="text-center pl-0 pr-0">
@@ -329,36 +336,41 @@ export default {
         },
 
         handleLikeIdea(data) {
-            this.isClickLikeButton = !this.isClickLikeButton;
+            this.isClickLikeButton = true;
             const payload = {
                 ideaId: data._id,
             };
             let responseSocket = {};
 
-            if (this.isClickLikeButton === true) {
-                socket.emit('like:create', payload);
+            socket.emit('like:create', payload);
 
-                socket.on('like', (likes) => {
-                    responseSocket = likes;
-                    for (let i = 0; i < this.DATA.length; i++) {
-                        if (this.DATA[i]._id === responseSocket['ideaId']) {
-                            this.DATA[i].likes = responseSocket['likes'];
-                        }
+            socket.on('like', (likes) => {
+                responseSocket = likes;
+                for (let i = 0; i < this.DATA.length; i++) {
+                    if (this.DATA[i]._id === responseSocket['ideaId']) {
+                        this.DATA[i].likes = responseSocket['likes'];
                     }
-                });
-            } else {
-                socket.emit('like:delete', payload);
+                }
+            });
+        },
 
-                socket.on('like', (likes) => {
-                    responseSocket = likes;
-                    console.log(responseSocket);
-                    // for (let i = 0; i < this.DATA.length; i++) {
-                    //     if (this.DATA[i]._id === responseSocket['ideaId']) {
-                    //         this.DATA[i].likes = responseSocket['likes'];
-                    //     }
-                    // }
-                });
-            }
+        handleUnLikeIdea(data) {
+            this.isClickLikeButton = false;
+            const payload = {
+                ideaId: data._id,
+            };
+            let responseSocket = {};
+            socket.emit('like:delete', payload);
+
+            socket.on('like', (likes) => {
+                responseSocket = likes;
+                console.log(responseSocket);
+                for (let i = 0; i < this.DATA.length; i++) {
+                    if (this.DATA[i]._id === responseSocket['ideaId']) {
+                        this.DATA[i].likes = responseSocket['likes'];
+                    }
+                }
+            });
         },
     },
 };

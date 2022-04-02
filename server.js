@@ -104,8 +104,8 @@ const io = new Server(httpServer, {
 });
 
 const registerCommentHandlers = require('./controllers/main/comment');
-const registeLikeHandlers = require('./controllers/main/like')
-const registeDislikeHandlers = require('./controllers/main/dislike')
+const registeLikeHandlers = require('./controllers/main/like');
+const registeDislikeHandlers = require('./controllers/main/dislike');
 
 const onConnection = (socket) => {
     console.log(socket.id);
