@@ -6,7 +6,8 @@ const Category = require("../../models/category")
 const Comment = require("../../models/comment")
 const Like = require("../../models/like");
 const Dislike = require("../../models/dislike");
-const sendEmail = require("../../middleware/nodemailer")
+const sendEmail = require("../../middleware/nodemailer");
+const like = require("./like");
 require('dotenv').config();
 
 const getPath = (path) => {
@@ -16,14 +17,23 @@ const getPath = (path) => {
 module.exports = {
     getIdea: async (ctx) => {
         let page = ctx.query.page;
-        let sort = ctx.query.page;
+        let sort = ctx.query.sort;
         const pageSize = 5;
         const ideas = []
         if (page) {
             page = parseInt(page)
             const skip = (page - 1) * pageSize;
             const totalRecord = await Idea.find({}).count().lean()
-            const allIdeas = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").populate("category").populate("department").sort({ createdAt: 'DESC' }).lean();
+            let allIdeas;
+            if (sort === "like") {
+                allIdeas = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").populate("category").populate("department").sort({ pointCount: 'DESC' }).lean();
+            }
+            else if (sort === "view") {
+                allIdeas = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").populate("category").populate("department").sort({ viewCount: 'DESC' }).lean();
+            }
+            else {
+                allIdeas = await Idea.find({}).skip(skip).limit(pageSize).populate("user", "-password").populate("category").populate("department").sort({ createdAt: 'DESC' }).lean();
+            }
             const totalPage = totalRecord % 5 === 0 ? parseInt(totalRecord / 5) : parseInt(totalRecord / 5) + 1;
             for (allIdea of allIdeas) {
                 const comments = await Comment.find({ idea: allIdea._id }).populate("user", "-password -idea").lean();
@@ -62,7 +72,7 @@ module.exports = {
 
     getIdeaComment: async (ctx) => {
         const ideaId = ctx.params.id
-
+        const user = ctx.state.user.user._id;
         if (!ideaId) {
             return (ctx.body = {
                 status: false,
@@ -76,9 +86,11 @@ module.exports = {
             idea: ideaId
         }).sort({
             createdAt: 'DESC'
-        }).populate("user", "-password").lean();
+        }).populate("user", "-password").populate("category").populate("department").lean();
         const likes = await Like.find({ idea: ideaId }).count();
         const dislikes = await Dislike.find({ idea: ideaId }).count();
+        const liked = await Like.findOne({ user: user, idea: ideaId }).count();
+        const disliked = await Dislike.findOne({ user: user, idea: ideaId }).count();
         if (!idea) {
             return (ctx.body = {
                 status: false,
@@ -94,6 +106,8 @@ module.exports = {
                 likes,
                 dislikes,
                 comments,
+                liked,
+                disliked
             }
         })
     },
