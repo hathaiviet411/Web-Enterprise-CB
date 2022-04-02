@@ -79,7 +79,7 @@
 										color="#000000"
 										:opacity=".9"
 									>
-										<v-btn color="#FFD154">
+										<v-btn color="#FFD154" @click.prevent="userReadIdea(post._id)">
 											<span style="color: #002795; font-weight: bold;">See more info</span>
 										</v-btn>
 									</v-overlay>

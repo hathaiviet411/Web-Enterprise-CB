@@ -86,7 +86,7 @@ module.exports = {
             idea: ideaId
         }).sort({
             createdAt: 'DESC'
-        }).populate("user", "-password").lean();
+        }).populate('user', '-password').lean();
         const likes = await Like.find({ idea: ideaId }).count();
         const dislikes = await Dislike.find({ idea: ideaId }).count();
         const userLike = await Like.findOne({ user: user, idea: ideaId }).count();

@@ -7,8 +7,6 @@ module.exports = (io, socket) => {
     userReadIdea = async (payload) => {
         const { ideaId } = payload;
 
-        console.log(payload);
-
         await Idea.findByIdAndUpdate(ideaId, { $inc: { viewCount: 1 } });
 
         socket.join("idea:" + ideaId);
@@ -17,48 +15,34 @@ module.exports = (io, socket) => {
     createComment = async (payload) => {
         const { commentContent, ideaId, isAnonymous } = payload;
         const userId = socket.decoded.payload;
-        const idea = await Idea.findOne({ _id: ideaId }).lean();
+        const idea = await Idea.findOne({ _id: ideaId }).populate("user", "-password").lean();
         if (idea.isDisabled === true) {
             socket.to("idea:" + ideaId).emit("comment:create", "this idea is closed");
         }
-        const user = await userRole.findOne({ user: userId })
-            .populate({
-                path: 'role',
-                select: '-__v'
-            })
-            .populate({
-                path: 'user',
-                select: '-__v -createdAt -updatedAt -password',
-            })
-            .populate({
-                path: 'department',
-                select: '-__v -createdAt -updatedAt',
-            })
-            .lean();
         if (idea) {
-            const comment = new Comment({
+            const thisComment = new Comment({
                 commentContent: commentContent,
                 idea: ideaId,
-                user: user,
+                user: userId,
                 isAnonymous: isAnonymous,
             });
+            await thisComment.save();
+            const comment = await Comment.find({ idea: ideaId }).populate('user', '-password').lean()
 
             const payload = {
-                user,
                 comment
             }
-
-            await comment.save();
-
             // socket.broadcast.to(ideaId).emit("renderComment", payload)
-            // socket.emit("renderComment", payload)
+            socket.emit("renderComment", payload)
 
-            socket.to("idea:" + ideaId).emit("comment:create", payload);
+            // socket.to("idea:" + ideaId).emit("renderComment", payload);
         }
 
         else {
             throw new Error('idea not found');
         }
+
+        console.log(idea.user.email)
 
         sendEmail({
             to: idea.user.email,
