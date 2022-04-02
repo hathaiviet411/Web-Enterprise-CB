@@ -129,7 +129,7 @@
 							<v-icon color="blue" small>mdi-thumb-up</v-icon>
 							<span class="button-text">Like</span>
 						</v-btn>
-						<v-btn v-else x-small class="card-button" @click="handleLike()">
+						<v-btn v-else x-small class="card-button" @click.prevent="handleLike()">
 							<v-icon color="black" small>mdi-thumb-up</v-icon>
 							<span class="button-text">Like</span>
 						</v-btn>
@@ -322,10 +322,7 @@ export default {
                 const response = await postLike(urlAPI.apiPostLike, {
                     ideaId: this.id,
                 });
-
-                if (response.status === 200) {
-                    this.totalLikes = response.like;
-                }
+                this.totalLikes = response.like;
             } catch (error) {
                 console.log(error);
             }
@@ -336,11 +333,6 @@ export default {
 
             try {
                 const response = await deleteLike(`${urlAPI.apiDeleteLike}/${this.id}`);
-
-                if (response.status === 200) {
-                    console.log(response);
-                }
-                console.log(response);
                 this.totalLikes = response.like;
             } catch (error) {
                 console.log(error);
@@ -358,10 +350,7 @@ export default {
                 const response = await postDislike(urlAPI.apiPostDislike, {
                     ideaId: this.id,
                 });
-
-                if (response.status === 200) {
-                    this.totalDislikes = response.dislike;
-                }
+                this.totalDislikes = response.dislike;
             } catch (error) {
                 console.log(error);
             }
@@ -372,10 +361,7 @@ export default {
 
             try {
                 const response = await deleteDislike(`${urlAPI.apiDeleteDislike}/${this.id}`);
-
-                if (response.status === 200) {
-                    this.totalDislikes = response.dislike;
-                }
+                this.totalDislikes = response.dislike;
             } catch (error) {
                 console.log(error);
             }
