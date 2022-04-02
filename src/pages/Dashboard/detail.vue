@@ -153,7 +153,7 @@
 						</v-btn>
 
 						<v-btn v-else x-small class="card-button" @click="isLiked = false">
-							<v-icon color="black" small>mdi-message</v-icon>
+							<v-icon color="black" small>mdi-thumb-down</v-icon>
 							<span class="button-text">Dislike</span>
 						</v-btn>
 					</v-col>
