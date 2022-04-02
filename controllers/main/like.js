@@ -13,8 +13,10 @@ module.exports = {
 
         await like.save();
         await Idea.findByIdAndUpdate(ideaId, { $inc: { pointCount: 1 } });
+        const count = await Like.find({ idea: ideaId }).count()
         return (ctx.body = {
             status: true,
+            like: count,
             message: "like success"
         })
     },
@@ -26,9 +28,10 @@ module.exports = {
         if (deleteAction.deletedCount === 1) {
             await Idea.findByIdAndUpdate(ideaId, { $inc: { pointCount: -1 } });
         }
-
+        const count = await Like.find({ idea: ideaId }).count()
         return (ctx.body = {
             status: true,
+            like: count,
             message: "unlike success"
         })
     },
@@ -43,8 +46,10 @@ module.exports = {
 
         await dislike.save();
         await Idea.findByIdAndUpdate(ideaId, { $inc: { pointCount: -1 } });
+        const count = await Dislike.find({ idea: ideaId }).count()
         return (ctx.body = {
             status: true,
+            dislike: count,
             message: "dislike success"
         })
     },
@@ -56,9 +61,10 @@ module.exports = {
         if (deleteAction.deletedCount === 1) {
             await Idea.findByIdAndUpdate(ideaId, { $inc: { pointCount: 1 } });
         }
-
+        const count = await Dislike.find({ idea: ideaId }).count()
         return (ctx.body = {
             status: true,
+            dislike: count,
             message: "undislike success"
         })
     },
