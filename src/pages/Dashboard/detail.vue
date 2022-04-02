@@ -37,7 +37,7 @@
 							<div class="author-info">
 								<span class="author-name">{{ DATA.idea.user.name + ' - ' + DATA.idea.user.username }}</span>
 								<br>
-								<span class="uploaded-time">{{ DATA.idea.user.createdAt | moment('from') }}
+								<span class="uploaded-time">{{ DATA.idea.createdAt | moment('from') }}
 									<span>·</span>
 									<v-icon class="pl-1" color="#999" small>mdi-earth</v-icon>
 								</span>
@@ -129,12 +129,14 @@
 
 				<v-row class="ml-1">
 					<v-col cols="3" lg="4" class="text-center pl-0 pr-0">
-
-						<v-btn x-small class="card-button">
-							<v-icon small color="black">mdi-thumb-up</v-icon>
+						<v-btn v-if="isLiked === true" x-small class="card-button" @click.prevent="handleUnLike()">
+							<v-icon color="blue" small>mdi-thumb-up</v-icon>
 							<span class="button-text">Like</span>
 						</v-btn>
-
+						<v-btn v-else x-small class="card-button" @click="handleLike()">
+							<v-icon color="black" small>mdi-thumb-up</v-icon>
+							<span class="button-text">Like</span>
+						</v-btn>
 					</v-col>
 
 					<v-col cols="4" lg="4" class="text-center pl-0 pr-0">
@@ -145,8 +147,13 @@
 					</v-col>
 
 					<v-col cols="4" lg="4" class="text-center pl-0 pr-0">
-						<v-btn x-small class="card-button">
-							<v-icon small>mdi-thumb-down</v-icon>
+						<v-btn v-if="isDisliked === true" x-small class="card-button" @click="isLiked = true">
+							<v-icon color="red" small>mdi-message</v-icon>
+							<span class="button-text">Dislike</span>
+						</v-btn>
+
+						<v-btn v-else x-small class="card-button" @click="isLiked = false">
+							<v-icon color="black" small>mdi-message</v-icon>
 							<span class="button-text">Dislike</span>
 						</v-btn>
 					</v-col>
@@ -171,7 +178,7 @@
 
 							<v-col cols="10" lg="11">
 								<v-text-field
-									label="Viết bình luận..."
+									label="Write comment here..."
 									filled
 									hide-details
 									rounded
@@ -228,9 +235,15 @@
 
 <script>
 import { getOneIdea } from '@/api/modules/idea';
+import { postLike, deleteLike } from '@/api/modules/like';
+import { postDislike, deleteDislike } from '@/api/modules/dislike';
 
 const urlAPI = {
     apiGetListIdea: '/idea',
+    apiPostLike: '/like',
+    apiDeleteLike: '/unlike',
+    apiPostDislike: '/dislike',
+    apiDeleteDislike: '/undislike',
 };
 
 export default {
@@ -250,6 +263,9 @@ export default {
             },
 
             isShowCommentSector: false,
+
+            isLiked: false,
+            isDisliked: false,
         };
     },
     created() {
@@ -263,8 +279,10 @@ export default {
 
                 if (response.status === true) {
                     this.DATA = response.data;
+
+                    this.isLiked = this.DATA.liked;
+                    this.isDisked = this.DATA.disliked;
                 }
-                console.log(response);
             } catch (error) {
                 console.log(error);
             }
@@ -274,6 +292,64 @@ export default {
             const randomColor = Math.floor(Math.random() * 16777215).toString(16);
             const style = '#' + randomColor;
             return `background-color: ${style}`;
+        },
+
+        async handleLike() {
+            this.isLiked = true;
+
+            if (this.isDisliked === true) {
+                this.handleUnDislike();
+            }
+
+            try {
+                const response = await postLike(urlAPI.apiPostLike, {
+                    ideaId: this.id,
+                });
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async handleUnLike() {
+            this.isLiked = false;
+
+            try {
+                const response = await deleteLike(urlAPI.apiDeleteLike, {
+                    ideaId: this.id,
+                });
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async handleDislike() {
+            this.isDisliked = true;
+
+            if (this.isLiked === true) {
+                this.handleUnLike();
+            }
+
+            try {
+                const response = await postDislike(urlAPI.apiPostDislike, {
+                    ideaId: this.id,
+                });
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async handleUnDislike() {
+            this.isDisliked = false;
+
+            try {
+                const response = await deleteDislike(urlAPI.apiDeleteDislike, this.id);
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
         },
     },
 };
