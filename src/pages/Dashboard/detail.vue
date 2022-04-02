@@ -318,8 +318,8 @@ export default {
             socket.emit('comment:create', payload);
 
             socket.on('renderComment', (payload) => {
-                console.log(payload);
-                this.listComment = payload;
+                this.commentContent = '';
+                this.listComment = payload.comment;
             });
         },
 
@@ -334,8 +334,10 @@ export default {
                 const response = await postLike(urlAPI.apiPostLike, {
                     ideaId: this.id,
                 });
-                console.log(response);
-                this.totalLikes = response.like;
+
+                if (response.status === 200) {
+                    this.totalLikes = response.like;
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -346,6 +348,10 @@ export default {
 
             try {
                 const response = await deleteLike(`${urlAPI.apiDeleteLike}/${this.id}`);
+
+                if (response.status === 200) {
+                    console.log(response);
+                }
                 console.log(response);
                 this.totalLikes = response.like;
             } catch (error) {
@@ -364,8 +370,10 @@ export default {
                 const response = await postDislike(urlAPI.apiPostDislike, {
                     ideaId: this.id,
                 });
-                this.totalDislikes = response.dislike;
-                console.log(response);
+
+                if (response.status === 200) {
+                    this.totalDislikes = response.dislike;
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -376,8 +384,10 @@ export default {
 
             try {
                 const response = await deleteDislike(`${urlAPI.apiDeleteDislike}/${this.id}`);
-                this.totalDislikes = response.dislike;
-                console.log(response);
+
+                if (response.status === 200) {
+                    this.totalDislikes = response.dislike;
+                }
             } catch (error) {
                 console.log(error);
             }
