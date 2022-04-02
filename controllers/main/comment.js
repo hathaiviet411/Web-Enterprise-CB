@@ -27,8 +27,8 @@ module.exports = (io, socket) => {
                 isAnonymous: isAnonymous,
             });
             await thisComment.save();
-            const comment = await Comment.find({ idea: ideaId }).populate('user', '-password').lean()
-
+            let comment = await Comment.find({ idea: ideaId }).populate('user', '-password').lean()
+            comment = comment.reverse()
             const payload = {
                 comment
             }
