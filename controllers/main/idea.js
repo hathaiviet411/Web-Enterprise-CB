@@ -81,7 +81,7 @@ module.exports = {
         }
         const idea = await Idea.findOne({
             _id: ideaId
-        }).populate("user", "-password").populate("category").populate("department").lean();
+        }).populate("user", "-password").populate("category", "categoryName").populate("department", "departmentName").lean();
         const comments = await Comment.find({
             idea: ideaId
         }).sort({
