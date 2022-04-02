@@ -4,6 +4,7 @@
 			:headers="vFields"
 			:items="vItems"
 			class="elevation-12"
+			:search="search"
 		>
 			<template v-slot:top>
 				<v-toolbar
@@ -12,6 +13,16 @@
 					<v-toolbar-title>Idea Management</v-toolbar-title>
 
 					<v-divider class="mx-4" inset vertical />
+
+					<v-spacer />
+
+					<v-text-field
+						v-model="search"
+						append-icon="mdi-magnify"
+						label="Search"
+						single-line
+						hide-details
+					/>
 
 					<v-spacer />
 
@@ -546,6 +557,8 @@ export default {
             categoryList: [],
             departmentList: [],
             userList: [],
+
+            search: '',
         };
     },
 

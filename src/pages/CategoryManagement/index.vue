@@ -191,6 +191,14 @@
 				</v-toolbar>
 			</template>
 
+			<template v-slot:[`item.firstClosureDate`]="{ item }">
+				<span>{{ item.firstClosureDate | moment('dddd, MM/YYYY, HH:mm A') }}</span>
+			</template>
+
+			<template v-slot:[`item.finalClosureDate`]="{ item }">
+				<span>{{ item.finalClosureDate | moment('dddd, MM/YYYY, HH:mm A') }}</span>
+			</template>
+
 			<template v-slot:[`item.actions`]="{ item }">
 				<v-icon small class="mr-2" style="color: #051367;" @click="editItem(item)">mdi-pencil</v-icon>
 				<v-icon small style="color: #E84545;" @click="deleteItem(item)">mdi-delete</v-icon>
@@ -347,7 +355,7 @@ export default {
                         RAW_DATA[i].firstClosureDate = convertDateToISO(RAW_DATA[i].firstClosureDate);
                         RAW_DATA[i].finalClosureDate = convertDateToISO(RAW_DATA[i].finalClosureDate);
                     }
-                    this.vItems = RAW_DATA;
+                    this.vItems = RAW_DATA[0];
                 }
             } catch (error) {
                 console.log(error.message);
