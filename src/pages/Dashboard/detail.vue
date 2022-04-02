@@ -120,7 +120,7 @@
 
 						<v-col cols="3" lg="3" class="text-center">
 							<v-icon class="p-1" style="margin-bottom: 2px;">mdi-thumb-down</v-icon>
-							<span class="share-total text-underline mr-3">{{ DATA.dislikes + ' dislike' }}</span>
+							<span class="share-total text-underline mr-3">{{ totalDislikes + ' dislike' }}</span>
 						</v-col>
 					</v-row>
 				</v-card-actions>
@@ -147,13 +147,13 @@
 					</v-col>
 
 					<v-col cols="4" lg="4" class="text-center pl-0 pr-0">
-						<v-btn v-if="isDisliked === true" x-small class="card-button" @click="isLiked = true">
-							<v-icon color="red" small>mdi-message</v-icon>
+						<v-btn v-if="isDisliked === true" x-small class="card-button" @click.prevent="handleUnDislike()">
+							<v-icon color="red" small>mdi-thumb-down</v-icon>
 							<span class="button-text">Dislike</span>
 						</v-btn>
 
-						<v-btn v-else x-small class="card-button" @click="isLiked = false">
-							<v-icon color="black" small>mdi-message</v-icon>
+						<v-btn v-else x-small class="card-button" @click.prevent="handleDislike()">
+							<v-icon color="black" small>mdi-thumb-down</v-icon>
 							<span class="button-text">Dislike</span>
 						</v-btn>
 					</v-col>
@@ -271,6 +271,7 @@ export default {
             isDisliked: false,
 
             totalLikes: '',
+            totalDislikes: '',
 
             commentContent: '',
 
@@ -293,6 +294,7 @@ export default {
                     this.isDisked = this.DATA.disliked;
 
                     this.totalLikes = this.DATA.likes;
+                    this.totalDislikes = this.DATA.dislikes;
 
                     this.listComment = this.DATA.comments;
                 }
@@ -362,6 +364,7 @@ export default {
                 const response = await postDislike(urlAPI.apiPostDislike, {
                     ideaId: this.id,
                 });
+                this.totalDislikes = response.dislike;
                 console.log(response);
             } catch (error) {
                 console.log(error);
@@ -373,6 +376,7 @@ export default {
 
             try {
                 const response = await deleteDislike(`${urlAPI.apiDeleteDislike}/${this.id}`);
+                this.totalDislikes = response.dislike;
                 console.log(response);
             } catch (error) {
                 console.log(error);
