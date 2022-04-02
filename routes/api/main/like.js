@@ -4,10 +4,10 @@ const controller = require('../../../controllers/main/like');
 
 router.post('/like', controller.like);
 
-router.delete('/unlike', controller.unlike);
+router.delete('/unlike/:id', controller.unlike);
 
 router.post('/dislike', controller.dislike);
 
-router.delete('/undislike', controller.undislike);
+router.delete('/undislike/:id', controller.undislike);
 
 module.exports = router.routes();
