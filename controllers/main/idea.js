@@ -89,8 +89,10 @@ module.exports = {
         }).populate("user", "-password").lean();
         const likes = await Like.find({ idea: ideaId }).count();
         const dislikes = await Dislike.find({ idea: ideaId }).count();
-        const liked = await Like.findOne({ user: user, idea: ideaId }).count();
-        const disliked = await Dislike.findOne({ user: user, idea: ideaId }).count();
+        const userLike = await Like.findOne({ user: user, idea: ideaId }).count();
+        const liked = userLike === 1 ? true : false;
+        const userDislike = await Dislike.findOne({ user: user, idea: ideaId }).count();
+        const disliked = userDislike === 1 ? true : false;
         if (!idea) {
             return (ctx.body = {
                 status: false,
