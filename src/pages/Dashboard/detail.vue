@@ -35,9 +35,9 @@
 
 						<v-col cols="12" lg="3">
 							<div class="author-info">
-								<span class="author-name">{{ DATA.idea.user.name + ' - ' + DATA.idea.user.username }}</span>
+								<span class="author-name">{{ name + ' - ' + username }}</span>
 								<br>
-								<span class="uploaded-time">{{ DATA.idea.createdAt | moment('from') }}
+								<span class="uploaded-time">{{ created_at | moment('from') }}
 									<span>·</span>
 									<v-icon class="pl-1" color="#999" small>mdi-earth</v-icon>
 								</span>
@@ -51,7 +51,7 @@
 										<strong>
 											<i class="fas fa-building mr-3" />Department:
 										</strong>
-										{{ DATA.idea.department.departmentName }}
+										{{ department_name }}
 									</span>
 								</v-col>
 
@@ -60,7 +60,7 @@
 										<strong>
 											<i class="fas fa-box-open mr-3" />Category:
 										</strong>
-										{{ DATA.idea.category.categoryName }}
+										{{ category_name }}
 									</span>
 								</v-col>
 							</v-row>
@@ -68,13 +68,13 @@
 					</v-row>
 				</v-card-title>
 
-				<v-card-text v-if="DATA.idea.ideaPicture" class="content">
+				<v-card-text v-if="idea_picture" class="content">
 					<v-row>
 						<v-col cols="12">
-							<h5 class="post-content ml-3">{{ DATA.idea.ideaTitle }}</h5>
+							<h5 class="post-content ml-3">{{ idea_title }}</h5>
 						</v-col>
 						<v-col cols="12">
-							<h5 class="post-content ml-3">{{ DATA.idea.ideaContent }}</h5>
+							<h5 class="post-content ml-3">{{ idea_content }}</h5>
 						</v-col>
 					</v-row>
 
@@ -83,7 +83,7 @@
 							width="1168"
 							height="472"
 							contain
-							:src="DATA.idea.ideaPicture"
+							:src="idea_picture"
 						/>
 					</div>
 				</v-card-text>
@@ -92,10 +92,10 @@
 					<div class="text-center">
 						<v-row>
 							<v-col cols="12">
-								<h5 style="color: #FFD154;" class="post-content">{{ DATA.idea.ideaTitle }}</h5>
+								<h5 style="color: #FFD154;" class="post-content">{{ idea_title }}</h5>
 							</v-col>
 							<v-col cols="12">
-								<h5 style="color: #FFD154;" class="post-content">{{ DATA.idea.ideaContent }}</h5>
+								<h5 style="color: #FFD154;" class="post-content">{{ idea_content }}</h5>
 							</v-col>
 						</v-row>
 					</div>
@@ -108,11 +108,11 @@
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
-							<span class="comment-total text-underline">{{ DATA.idea.viewCount + ' views' }}</span>
+							<span class="comment-total text-underline">{{ total_views + ' views' }}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
-							<span class="comment-total text-underline">{{ (DATA.comments.length === 0 ? 0 : (DATA.comments.length + 1)) + ' comments' }}</span>
+							<span class="comment-total text-underline">{{ total_comments + ' comments' }}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
@@ -159,7 +159,16 @@
 
 				<Transition appear name="fade" mode="in-out">
 					<div v-if="isShowCommentSector">
+
 						<v-row>
+							<v-col cols="12">
+								<b-form-checkbox v-model="isAnonymous" switch size="lg" class="ml-3">
+									<span style="font-size: 12px;">Anonymous Mode</span>
+								</b-form-checkbox>
+							</v-col>
+						</v-row>
+
+						<v-row class="mb-2">
 							<v-col cols="2" lg="1">
 								<v-img
 									min-width="50"
@@ -204,6 +213,7 @@
 									<v-textarea
 										readonly
 										filled
+										:label="isAnonymous === false ? comment.user.name : 'User ' + comment.user._id"
 										rounded
 										dense
 										hide-details
@@ -215,8 +225,8 @@
 
 									<div class="comment-section-button ml-6 mt-1">
 										<span class="text-underline">Like</span>
-										<span class="ml-3 text-underline">Trả lời</span>
-										<span class="ml-3 text-underline">{{ comment.createdAt }}</span>
+										<span class="ml-3 text-underline">Comment</span>
+										<span class="ml-3 text-underline">{{ comment.createdAt | moment('from') }}</span>
 									</div>
 								</v-col>
 							</v-row>
@@ -265,11 +275,22 @@ export default {
             totalDislikes: '',
             commentContent: '',
             listComment: [],
-            isAnonymously: false,
+            isAnonymous: false,
             isDisabled: false,
+
+            name: '',
+            username: '',
+            created_at: '',
+            department_name: '',
+            category_name: '',
+            idea_picture: '',
+            idea_title: '',
+            idea_content: '',
+            total_views: '',
+            total_comments: '',
         };
     },
-    created() {
+    mounted() {
         this.getIdea();
     },
     methods: {
@@ -279,6 +300,17 @@ export default {
                 const response = await getOneIdea(URL);
                 if (response.status === true) {
                     this.DATA = response.data;
+
+                    this.name = this.DATA.idea.user.name;
+                    this.username = this.DATA.idea.user.username;
+                    this.created_at = this.DATA.idea.createdAt;
+                    this.department_name = this.DATA.idea.department.departmentName;
+                    this.category_name = this.DATA.idea.category.categoryName;
+                    this.idea_picture = this.DATA.idea.ideaPicture;
+                    this.idea_title = this.DATA.idea.ideaTitle;
+                    this.idea_content = this.DATA.idea.ideaContent;
+                    this.total_views = this.DATA.idea.viewCount;
+                    this.total_comments = this.DATA.comments.length;
 
                     this.isLiked = this.DATA.liked;
                     this.isDisked = this.DATA.disliked;
