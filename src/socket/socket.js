@@ -6,7 +6,7 @@ const baseURL = process.env.VUE_APP_SOCKET_URL;
 const socket = io(baseURL, {
     auth: { token },
 });
-socket.on('connect', (socket) => {
+socket.on('connection', (socket) => {
     // console.log(socket.id);
 });
 

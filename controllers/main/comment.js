@@ -15,6 +15,7 @@ module.exports = (io, socket) => {
     createComment = async (payload) => {
         const { commentContent, ideaId, isAnonymous } = payload;
         const userId = socket.decoded.payload;
+        console.log(userId)
         const idea = await Idea.findOne({ _id: ideaId }).populate("user", "-password").lean();
         if (idea.isDisabled === true) {
             socket.to("idea:" + ideaId).emit("comment:create", "this idea is closed");
@@ -27,22 +28,20 @@ module.exports = (io, socket) => {
                 isAnonymous: isAnonymous,
             });
             await thisComment.save();
-            let comment = await Comment.find({ idea: ideaId }).populate('user', '-password').lean()
-            comment = comment.reverse()
+            // const comment = await Comment.findOne({ _id: thisComment._id }).populate('user', '-password').lean()
+            const comment = await Comment.find({ idea: ideaId }).populate('user', '-password').sort({ createdAt: 'DESC' }).lean()
             const payload = {
                 comment
             }
             // socket.broadcast.to(ideaId).emit("renderComment", payload)
-            socket.emit("renderComment", payload)
-
+            socket.emit("renderComment", payload);
+            socket.broadcast.emit("renderBroadcastComment", payload);
             // socket.to("idea:" + ideaId).emit("renderComment", payload);
         }
 
         else {
             throw new Error('idea not found');
         }
-
-        console.log(idea.user.email)
 
         sendEmail({
             to: idea.user.email,
