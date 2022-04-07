@@ -82,6 +82,12 @@ module.exports = {
         const idea = await Idea.findOne({
             _id: ideaId
         }).populate("user", "-password").populate("category", "categoryName -_id").populate("department", "departmentName -_id").lean();
+        if (!idea) {
+            return (ctx.body = {
+                status: false,
+                message: "idea not found",
+            })
+        }
         const comments = await Comment.find({ idea: ideaId }).sort({ createdAt: 'DESC' }).populate('user', '-password').lean();
         const likes = await Like.find({ idea: ideaId }).count();
         const dislikes = await Dislike.find({ idea: ideaId }).count();
@@ -89,12 +95,6 @@ module.exports = {
         const liked = userLike === 1 ? true : false;
         const userDislike = await Dislike.findOne({ user: user, idea: ideaId }).count();
         const disliked = userDislike === 1 ? true : false;
-        if (!idea) {
-            return (ctx.body = {
-                status: false,
-                message: "idea not found",
-            })
-        }
 
         return (ctx.body = {
             status: true,

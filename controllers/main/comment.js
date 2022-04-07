@@ -15,7 +15,6 @@ module.exports = (io, socket) => {
     createComment = async (payload) => {
         const { commentContent, ideaId, isAnonymous } = payload;
         const userId = socket.decoded.payload;
-        console.log(userId)
         const idea = await Idea.findOne({ _id: ideaId }).populate("user", "-password").lean();
         if (idea.isDisabled === true) {
             socket.to("idea:" + ideaId).emit("comment:create", "this idea is closed");
@@ -58,7 +57,6 @@ module.exports = (io, socket) => {
 
         await Comment.deleteOne({ _id: commentId });
 
-        socket.to("idea:" + ideaId).emit("comment:delete", commentId);
     }
 
     updateComment = async (ctx) => {
