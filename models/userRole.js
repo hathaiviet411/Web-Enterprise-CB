@@ -16,7 +16,7 @@ const userRole = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "department",
     required: true,
-  }
+  },
 });
 
 module.exports = mongoose.model("userRole", userRole);

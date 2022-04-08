@@ -9,8 +9,15 @@
 		>
 			<template #overlay>
 				<div class="text-center overlay-card">
-					<b-icon icon="arrow-clockwise" color="#7366FF" font-scale="3" animation="spin" />
-					<p style="margin-top: 10px; color:#7366FF">{{ 'Xin vui lòng chờ' }}</p>
+					<b-icon
+						icon="arrow-clockwise"
+						color="#7366FF"
+						font-scale="3"
+						animation="spin"
+					/>
+					<p style="margin-top: 10px; color: #7366ff">
+						{{ "Xin vui lòng chờ" }}
+					</p>
 				</div>
 			</template>
 
@@ -128,8 +135,13 @@
 			<v-row>
 				<v-col v-if="isLoading === true" cols="12" class="text-center">
 					<v-btn class="btn-loading rounded-xl" elevation="12" color="#7366FF">
-						<b-icon style="color: #FFFFFF" icon="arrow-clockwise" animation="spin-pulse" font-scale="2" />
-						<span style="color: #FFFFFF">Loading...</span>
+						<b-icon
+							style="color: #ffffff"
+							icon="arrow-clockwise"
+							animation="spin-pulse"
+							font-scale="2"
+						/>
+						<span style="color: #ffffff">Loading...</span>
 					</v-btn>
 				</v-col>
 			</v-row>
@@ -286,103 +298,103 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/variables.scss';
+@import "@/scss/variables.scss";
 
 .dashboard {
-	background-image: url('/assets/images/background.png');
-	background-repeat: no-repeat;
-	background-size: auto;
+  background-image: url("/assets/images/background.png");
+  background-repeat: no-repeat;
+  background-size: auto;
 }
 
 .author-name {
-	font-size: 14px;
-	font-weight: bolder;
+  font-size: 14px;
+  font-weight: bolder;
 }
 
 .uploaded-time {
-	font-size: 14px;
-	color: #999;
+  font-size: 14px;
+  color: #999;
 }
 
 .content {
-	display: flex;
-	justify-content: center;
-	align-content: center;
-	flex-direction: column;
-	height: 472px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  height: 472px;
 }
 
 .post-content {
-	color: $black;
-	line-height: 40px;
+  color: $black;
+  line-height: 40px;
 }
 
 .like-total {
-	font-size: 12px;
-	color: #999;
+  font-size: 12px;
+  color: #999;
 }
 
 .comment-total {
-	font-size: 12px;
-	color: #999;
+  font-size: 12px;
+  color: #999;
 }
 
 .share-total {
-	font-size: 12px;
-	color: #999;
+  font-size: 12px;
+  color: #999;
 }
 
 .text-underline:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 .button-text {
-	margin-left: 10px;
-	font-size: 10px;
+  margin-left: 10px;
+  font-size: 10px;
 }
 
 .card-button {
-	height: 40px !important;
-	box-shadow: none;
-	border: 1px solid $white !important;
-	background-color: #FFFFFF !important;
+  height: 40px !important;
+  box-shadow: none;
+  border: 1px solid $white !important;
+  background-color: #ffffff !important;
 }
 
 .fade-enter-active,
 .fade-leave-active {
-	transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-	opacity: 0;
+  opacity: 0;
 }
 
 .comment-section-button {
-	font-size: 12px;
+  font-size: 12px;
 }
 
 .comment-section {
-	font-size: 14px;
+  font-size: 14px;
 }
 
 .btn-loading {
-	opacity: .8;
+  opacity: 0.8;
 }
 
 .text-small {
-	font-size: 12px;
+  font-size: 12px;
 }
 
 .random-background {
-	display: flex;
-	justify-content: center;
-	align-content: center;
-	flex-direction: column;
-	height: 472px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  height: 472px;
 }
 
 .overlay-card {
-	margin-top: 100px;
+  margin-top: 100px;
 }
 </style>

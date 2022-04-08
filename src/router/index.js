@@ -34,11 +34,12 @@ export const asyncRoutes = [
     setting,
 ];
 
-const createRouter = () => new VueRouter({
-    mode: 'history',
-    scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes,
-});
+const createRouter = () =>
+    new VueRouter({
+        mode: 'history',
+        scrollBehavior: () => ({ y: 0 }),
+        routes: constantRoutes,
+    });
 
 const router = createRouter();
 
@@ -48,4 +49,3 @@ export function resetRouter() {
 }
 
 export default router;
-
