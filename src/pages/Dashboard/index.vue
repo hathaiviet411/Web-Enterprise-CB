@@ -17,7 +17,7 @@
 			<v-row>
 				<v-col cols="2">
 					<v-card elevation="24" min-height="800" class="rounded-lg">
-						<v-img src="@/assets/images/art1.png" min-height="800" />
+						<v-img src="@/assets/images/avatar.png" min-height="800" />
 					</v-card>
 				</v-col>
 
