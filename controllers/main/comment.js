@@ -27,22 +27,20 @@ module.exports = (io, socket) => {
                 isAnonymous: isAnonymous,
             });
             await thisComment.save();
-            let comment = await Comment.find({ idea: ideaId }).populate('user', '-password').lean()
-            comment = comment.reverse()
+            // const comment = await Comment.findOne({ _id: thisComment._id }).populate('user', '-password').lean()
+            const comment = await Comment.find({ idea: ideaId }).populate('user', '-password').sort({ createdAt: 'DESC' }).lean()
             const payload = {
                 comment
             }
             // socket.broadcast.to(ideaId).emit("renderComment", payload)
-            socket.emit("renderComment", payload)
-
+            socket.emit("renderComment", payload);
+            socket.broadcast.emit("renderBroadcastComment", payload);
             // socket.to("idea:" + ideaId).emit("renderComment", payload);
         }
 
         else {
             throw new Error('idea not found');
         }
-
-        console.log(idea.user.email)
 
         sendEmail({
             to: idea.user.email,
@@ -59,7 +57,6 @@ module.exports = (io, socket) => {
 
         await Comment.deleteOne({ _id: commentId });
 
-        socket.to("idea:" + ideaId).emit("comment:delete", commentId);
     }
 
     updateComment = async (ctx) => {

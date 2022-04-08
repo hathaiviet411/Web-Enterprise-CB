@@ -293,6 +293,13 @@ export default {
     mounted() {
         this.getIdea();
     },
+    created() {
+        this.listComment = [];
+        socket.on('renderBroadcastComment', (payload) => {
+            this.commentContent = '';
+            this.listComment = payload.comment;
+        });
+    },
     methods: {
         async getIdea() {
             const URL = `${urlAPI.apiGetListIdea}/${this.$route.params.id}`;

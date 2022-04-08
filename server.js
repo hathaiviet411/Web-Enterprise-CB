@@ -108,6 +108,10 @@ const registerCommentHandlers = require('./controllers/main/comment');
 const onConnection = (socket) => {
     console.log(socket.id);
     registerCommentHandlers(io, socket);
+
+    io.on('disconnection', () => {
+        console.log('Disconnected');
+    });
 };
 
 io.sockets.setMaxListeners(0);
