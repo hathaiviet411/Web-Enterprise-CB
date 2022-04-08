@@ -1,238 +1,237 @@
 <template>
-  <div>
-    <v-data-table
-      :headers="vFields"
-      :items="vItems"
-      class="elevation-12"
-      :search="search"
-    >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title>
-            <span>{{ "Category Management" }}</span>
-          </v-toolbar-title>
+	<div>
+		<v-data-table
+			:headers="vFields"
+			:items="vItems"
+			class="elevation-12"
+			:search="search"
+		>
+			<template v-slot:top>
+				<v-toolbar flat>
+					<v-toolbar-title>
+						<span>{{ "Category Management" }}</span>
+					</v-toolbar-title>
 
-          <v-divider class="mx-4" inset vertical />
+					<v-divider class="mx-4" inset vertical />
 
-          <v-spacer />
+					<v-spacer />
 
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-          />
+					<v-text-field
+						v-model="search"
+						append-icon="mdi-magnify"
+						label="Search"
+						single-line
+						hide-details
+					/>
 
-          <v-spacer />
+					<v-spacer />
 
-          <v-dialog v-model="dialog" max-width="500px" persistent>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                <v-icon left>mdi-plus-box</v-icon>
-                <span>New Category</span>
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <v-row>
-                  <v-col cols="12" class="text-center">
-                    <span>{{ formTitle }}</span>
-                  </v-col>
-                </v-row>
-              </v-card-title>
+					<v-dialog v-model="dialog" max-width="500px" persistent>
+						<template v-slot:activator="{ on, attrs }">
+							<v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+								<v-icon left>mdi-plus-box</v-icon>
+								<span>New Category</span>
+							</v-btn>
+						</template>
+						<v-card>
+							<v-card-title>
+								<v-row>
+									<v-col cols="12" class="text-center">
+										<span>{{ formTitle }}</span>
+									</v-col>
+								</v-row>
+							</v-card-title>
 
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="12" md="12">
-                      <v-text-field
-                        v-model="editedItem.categoryName"
-                        prepend-inner-icon="mdi-library"
-                        label="Category Name"
-                      />
-                    </v-col>
-                    <v-col cols="12" sm="12" md="12">
-                      <v-menu
-                        ref="add_created_date_menu"
-                        v-model="add_created_date_menu"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        offset-y
-                        max-width="290px"
-                        min-width="auto"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            :value="editedItem.firstClosureDate"
-                            label="Created Date"
-                            hint="YYYY-mm-dd"
-                            persistent-hint
-                            prepend-inner-icon="mdi-calendar"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
-                          >
-                            <v-icon
-                              v-show="add_created_date_menu === true"
-                              slot="append"
-                              color="red"
-                              @click="editedItem.firstClosureDate = ''"
-                              >mdi-close-box</v-icon
-                            >
-                          </v-text-field>
-                        </template>
-                        <v-date-picker
-                          v-model="editedItem.firstClosureDate"
-                          no-title
-                          :max="editedItem.finalClosureDate"
-                          @input="add_created_date_menu = false"
-                        />
-                      </v-menu>
-                    </v-col>
-                    <v-col cols="12" sm="12" md="12">
-                      <v-menu
-                        ref="add_expired_date_menu"
-                        v-model="add_expired_date_menu"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        offset-y
-                        max-width="290px"
-                        min-width="auto"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            :value="editedItem.finalClosureDate"
-                            label="Expired Date"
-                            hint="YYYY-mm-dd"
-                            persistent-hint
-                            prepend-inner-icon="mdi-calendar"
-                            v-bind="attrs"
-                            readonly
-                            v-on="on"
-                          >
-                            <v-icon
-                              v-show="add_expired_date_menu === true"
-                              slot="append"
-                              color="red"
-                              @click="editedItem.finalClosureDate = ''"
-                              >mdi-close-box</v-icon
-                            >
-                          </v-text-field>
-                        </template>
-                        <v-date-picker
-                          v-model="editedItem.finalClosureDate"
-                          no-title
-                          :min="editedItem.firstClosureDate"
-                          @input="add_expired_date_menu = false"
-                        />
-                      </v-menu>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
+							<v-card-text>
+								<v-container>
+									<v-row>
+										<v-col cols="12" sm="12" md="12">
+											<v-text-field
+												v-model="editedItem.categoryName"
+												prepend-inner-icon="mdi-library"
+												label="Category Name"
+											/>
+										</v-col>
+										<v-col cols="12" sm="12" md="12">
+											<v-menu
+												ref="add_created_date_menu"
+												v-model="add_created_date_menu"
+												:close-on-content-click="false"
+												transition="scale-transition"
+												offset-y
+												max-width="290px"
+												min-width="auto"
+											>
+												<template v-slot:activator="{ on, attrs }">
+													<v-text-field
+														:value="editedItem.firstClosureDate"
+														label="Created Date"
+														hint="YYYY-mm-dd"
+														persistent-hint
+														prepend-inner-icon="mdi-calendar"
+														readonly
+														v-bind="attrs"
+														v-on="on"
+													>
+														<v-icon
+															v-show="add_created_date_menu === true"
+															slot="append"
+															color="red"
+															@click="editedItem.firstClosureDate = ''"
+														>mdi-close-box</v-icon>
+													</v-text-field>
+												</template>
+												<v-date-picker
+													v-model="editedItem.firstClosureDate"
+													no-title
+													:max="editedItem.finalClosureDate"
+													@input="add_created_date_menu = false"
+												/>
+											</v-menu>
+										</v-col>
+										<v-col cols="12" sm="12" md="12">
+											<v-menu
+												ref="add_expired_date_menu"
+												v-model="add_expired_date_menu"
+												:close-on-content-click="false"
+												transition="scale-transition"
+												offset-y
+												max-width="290px"
+												min-width="auto"
+											>
+												<template v-slot:activator="{ on, attrs }">
+													<v-text-field
+														:value="editedItem.finalClosureDate"
+														label="Expired Date"
+														hint="YYYY-mm-dd"
+														persistent-hint
+														prepend-inner-icon="mdi-calendar"
+														v-bind="attrs"
+														readonly
+														v-on="on"
+													>
+														<v-icon
+															v-show="add_expired_date_menu === true"
+															slot="append"
+															color="red"
+															@click="editedItem.finalClosureDate = ''"
+														>mdi-close-box</v-icon>
+													</v-text-field>
+												</template>
+												<v-date-picker
+													v-model="editedItem.finalClosureDate"
+													no-title
+													:min="editedItem.firstClosureDate"
+													@input="add_expired_date_menu = false"
+												/>
+											</v-menu>
+										</v-col>
+									</v-row>
+								</v-container>
+							</v-card-text>
 
-              <v-card-actions>
-                <v-spacer />
-                <v-btn color="red darken-1" text @click="close()">
-                  <v-icon left>mdi-exit-to-app</v-icon>
-                  <span>Cancel</span>
-                </v-btn>
-                <v-btn color="blue darken-1" text @click="save()">
-                  <v-icon left>mdi-lead-pencil</v-icon>
-                  <span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+							<v-card-actions>
+								<v-spacer />
+								<v-btn color="red darken-1" text @click="close()">
+									<v-icon left>mdi-exit-to-app</v-icon>
+									<span>Cancel</span>
+								</v-btn>
+								<v-btn color="blue darken-1" text @click="save()">
+									<v-icon left>mdi-lead-pencil</v-icon>
+									<span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
+								</v-btn>
+							</v-card-actions>
+						</v-card>
+					</v-dialog>
 
-          <v-dialog v-model="dialogDelete" max-width="500px">
-            <v-card>
-              <v-card-title>
-                <v-row>
-                  <v-col cols="12" class="text-center">
-                    <span>Are you sure to delete this category?</span>
-                  </v-col>
-                </v-row>
-              </v-card-title>
+					<v-dialog v-model="dialogDelete" max-width="500px">
+						<v-card>
+							<v-card-title>
+								<v-row>
+									<v-col cols="12" class="text-center">
+										<span>Are you sure to delete this category?</span>
+									</v-col>
+								</v-row>
+							</v-card-title>
 
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="12" md="12">
-                      <v-text-field
-                        v-model="editedItem.categoryName"
-                        label="Category Name"
-                        prepend-inner-icon="mdi-library"
-                        readonly
-                      />
-                    </v-col>
-                    <v-col cols="12" sm="12" md="12">
-                      <v-text-field
-                        v-model="editedItem.firstClosureDate"
-                        label="Created Date"
-                        readonly
-                        prepend-inner-icon="mdi-calendar"
-                      />
-                    </v-col>
-                    <v-col cols="12" sm="12" md="12">
-                      <v-text-field
-                        v-model="editedItem.finalClosureDate"
-                        label="Expired Date"
-                        readonly
-                        prepend-inner-icon="mdi-calendar"
-                      />
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
+							<v-card-text>
+								<v-container>
+									<v-row>
+										<v-col cols="12" sm="12" md="12">
+											<v-text-field
+												v-model="editedItem.categoryName"
+												label="Category Name"
+												prepend-inner-icon="mdi-library"
+												readonly
+											/>
+										</v-col>
+										<v-col cols="12" sm="12" md="12">
+											<v-text-field
+												v-model="editedItem.firstClosureDate"
+												label="Created Date"
+												readonly
+												prepend-inner-icon="mdi-calendar"
+											/>
+										</v-col>
+										<v-col cols="12" sm="12" md="12">
+											<v-text-field
+												v-model="editedItem.finalClosureDate"
+												label="Expired Date"
+												readonly
+												prepend-inner-icon="mdi-calendar"
+											/>
+										</v-col>
+									</v-row>
+								</v-container>
+							</v-card-text>
 
-              <v-card-actions>
-                <v-spacer />
-                <v-btn color="blue darken-1" text @click="closeDelete()">
-                  <v-icon left>mdi-exit-to-app</v-icon>
-                  <span>Cancel</span>
-                </v-btn>
-                <v-btn color="red darken-1" text @click="deleteItemConfirm()">
-                  <v-icon left>mdi-delete-empty</v-icon>
-                  <span>{{ "Confirm" }}</span>
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-toolbar>
-      </template>
+							<v-card-actions>
+								<v-spacer />
+								<v-btn color="blue darken-1" text @click="closeDelete()">
+									<v-icon left>mdi-exit-to-app</v-icon>
+									<span>Cancel</span>
+								</v-btn>
+								<v-btn color="red darken-1" text @click="deleteItemConfirm()">
+									<v-icon left>mdi-delete-empty</v-icon>
+									<span>{{ "Confirm" }}</span>
+								</v-btn>
+							</v-card-actions>
+						</v-card>
+					</v-dialog>
+				</v-toolbar>
+			</template>
 
-      <template v-slot:[`item.firstClosureDate`]="{ item }">
-        <span>{{
-          item.firstClosureDate | moment("dddd, MM/YYYY, HH:mm A")
-        }}</span>
-      </template>
+			<template v-slot:[`item.firstClosureDate`]="{ item }">
+				<span>{{
+					item.firstClosureDate | moment("dddd, MM/YYYY, HH:mm A")
+				}}</span>
+			</template>
 
-      <template v-slot:[`item.finalClosureDate`]="{ item }">
-        <span>{{
-          item.finalClosureDate | moment("dddd, MM/YYYY, HH:mm A")
-        }}</span>
-      </template>
+			<template v-slot:[`item.finalClosureDate`]="{ item }">
+				<span>{{
+					item.finalClosureDate | moment("dddd, MM/YYYY, HH:mm A")
+				}}</span>
+			</template>
 
-      <template v-slot:[`item.actions`]="{ item }">
-        <v-icon
-          small
-          class="mr-2"
-          style="color: #051367"
-          @click="editItem(item)"
-          >mdi-pencil</v-icon
-        >
-        <v-icon small style="color: #e84545" @click="deleteItem(item)"
-          >mdi-delete</v-icon
-        >
-      </template>
+			<template v-slot:[`item.actions`]="{ item }">
+				<v-icon
+					small
+					class="mr-2"
+					style="color: #051367"
+					@click="editItem(item)"
+				>mdi-pencil</v-icon>
+				<v-icon
+					small
+					style="color: #e84545"
+					@click="deleteItem(item)"
+				>mdi-delete</v-icon>
+			</template>
 
-      <template v-slot:no-data>
-        <span>{{ "Table is Empty" }}</span>
-      </template>
+			<template v-slot:no-data>
+				<span>{{ "Table is Empty" }}</span>
+			</template>
 
-      <!-- <template v-slot:footer class="mt-3">
+			<!-- <template v-slot:footer class="mt-3">
 				<div class="text-center pb-3 pt-3">
 					<v-pagination
 						v-model="pagination.currentPage"
@@ -241,291 +240,291 @@
 					/>
 				</div>
 			</template> -->
-    </v-data-table>
-  </div>
+		</v-data-table>
+	</div>
 </template>
 
 <script>
 // APIs import
 import {
-  getCategory,
-  postCategory,
-  putCategory,
-  deleteCategory,
-} from "@/api/modules/category";
+    getCategory,
+    postCategory,
+    putCategory,
+    deleteCategory,
+} from '@/api/modules/category';
 
 // Helper functions import
-import { convertDateToISO } from "@/utils/handleConvertDateFormat";
-import { MakeToast } from "@/toast/toastMessage";
-import { isPassValidation } from "./helper";
+import { convertDateToISO } from '@/utils/handleConvertDateFormat';
+import { MakeToast } from '@/toast/toastMessage';
+import { isPassValidation } from './helper';
 
 // Const APIs Url
-const URL_GET_CATEGORY = "/category";
-const URL_POST_CATEGORY = "/category";
-const URL_PUT_CATEGORY = "/category";
-const URL_DELETE_CATEGORY = "/category";
+const URL_GET_CATEGORY = '/category';
+const URL_POST_CATEGORY = '/category';
+const URL_PUT_CATEGORY = '/category';
+const URL_DELETE_CATEGORY = '/category';
 
 export default {
-  name: "CategoryManagement",
-  data() {
-    return {
-      convertDateToISO: convertDateToISO,
+    name: 'CategoryManagement',
+    data() {
+        return {
+            convertDateToISO: convertDateToISO,
 
-      filter: {
-        category_name: "",
-        created_date: "",
-        expired_date: "",
+            filter: {
+                category_name: '',
+                created_date: '',
+                expired_date: '',
 
-        isCheck: {
-          category_name: false,
-          created_date: false,
-          expired_date: false,
+                isCheck: {
+                    category_name: false,
+                    created_date: false,
+                    expired_date: false,
+                },
+            },
+
+            dialog: false,
+            dialogDelete: false,
+
+            vFields: [
+                {
+                    text: 'Category Name',
+                    value: 'categoryName',
+                    sortable: true,
+                    align: 'start',
+                },
+                { text: 'Created Date', value: 'firstClosureDate', sortable: true },
+                { text: 'Expired Date', value: 'finalClosureDate', sortable: true },
+                { text: 'Actions', value: 'actions', sortable: false },
+            ],
+
+            vItems: [],
+
+            filter_created_date_menu: false,
+            filter_expired_date_menu: false,
+
+            edit_created_date_menu: false,
+            edit_expired_date_menu: false,
+
+            add_created_date_menu: false,
+            add_expired_date_menu: false,
+
+            editedIndex: -1,
+
+            editedItem: {
+                id: '',
+                categoryName: '',
+                firstClosureDate: '',
+                finalClosureDate: '',
+            },
+
+            defaultItem: {
+                id: '',
+                categoryName: '',
+                firstClosureDate: '',
+                finalClosureDate: '',
+            },
+
+            pagination: {
+                currentPage: 1,
+                perPage: 10,
+                totalPage: 2,
+            },
+
+            search: '',
+        };
+    },
+
+    computed: {
+        isCheckCategoryName() {
+            return this.filter.isCheck.category_name;
         },
-      },
 
-      dialog: false,
-      dialogDelete: false,
-
-      vFields: [
-        {
-          text: "Category Name",
-          value: "categoryName",
-          sortable: true,
-          align: "start",
+        isCheckCreatedDate() {
+            return this.filter.isCheck.created_date;
         },
-        { text: "Created Date", value: "firstClosureDate", sortable: true },
-        { text: "Expired Date", value: "finalClosureDate", sortable: true },
-        { text: "Actions", value: "actions", sortable: false },
-      ],
 
-      vItems: [],
+        isCheckExpiredDate() {
+            return this.filter.isCheck.expired_date;
+        },
 
-      filter_created_date_menu: false,
-      filter_expired_date_menu: false,
-
-      edit_created_date_menu: false,
-      edit_expired_date_menu: false,
-
-      add_created_date_menu: false,
-      add_expired_date_menu: false,
-
-      editedIndex: -1,
-
-      editedItem: {
-        id: "",
-        categoryName: "",
-        firstClosureDate: "",
-        finalClosureDate: "",
-      },
-
-      defaultItem: {
-        id: "",
-        categoryName: "",
-        firstClosureDate: "",
-        finalClosureDate: "",
-      },
-
-      pagination: {
-        currentPage: 1,
-        perPage: 10,
-        totalPage: 2,
-      },
-
-      search: "",
-    };
-  },
-
-  computed: {
-    isCheckCategoryName() {
-      return this.filter.isCheck.category_name;
+        formTitle() {
+            return this.editedIndex === -1 ? 'New Category' : 'Edit Category';
+        },
     },
 
-    isCheckCreatedDate() {
-      return this.filter.isCheck.created_date;
+    watch: {
+        isCheckCategoryName() {
+            this.filter.category_name = '';
+        },
+
+        isCheckCreatedDate() {
+            this.filter.created_date = '';
+        },
+
+        isCheckExpiredDate() {
+            this.filter.expired_date = '';
+        },
+
+        dialog(val) {
+            val || this.close();
+        },
+
+        dialogDelete(val) {
+            val || this.closeDelete();
+        },
     },
 
-    isCheckExpiredDate() {
-      return this.filter.isCheck.expired_date;
+    mounted() {
+        this.getCategoryData();
     },
 
-    formTitle() {
-      return this.editedIndex === -1 ? "New Category" : "Edit Category";
-    },
-  },
+    methods: {
+        async getCategoryData() {
+            try {
+                const response = await getCategory(URL_GET_CATEGORY);
+                if (response.status === true) {
+                    const RAW_DATA = [response.category];
+                    for (let i = 0; i < RAW_DATA.length; i++) {
+                        RAW_DATA[i].firstClosureDate = convertDateToISO(
+                            RAW_DATA[i].firstClosureDate
+                        );
+                        RAW_DATA[i].finalClosureDate = convertDateToISO(
+                            RAW_DATA[i].finalClosureDate
+                        );
+                    }
+                    this.vItems = RAW_DATA[0];
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        },
 
-  watch: {
-    isCheckCategoryName() {
-      this.filter.category_name = "";
-    },
+        doFilter() {
+            //
+        },
 
-    isCheckCreatedDate() {
-      this.filter.created_date = "";
-    },
+        async createNewCategory() {
+            if (isPassValidation(this.editedItem) === true) {
+                this.close();
+                try {
+                    const response = await postCategory(
+                        URL_POST_CATEGORY,
+                        this.editedItem
+                    );
+                    if (response.status === true) {
+                        MakeToast({
+                            variant: 'success',
+                            title: 'Success',
+                            content: 'Create New Category Successful',
+                        });
 
-    isCheckExpiredDate() {
-      this.filter.expired_date = "";
-    },
+                        this.getCategoryData();
+                    }
+                } catch (error) {
+                    console.log(error.message);
+                }
+            }
+        },
 
-    dialog(val) {
-      val || this.close();
-    },
+        async updateCategory(DATA) {
+            const URL = `${URL_PUT_CATEGORY}/${DATA.id}`;
+            if (isPassValidation(DATA) === true) {
+                this.close();
+                try {
+                    const response = await putCategory(URL, DATA);
 
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
-  },
+                    if (response.status === true) {
+                        MakeToast({
+                            variant: 'success',
+                            title: 'Success',
+                            content: 'Update Category Successful',
+                        });
 
-  mounted() {
-    this.getCategoryData();
-  },
+                        this.getCategoryData();
+                    }
+                } catch (error) {
+                    console.log(error.message);
+                }
+            }
+        },
 
-  methods: {
-    async getCategoryData() {
-      try {
-        const response = await getCategory(URL_GET_CATEGORY);
-        if (response.status === true) {
-          const RAW_DATA = [response.category];
-          for (let i = 0; i < RAW_DATA.length; i++) {
-            RAW_DATA[i].firstClosureDate = convertDateToISO(
-              RAW_DATA[i].firstClosureDate
-            );
-            RAW_DATA[i].finalClosureDate = convertDateToISO(
-              RAW_DATA[i].finalClosureDate
-            );
-          }
-          this.vItems = RAW_DATA[0];
-        }
-      } catch (error) {
-        console.log(error.message);
-      }
-    },
+        async removeCategory(ID) {
+            const URL = `${URL_DELETE_CATEGORY}/${ID}`;
+            try {
+                const response = await deleteCategory(URL);
+                if (response.status === true) {
+                    MakeToast({
+                        variant: 'success',
+                        title: 'Success',
+                        content: 'Delete Category Successful',
+                    });
 
-    doFilter() {
-      //
-    },
+                    this.getCategoryData();
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+            this.closeDelete();
+        },
 
-    async createNewCategory() {
-      if (isPassValidation(this.editedItem) === true) {
-        this.close();
-        try {
-          const response = await postCategory(
-            URL_POST_CATEGORY,
-            this.editedItem
-          );
-          if (response.status === true) {
-            MakeToast({
-              variant: "success",
-              title: "Success",
-              content: "Create New Category Successful",
+        editItem(item) {
+            this.editedIndex = this.vItems.indexOf(item);
+            this.editedItem = {
+                id: item._id,
+                categoryName: item.categoryName,
+                firstClosureDate: convertDateToISO(item.firstClosureDate),
+                finalClosureDate: convertDateToISO(item.finalClosureDate),
+            };
+            this.dialog = true;
+        },
+
+        deleteItem(item) {
+            this.editedIndex = this.vItems.indexOf(item);
+            this.editedItem = {
+                id: item._id,
+                categoryName: item.categoryName,
+                firstClosureDate: convertDateToISO(item.firstClosureDate),
+                finalClosureDate: convertDateToISO(item.finalClosureDate),
+            };
+            this.dialogDelete = true;
+        },
+
+        deleteItemConfirm() {
+            this.removeCategory(this.editedItem.id);
+        },
+
+        close() {
+            this.dialog = false;
+            this.$nextTick(() => {
+                this.editedItem = Object.assign({}, this.defaultItem);
+                this.editedIndex = -1;
             });
+        },
 
-            this.getCategoryData();
-          }
-        } catch (error) {
-          console.log(error.message);
-        }
-      }
-    },
-
-    async updateCategory(DATA) {
-      const URL = `${URL_PUT_CATEGORY}/${DATA.id}`;
-      if (isPassValidation(DATA) === true) {
-        this.close();
-        try {
-          const response = await putCategory(URL, DATA);
-
-          if (response.status === true) {
-            MakeToast({
-              variant: "success",
-              title: "Success",
-              content: "Update Category Successful",
+        closeDelete() {
+            this.dialogDelete = false;
+            this.$nextTick(() => {
+                this.editedItem = Object.assign({}, this.defaultItem);
+                this.editedIndex = -1;
             });
+        },
 
-            this.getCategoryData();
-          }
-        } catch (error) {
-          console.log(error.message);
-        }
-      }
+        save() {
+            if (this.editedIndex > -1) {
+                this.updateCategory(this.editedItem);
+            } else {
+                this.createNewCategory();
+            }
+        },
+
+        resetFilter() {
+            this.filter.isCheck = {
+                category_name: false,
+                created_date: false,
+                expired_date: false,
+            };
+        },
     },
-
-    async removeCategory(ID) {
-      const URL = `${URL_DELETE_CATEGORY}/${ID}`;
-      try {
-        const response = await deleteCategory(URL);
-        if (response.status === true) {
-          MakeToast({
-            variant: "success",
-            title: "Success",
-            content: "Delete Category Successful",
-          });
-
-          this.getCategoryData();
-        }
-      } catch (error) {
-        console.log(error.message);
-      }
-      this.closeDelete();
-    },
-
-    editItem(item) {
-      this.editedIndex = this.vItems.indexOf(item);
-      this.editedItem = {
-        id: item._id,
-        categoryName: item.categoryName,
-        firstClosureDate: convertDateToISO(item.firstClosureDate),
-        finalClosureDate: convertDateToISO(item.finalClosureDate),
-      };
-      this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.editedIndex = this.vItems.indexOf(item);
-      this.editedItem = {
-        id: item._id,
-        categoryName: item.categoryName,
-        firstClosureDate: convertDateToISO(item.firstClosureDate),
-        finalClosureDate: convertDateToISO(item.finalClosureDate),
-      };
-      this.dialogDelete = true;
-    },
-
-    deleteItemConfirm() {
-      this.removeCategory(this.editedItem.id);
-    },
-
-    close() {
-      this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    closeDelete() {
-      this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    save() {
-      if (this.editedIndex > -1) {
-        this.updateCategory(this.editedItem);
-      } else {
-        this.createNewCategory();
-      }
-    },
-
-    resetFilter() {
-      this.filter.isCheck = {
-        category_name: false,
-        created_date: false,
-        expired_date: false,
-      };
-    },
-  },
 };
 </script>
 
