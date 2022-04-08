@@ -1,60 +1,65 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const idea = new Schema({
+const idea = new Schema(
+  {
     user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
-        require: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      require: true,
     },
     category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'category',
-        require: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "category",
+      require: true,
     },
     department: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'department',
-        require: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "department",
+      require: true,
     },
     ideaTitle: {
-        type: String,
-        trim: true,
-        require: true,
+      type: String,
+      trim: true,
+      require: true,
     },
     ideaContent: {
-        type: String,
-        trim: true,
+      type: String,
+      trim: true,
     },
     ideaPicture: {
-        type: String,
-        trim: true,
+      type: String,
+      trim: true,
     },
     viewCount: {
-        type: Number,
-        default: 0,
+      type: Number,
+      default: 0,
     },
     pointCount: {
-        type: Number,
-        default: 0,
+      type: Number,
+      default: 0,
     },
-    ideaFile: [{
+    ideaFile: [
+      {
         type: String,
         trim: true,
-    }],
+      },
+    ],
     isAnonymous: {
-        type: Boolean,
-        default: false,
+      type: Boolean,
+      default: false,
     },
     isDisabled: {
-        type: Boolean,
-        default: false,
+      type: Boolean,
+      default: false,
     },
-}, {
+  },
+  {
     timestamps: {
-        createdAt: 'createdAt',
-        updatedAt: 'updatedAt',
+      createdAt: "createdAt",
+      updatedAt: "updatedAt",
     },
-});
+  }
+);
 
-module.exports = mongoose.model('idea', idea);
+module.exports = mongoose.model("idea", idea);

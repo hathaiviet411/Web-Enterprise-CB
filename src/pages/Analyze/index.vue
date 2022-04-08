@@ -1,18 +1,16 @@
 <template>
-	<div>
-		<span>Cat</span>
-	</div>
+  <div>
+    <span>Cat</span>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'Analyze',
-    data() {
-        return {};
-    },
+  name: "Analyze",
+  data() {
+    return {};
+  },
 };
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
