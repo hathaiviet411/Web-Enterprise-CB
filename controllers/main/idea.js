@@ -9,6 +9,7 @@ const Dislike = require("../../models/dislike");
 const sendEmail = require("../../middleware/nodemailer");
 const like = require("./like");
 require('dotenv').config();
+const helpers = require('../helpers')
 
 const getPath = (path) => {
     return process.env.BASE_URL + "/" + path[path.length - 2] + "/" + path[path.length - 1];
@@ -178,6 +179,10 @@ module.exports = {
                 message: "no idea found",
             });
         }
+
+
+
+
         if (idea.user.toString() !== user.user._id.toString()) {
             return (ctx.body = {
                 status: false,
@@ -190,6 +195,8 @@ module.exports = {
             ideaTitle: ideaTitle,
             ideaContent: ideaContent,
         });
+        await helpers.checkIfCloseIdea(idea.createdAt, id)
+
         return (ctx.body = {
             status: true,
             message: "update idea success",
