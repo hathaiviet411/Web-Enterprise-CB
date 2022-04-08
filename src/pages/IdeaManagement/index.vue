@@ -127,7 +127,7 @@
 					</v-dialog>
 
 					<!-- Term and Services Dialog -->
-					<v-dialog v-model="dialogTermService" width="600px">
+					<v-dialog id="v-dialog-term-services" v-model="dialogTermService" width="600px">
 						<v-card>
 							<v-card-title>
 								<span lass="text-h5">Idea Collecting System's Terms and Services</span>

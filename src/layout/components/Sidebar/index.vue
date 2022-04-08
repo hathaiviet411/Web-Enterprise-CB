@@ -45,6 +45,12 @@ export default {
                 },
                 {
                     icon: 'mdi-account',
+                    name: 'Analyze',
+                    url: '/analyze/index',
+                    disabled: false,
+                },
+                {
+                    icon: 'mdi-account',
                     name: 'User',
                     url: '/user/index',
                     disabled: false,
