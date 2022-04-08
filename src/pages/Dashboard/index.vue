@@ -15,122 +15,114 @@
 			</template>
 
 			<v-row>
-				<v-col cols="2">
-					<v-card elevation="24" min-height="800" class="rounded-lg">
-						<v-img src="@/assets/images/avatar.png" min-height="800" />
-					</v-card>
-				</v-col>
+				<v-col v-for="(post, index) in DATA" :key="index" cols="12">
+					<v-hover>
+						<template v-slot:default="{ hover }">
+							<v-card elevation="24" class="rounded-lg mx-auto" max-width="1000" @click="toDetailScreen(post._id)">
+								<v-card-title>
+									<v-row>
+										<v-col cols="12" lg="1" class="text-center">
+											<v-badge dot bottom color="green" offset-y="10" offset-x="10">
+												<v-avatar size="50">
+													<v-img
+														min-width="40"
+														min-height="40"
+														max-width="60"
+														max-height="60"
+														contain
+														class="rounded-circle"
+														src="@/assets/images/default_avatar.png"
+													/>
+												</v-avatar>
+											</v-badge>
+										</v-col>
 
-				<v-col cols="10">
-					<v-col v-for="(post, index) in DATA" :key="index" cols="12">
-						<v-hover>
-							<template v-slot:default="{ hover }">
-								<v-card elevation="24" class="rounded-lg" max-width="1000" @click="toDetailScreen(post._id)">
-									<v-card-title>
-										<v-row>
-											<v-col cols="12" lg="1" class="text-center">
-												<v-badge dot bottom color="green" offset-y="10" offset-x="10">
-													<v-avatar size="50">
-														<v-img
-															min-width="40"
-															min-height="40"
-															max-width="60"
-															max-height="60"
-															contain
-															class="rounded-circle"
-															src="@/assets/images/default_avatar.png"
-														/>
-													</v-avatar>
-												</v-badge>
-											</v-col>
+										<v-col cols="12" lg="3">
+											<div class="author-info">
+												<span class="author-name">{{ post.user.name + ' - ' + post.user.username }}</span>
+												<br>
+												<span class="uploaded-time">{{ post.createdAt | moment('from') }}
+													<span>·</span>
+													<v-icon class="pl-1" color="#999" small>mdi-earth</v-icon>
+												</span>
+											</div>
+										</v-col>
 
-											<v-col cols="12" lg="3">
-												<div class="author-info">
-													<span class="author-name">{{ post.user.name + ' - ' + post.user.username }}</span>
-													<br>
-													<span class="uploaded-time">{{ post.createdAt | moment('from') }}
-														<span>·</span>
-														<v-icon class="pl-1" color="#999" small>mdi-earth</v-icon>
-													</span>
-												</div>
-											</v-col>
-
-											<v-col cols="12" lg="8" class="text-center">
-												<v-row>
-													<v-col cols="12" lg="5">
-														<span class="text-small">
-															<strong>
-																<i class="fas fa-building mr-3" />Department:
-															</strong>
-															{{ post.department.departmentName }}
-														</span>
-													</v-col>
-
-													<v-col cols="12" lg="5" class="text-center">
-														<span class="text-small">
-															<strong>
-																<i class="fas fa-box-open mr-3" />Category:
-															</strong>
-															{{ post.category.categoryName }}
-														</span>
-													</v-col>
-												</v-row>
-											</v-col>
-										</v-row>
-									</v-card-title>
-
-									<v-fade-transition>
-										<v-overlay
-											v-if="hover"
-											absolute
-											color="#000000"
-											:opacity=".5"
-										>
-											<v-btn color="#FFD154" @click.prevent="userReadIdea(post._id)">
-												<span style="color: #002795; font-weight: bold;">See more info</span>
-											</v-btn>
-										</v-overlay>
-									</v-fade-transition>
-
-									<v-card-text v-if="post.ideaPicture" class="content">
-										<v-row>
-											<v-col cols="12">
-												<h5 class="post-content ml-3">{{ post.ideaTitle }}</h5>
-											</v-col>
-											<v-col cols="12">
-												<h5 class="post-content ml-3">{{ post.ideaContent }}</h5>
-											</v-col>
-										</v-row>
-
-										<div class="text-center">
-											<v-img
-												width="1168"
-												height="472"
-												contain
-												:src="post.ideaPicture"
-											/>
-										</div>
-									</v-card-text>
-
-									<v-card-text v-else class="random-background" :style="`background-color: #3D3D3D;`">
-										<div class="text-center">
+										<v-col cols="12" lg="8" class="text-center">
 											<v-row>
-												<v-col cols="12">
-													<h5 style="color: #FFD154;" class="post-content">{{ post.ideaTitle }}</h5>
+												<v-col cols="12" lg="5">
+													<span class="text-small">
+														<strong>
+															<i class="fas fa-building mr-3" />Department:
+														</strong>
+														{{ post.department.departmentName }}
+													</span>
 												</v-col>
-												<v-col cols="12">
-													<h5 style="color: #FFD154;" class="post-content">{{ post.ideaContent }}</h5>
+
+												<v-col cols="12" lg="5" class="text-center">
+													<span class="text-small">
+														<strong>
+															<i class="fas fa-box-open mr-3" />Category:
+														</strong>
+														{{ post.category.categoryName }}
+													</span>
 												</v-col>
 											</v-row>
-										</div>
-									</v-card-text>
-								</v-card>
-							</template>
-						</v-hover>
-					</v-col>
+										</v-col>
+									</v-row>
+								</v-card-title>
 
-					<div v-if="DATA.length" v-observe-visibility="handleScrolledBottom" />
+								<v-fade-transition>
+									<v-overlay
+										v-if="hover"
+										absolute
+										color="#000000"
+										:opacity=".5"
+									>
+										<v-btn color="#FFD154" @click.prevent="userReadIdea(post._id)">
+											<span style="color: #002795; font-weight: bold;">See more info</span>
+										</v-btn>
+									</v-overlay>
+								</v-fade-transition>
+
+								<v-card-text v-if="post.ideaPicture" class="content">
+									<v-row>
+										<v-col cols="12">
+											<h5 class="post-content ml-3">{{ post.ideaTitle }}</h5>
+										</v-col>
+										<v-col cols="12">
+											<h5 class="post-content ml-3">{{ post.ideaContent }}</h5>
+										</v-col>
+									</v-row>
+
+									<div class="text-center">
+										<v-img
+											width="1168"
+											height="472"
+											contain
+											:src="post.ideaPicture"
+										/>
+									</div>
+								</v-card-text>
+
+								<v-card-text v-else class="random-background" :style="`background-color: #3D3D3D;`">
+									<div class="text-center">
+										<v-row>
+											<v-col cols="12">
+												<h5 style="color: #FFD154;" class="post-content">{{ post.ideaTitle }}</h5>
+											</v-col>
+											<v-col cols="12">
+												<h5 style="color: #FFD154;" class="post-content">{{ post.ideaContent }}</h5>
+											</v-col>
+										</v-row>
+									</div>
+								</v-card-text>
+							</v-card>
+						</template>
+					</v-hover>
 				</v-col>
+
+				<div v-if="DATA.length" v-observe-visibility="handleScrolledBottom" />
 			</v-row>
 
 			<v-row>

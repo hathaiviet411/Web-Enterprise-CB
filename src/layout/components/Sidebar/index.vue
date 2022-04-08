@@ -44,9 +44,9 @@ export default {
                     disabled: false,
                 },
                 {
-                    icon: 'mdi-account',
-                    name: 'Analyze',
-                    url: '/analyze/index',
+                    icon: 'fas fa-chart-bar',
+                    name: 'Chart',
+                    url: '/chart/index',
                     disabled: false,
                 },
                 {
