@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="cat">
 		<v-app id="inspire">
 			<v-main>
 				<v-container fluid fill-height>
@@ -234,7 +234,7 @@ export default {
                             const PROFILE = {
                                 id: USER.info.user._id,
                                 isAgreedTerm: USER.info.user.isAgreedTerm,
-                                username: USER.info.user.username,
+                                // username: USER.info.user.username,
                                 name: USER.info.user.name,
                                 department_id: '',
                                 expired_token: EXPIRED_TOKE,

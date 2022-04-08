@@ -1,7 +1,7 @@
 module.exports = {
     testRegex: 'src/tests/.*.spec.js$',
     moduleNameMapper: {
-        '^@/(.*)$': '<rootDir>/src/js/$1',
+        '^@/(.*)$': '<rootDir>/src/$1',
     },
     moduleFileExtensions: ['js', 'json', 'vue'],
     transform: {

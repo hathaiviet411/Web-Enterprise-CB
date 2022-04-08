@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="cat">
 		<v-data-table
 			:headers="vFields"
 			:items="vItems"
