@@ -19,7 +19,7 @@ async function isClose(opened_time, close_date, idea_id) {
 
     const idea = Idea.findOne({ _id: idea_id })
     if (close_date <= opened_time) {
-        await closeIdea(idea_id, idea)
+        await closeIdea( idea)
         return true
     }
     return false
