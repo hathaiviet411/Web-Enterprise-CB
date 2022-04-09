@@ -7,9 +7,8 @@ const Comment = require("../../models/comment")
 const Like = require("../../models/like");
 const Dislike = require("../../models/dislike");
 const sendEmail = require("../../middleware/nodemailer");
-const like = require("./like");
-require('dotenv').config();
-const helpers = require('../helpers')
+require("dotenv").config();
+const helpers = require("../helpers");
 
 const getPath = (path) => {
     return process.env.BASE_URL + "/" + path[path.length - 2] + "/" + path[path.length - 1];
@@ -126,13 +125,13 @@ module.exports = {
         }
         if (ctx.request.files.ideaFile) {
             for (let i = 0; i < ctx.request.files.ideaFile.length; i++) {
-                let ideaFilePath = ctx.request.files.ideaFile[i].path.split("\\");
+                let ideaFilePath = ctx.request.files.ideaFile[i].path.split("/");
                 idea.ideaFile[i] = getPath(ideaFilePath);
             }
         }
 
         if (ctx.request.files.ideaPicture) {
-            let ideaPicturePath = ctx.request.files.ideaPicture[0].path.split("\\");
+            let ideaPicturePath = ctx.request.files.ideaPicture[0].path.split("/");
             idea.ideaPicture = getPath(ideaPicturePath);
         }
 
