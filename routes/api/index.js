@@ -10,9 +10,9 @@ require("../../middleware/passport");
 router.use('/auth', auth);
 
 router.use(
-    passport.authenticate("jwt-access", {
-        failWithError: true
-    }),
+    // passport.authenticate("jwt-access", {
+    //     failWithError: true
+    // }),
     main
 );
 
