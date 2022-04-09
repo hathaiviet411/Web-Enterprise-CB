@@ -1,5 +1,5 @@
 <template>
-	<div class="cat">
+	<div class="login-screen">
 		<v-app id="inspire">
 			<v-main>
 				<v-container fluid fill-height>
