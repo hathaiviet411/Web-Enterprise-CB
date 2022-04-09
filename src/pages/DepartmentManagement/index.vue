@@ -2,6 +2,7 @@
 	<div class="department-screen">
 		<v-data-table
 			:headers="vFields"
+			name="department-table"
 			:items="vItems"
 			class="elevation-12 table-department-list"
 			:search="search"
