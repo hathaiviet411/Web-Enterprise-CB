@@ -9,15 +9,8 @@
 		>
 			<template #overlay>
 				<div class="text-center overlay-card">
-					<b-icon
-						icon="arrow-clockwise"
-						color="#7366FF"
-						font-scale="3"
-						animation="spin"
-					/>
-					<p style="margin-top: 10px; color: #7366ff">
-						{{ "Xin vui lòng chờ" }}
-					</p>
+					<b-icon icon="arrow-clockwise" color="#7366FF" font-scale="3" animation="spin" />
+					<p style="margin-top: 10px; color:#7366FF">{{ 'Xin vui lòng chờ' }}</p>
 				</div>
 			</template>
 
@@ -42,11 +35,9 @@
 
 						<v-col cols="12" lg="3">
 							<div class="author-info">
-								<span class="author-name">{{ name + " - " + username }}</span>
+								<span class="author-name">{{ name + ' - ' + username }}</span>
 								<br>
-								<span
-									class="uploaded-time"
-								>{{ created_at | moment("from") }}
+								<span class="uploaded-time">{{ created_at | moment('from') }}
 									<span>·</span>
 									<v-icon class="pl-1" color="#999" small>mdi-earth</v-icon>
 								</span>
@@ -88,26 +79,23 @@
 					</v-row>
 
 					<div class="text-center">
-						<v-img width="1168" height="472" contain :src="idea_picture" />
+						<v-img
+							width="1168"
+							height="472"
+							contain
+							:src="idea_picture"
+						/>
 					</div>
 				</v-card-text>
 
-				<v-card-text
-					v-else
-					class="random-background"
-					:style="`background-color: #3D3D3D;`"
-				>
+				<v-card-text v-else class="random-background" :style="`background-color: #3D3D3D;`">
 					<div class="text-center">
 						<v-row>
 							<v-col cols="12">
-								<h5 style="color: #ffd154" class="post-content">
-									{{ idea_title }}
-								</h5>
+								<h5 style="color: #FFD154;" class="post-content">{{ idea_title }}</h5>
 							</v-col>
 							<v-col cols="12">
-								<h5 style="color: #ffd154" class="post-content">
-									{{ idea_content }}
-								</h5>
+								<h5 style="color: #FFD154;" class="post-content">{{ idea_content }}</h5>
 							</v-col>
 						</v-row>
 					</div>
@@ -116,27 +104,19 @@
 				<v-card-actions>
 					<v-row class="mt-3">
 						<v-col cols="3" lg="3" class="text-center">
-							<span class="like-total text-underline">{{
-								totalLikes + " likes"
-							}}</span>
+							<span class="like-total text-underline">{{ totalLikes + ' likes' }}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
-							<span class="comment-total text-underline">{{
-								total_views + " views"
-							}}</span>
+							<span class="comment-total text-underline">{{ total_views + ' views' }}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
-							<span class="comment-total text-underline">{{
-								total_comments + " comments"
-							}}</span>
+							<span class="comment-total text-underline">{{ total_comments + ' comments' }}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
-							<span class="share-total text-underline mr-3">{{
-								totalDislikes + " dislike"
-							}}</span>
+							<span class="share-total text-underline mr-3">{{ totalDislikes + ' dislike' }}</span>
 						</v-col>
 					</v-row>
 				</v-card-actions>
@@ -145,54 +125,30 @@
 
 				<v-row class="ml-1">
 					<v-col cols="3" lg="4" class="text-center pl-0 pr-0">
-						<v-btn
-							v-if="isLiked === true"
-							x-small
-							class="card-button"
-							@click.prevent="handleUnLike()"
-						>
+						<v-btn v-if="isLiked === true" x-small class="card-button" @click.prevent="handleUnLike()">
 							<v-icon color="blue" small>mdi-thumb-up</v-icon>
 							<span class="button-text">Like</span>
 						</v-btn>
-						<v-btn
-							v-else
-							x-small
-							class="card-button"
-							@click.prevent="handleLike()"
-						>
+						<v-btn v-else x-small class="card-button" @click.prevent="handleLike()">
 							<v-icon color="black" small>mdi-thumb-up</v-icon>
 							<span class="button-text">Like</span>
 						</v-btn>
 					</v-col>
 
 					<v-col cols="4" lg="4" class="text-center pl-0 pr-0">
-						<v-btn
-							x-small
-							class="card-button"
-							@click="isShowCommentSector = !isShowCommentSector"
-						>
+						<v-btn x-small class="card-button" @click="isShowCommentSector = !isShowCommentSector">
 							<v-icon small>mdi-message</v-icon>
 							<span class="button-text">Comment</span>
 						</v-btn>
 					</v-col>
 
 					<v-col cols="4" lg="4" class="text-center pl-0 pr-0">
-						<v-btn
-							v-if="isDisliked === true"
-							x-small
-							class="card-button"
-							@click.prevent="handleUnDislike()"
-						>
+						<v-btn v-if="isDisliked === true" x-small class="card-button" @click.prevent="handleUnDislike()">
 							<v-icon color="red" small>mdi-thumb-down</v-icon>
 							<span class="button-text">Dislike</span>
 						</v-btn>
 
-						<v-btn
-							v-else
-							x-small
-							class="card-button"
-							@click.prevent="handleDislike()"
-						>
+						<v-btn v-else x-small class="card-button" @click.prevent="handleDislike()">
 							<v-icon color="black" small>mdi-thumb-down</v-icon>
 							<span class="button-text">Dislike</span>
 						</v-btn>
@@ -203,15 +159,11 @@
 
 				<Transition appear name="fade" mode="in-out">
 					<div v-if="isShowCommentSector">
+
 						<v-row>
 							<v-col cols="12">
-								<b-form-checkbox
-									v-model="isAnonymous"
-									switch
-									size="lg"
-									class="ml-3"
-								>
-									<span style="font-size: 12px">Anonymous Mode</span>
+								<b-form-checkbox v-model="isAnonymous" switch size="lg" class="ml-3">
+									<span style="font-size: 12px;">Anonymous Mode</span>
 								</b-form-checkbox>
 							</v-col>
 						</v-row>
@@ -243,10 +195,7 @@
 							</v-col>
 						</v-row>
 
-						<div
-							v-for="(comment, indexComment) in listComment"
-							:key="indexComment"
-						>
+						<div v-for="(comment, indexComment) in listComment" :key="indexComment">
 							<v-row>
 								<v-col cols="2" lg="1">
 									<v-img
@@ -264,11 +213,7 @@
 									<v-textarea
 										readonly
 										filled
-										:label="
-											isAnonymous === false
-												? comment.user.name
-												: 'User ' + comment.user._id
-										"
+										:label="isAnonymous === false ? comment.user.name : 'User ' + comment.user._id"
 										rounded
 										dense
 										hide-details
@@ -281,16 +226,16 @@
 									<div class="comment-section-button ml-6 mt-1">
 										<span class="text-underline">Like</span>
 										<span class="ml-3 text-underline">Comment</span>
-										<span class="ml-3 text-underline">{{
-											comment.createdAt | moment("from")
-										}}</span>
+										<span class="ml-3 text-underline">{{ comment.createdAt | moment('from') }}</span>
 									</div>
 								</v-col>
 							</v-row>
 						</div>
+
 					</div>
 				</Transition>
 			</v-card>
+
 		</b-overlay>
 	</div>
 </template>
@@ -454,9 +399,7 @@ export default {
             this.isDisliked = false;
 
             try {
-                const response = await deleteDislike(
-                    `${urlAPI.apiDeleteDislike}/${this.id}`
-                );
+                const response = await deleteDislike(`${urlAPI.apiDeleteDislike}/${this.id}`);
                 this.totalDislikes = response.dislike;
             } catch (error) {
                 console.log(error);
@@ -467,103 +410,103 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/scss/variables.scss";
+@import '@/scss/variables.scss';
 
 .dashboard {
-  background-image: url("/assets/images/background.png");
-  background-repeat: no-repeat;
-  background-size: auto;
+	background-image: url('/assets/images/background.png');
+	background-repeat: no-repeat;
+	background-size: auto;
 }
 
 .author-name {
-  font-size: 14px;
-  font-weight: bolder;
+	font-size: 14px;
+	font-weight: bolder;
 }
 
 .uploaded-time {
-  font-size: 14px;
-  color: #999;
+	font-size: 14px;
+	color: #999;
 }
 
 .content {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  flex-direction: column;
-  height: 472px;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	flex-direction: column;
+	height: 472px;
 }
 
 .post-content {
-  color: $black;
-  line-height: 40px;
+	color: $black;
+	line-height: 40px;
 }
 
 .like-total {
-  font-size: 12px;
-  color: #999;
+	font-size: 12px;
+	color: #999;
 }
 
 .comment-total {
-  font-size: 12px;
-  color: #999;
+	font-size: 12px;
+	color: #999;
 }
 
 .share-total {
-  font-size: 12px;
-  color: #999;
+	font-size: 12px;
+	color: #999;
 }
 
 .text-underline:hover {
-  text-decoration: underline;
+	text-decoration: underline;
 }
 
 .button-text {
-  margin-left: 10px;
-  font-size: 10px;
+	margin-left: 10px;
+	font-size: 10px;
 }
 
 .card-button {
-  height: 40px !important;
-  box-shadow: none;
-  border: 1px solid $white !important;
-  background-color: #ffffff !important;
+	height: 40px !important;
+	box-shadow: none;
+	border: 1px solid $white !important;
+	background-color: #FFFFFF !important;
 }
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+	transition: opacity 0.3s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-  opacity: 0;
+	opacity: 0;
 }
 
 .comment-section-button {
-  font-size: 12px;
+	font-size: 12px;
 }
 
 .comment-section {
-  font-size: 14px;
+	font-size: 14px;
 }
 
 .btn-loading {
-  opacity: 0.8;
+	opacity: .8;
 }
 
 .text-small {
-  font-size: 12px;
+	font-size: 12px;
 }
 
 .random-background {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  flex-direction: column;
-  height: 472px;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	flex-direction: column;
+	height: 472px;
 }
 
 .overlay-card {
-  margin-top: 100px;
+	margin-top: 100px;
 }
 </style>

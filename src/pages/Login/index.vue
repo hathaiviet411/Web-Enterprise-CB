@@ -1,5 +1,5 @@
 <template>
-	<div class="cat">
+	<div>
 		<v-app id="inspire">
 			<v-main>
 				<v-container fluid fill-height>
@@ -41,19 +41,13 @@
 
 											<b-row>
 												<b-col cols="12">
-													<v-img
-														src="@/assets/images/banner.png"
-														min-width="100%"
-													/>
+													<v-img src="@/assets/images/banner.png" min-width="100%" />
 												</b-col>
 											</b-row>
 
 											<b-row class="mt-3">
 												<b-col cols="12" class="text-center">
-													<span
-														class="login-option-suggest"
-													>Please contact with administrator if you do not
-														have an account.</span>
+													<span class="login-option-suggest">Please contact with administrator if you do not have an account.</span>
 												</b-col>
 											</b-row>
 
@@ -97,14 +91,8 @@
 															</b-form-checkbox>
 														</b-col>
 
-														<b-col
-															cols="6"
-															class="text-right"
-															:disabled="isProcess"
-														>
-															<span
-																class="create-account-text"
-															>Forgot password</span>
+														<b-col cols="6" class="text-right" :disabled="isProcess">
+															<span class="create-account-text">Forgot password</span>
 														</b-col>
 													</b-row>
 												</b-col>
@@ -112,11 +100,7 @@
 
 											<b-row>
 												<b-col cols="12">
-													<b-button
-														class="btn-login"
-														:disabled="isProcess"
-														@click="doLogin()"
-													>
+													<b-button class="btn-login" :disabled="isProcess" @click="doLogin()">
 														<span class="btn-login-text">Login</span>
 													</b-button>
 												</b-col>
@@ -234,7 +218,7 @@ export default {
                             const PROFILE = {
                                 id: USER.info.user._id,
                                 isAgreedTerm: USER.info.user.isAgreedTerm,
-                                // username: USER.info.user.username,
+                                username: USER.info.user.username,
                                 name: USER.info.user.name,
                                 department_id: '',
                                 expired_token: EXPIRED_TOKE,
@@ -254,8 +238,7 @@ export default {
 
                             const ROLE = this.$store.getters.profile.role;
 
-                            await this.$store
-                                .dispatch('role/generateRoutes', ROLE)
+                            await this.$store.dispatch('role/generateRoutes', ROLE)
                                 .then((routes) => {
                                     for (let route = 0; route < routes.length; route++) {
                                         this.$router.addRoute(routes[route]);
@@ -290,69 +273,69 @@ export default {
 
 <style lang="scss" scoped>
 .no-padding {
-  padding: 0 !important;
+	padding: 0 !important;
 }
 
 .login-illustration {
-  overflow: hidden;
-  background-color: $tequila;
-  height: 100%;
-  text-align: center;
+	overflow: hidden;
+	background-color: $tequila;
+	height: 100%;
+	text-align: center;
 }
 
 .login-form {
-  overflow: hidden;
-  padding: 50px;
+	overflow: hidden;
+	padding: 50px;
 
-  #oval-1 {
-    float: left;
-  }
+	#oval-1 {
+		float: left;
+	}
 
-  .google-icon {
-    color: rgb(194, 177, 25);
-    padding-top: 5px;
-  }
+	.google-icon {
+		color: rgb(194, 177, 25);
+		padding-top: 5px;
+	}
 
-  .btn-sign-up {
-    margin-top: 20px;
-    width: 98%;
-    height: 40px;
-    font-weight: bold;
-    color: $black;
-    background-color: $dandelion;
-  }
+	.btn-sign-up {
+		margin-top: 20px;
+		width: 98%;
+		height: 40px;
+		font-weight: bold;
+		color: $black;
+		background-color: $dandelion;
+	}
 
-  .login-option-suggest {
-    opacity: 0.8;
-  }
+	.login-option-suggest {
+		opacity: 0.8;
+	}
 
-  .login-description {
-    text-align: left;
-  }
+	.login-description {
+		text-align: left;
+	}
 
-  .btn-login {
-    margin-top: 20px;
-    width: 98%;
-    background-color: $tawny-port;
-    height: 40px;
+	.btn-login {
+		margin-top: 20px;
+		width: 98%;
+		background-color: $tawny-port;
+		height: 40px;
 
-    .btn-login-text {
-      font-weight: 500;
-    }
-  }
+		.btn-login-text {
+		font-weight: 500;
+		}
+	}
 
-  .create-account-text {
-    color: $tawny-port;
-    font-weight: bolder;
-  }
+	.create-account-text {
+		color: $tawny-port;
+		font-weight: bolder;
+	}
 
-  .create-account-text:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
+	.create-account-text:hover {
+		text-decoration: underline;
+		cursor: pointer;
+	}
 
-  .footer-description {
-    margin-top: 50px;
-  }
+	.footer-description {
+		margin-top: 50px;
+	}
 }
 </style>

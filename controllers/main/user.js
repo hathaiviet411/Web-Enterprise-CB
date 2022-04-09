@@ -1,6 +1,6 @@
 const User = require("../../models/user");
 const Role = require("../../models/role");
-const Department = require("../../models/department");
+const Department = require("../../models/department")
 const UserRole = require("../../models/userRole");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -13,13 +13,19 @@ module.exports = {
       status: true,
       message: "Get all role success",
       role,
-      departments,
+      departments
     });
   },
 
   register: async (ctx) => {
-    let { username, email, password, roleId, departmentId, name } =
-      ctx.request.body;
+    let {
+      username,
+      email,
+      password,
+      roleId,
+      departmentId,
+      name
+    } = ctx.request.body;
     const existAccount = await User.findOne({
       username: username,
     });
@@ -36,11 +42,11 @@ module.exports = {
         password: hash,
         name: name,
       });
-
+      
       let userRole = new UserRole({
         user: user._id,
         role: roleId,
-        department: departmentId,
+        department: departmentId
       });
       await userRole.save();
       await user.save();
@@ -52,25 +58,23 @@ module.exports = {
   },
 
   getAllUser: async (ctx) => {
-    const user = await UserRole.find({})
+    const user = await UserRole.find({}).populate({
+      path: 'role',
+      select: '-__v'
+    })
       .populate({
-        path: "role",
-        select: "-__v",
+        path: 'user',
+        select: '-__v -createdAt -updatedAt -password',
       })
       .populate({
-        path: "user",
-        select: "-__v -createdAt -updatedAt -password",
+        path: 'department',
+        select: '-__v -createdAt -updatedAt',
       })
-      .populate({
-        path: "department",
-        select: "-__v -createdAt -updatedAt",
-      })
-      .select("-__v -_id")
-      .lean();
+      .select('-__v -_id').lean();
     return (ctx.body = {
       status: true,
       message: "get all user success",
-      user,
-    });
+      user
+    })
   },
 };

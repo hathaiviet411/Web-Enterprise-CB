@@ -1,11 +1,6 @@
 <template>
 	<div>
-		<v-data-table
-			:headers="vFields"
-			:items="vItems"
-			class="elevation-12"
-			:search="search"
-		>
+		<v-data-table :headers="vFields" :items="vItems" class="elevation-12" :search="search">
 			<template v-slot:top>
 				<v-toolbar flat>
 					<v-toolbar-title>User Management</v-toolbar-title>
@@ -100,14 +95,8 @@
 											/>
 										</v-col>
 										<v-col cols="12">
-											<b-form-checkbox
-												v-model="editedItem.isAgreedTerm"
-												size="lg"
-											>
-												<span
-													style="font-size: 16px !important"
-												>I agreed with Idea Collecting System's Terms and
-													Conditions agreement.</span>
+											<b-form-checkbox v-model="editedItem.isAgreedTerm" size="lg">
+												<span style="font-size: 16px !important;">I agreed with Idea Collecting System's Terms and Conditions agreement.</span>
 											</b-form-checkbox>
 										</v-col>
 									</v-row>
@@ -124,7 +113,7 @@
 
 								<v-btn color="blue darken-1" text @click="save()">
 									<v-icon left>mdi-lead-pencil</v-icon>
-									<span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
+									<span>{{ editedIndex === -1 ? 'Register' : 'Save' }}</span>
 								</v-btn>
 							</v-card-actions>
 						</v-card>
@@ -384,8 +373,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.btn-register {
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
-    rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
-}
+.btn-register { box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px; }
 </style>

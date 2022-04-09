@@ -6,7 +6,6 @@ Vue.use(VueRouter);
 // Import modules router
 import login from './modules/login';
 import dashboard from './modules/dashboard';
-import chartManagement from './modules/chart';
 import user from './modules/user';
 import category from './modules/category';
 import idea from './modules/idea';
@@ -25,7 +24,6 @@ export const constantRoutes = [
 
 export const asyncRoutes = [
     dashboard,
-    chartManagement,
     user,
     category,
     idea,
@@ -34,12 +32,11 @@ export const asyncRoutes = [
     setting,
 ];
 
-const createRouter = () =>
-    new VueRouter({
-        mode: 'history',
-        scrollBehavior: () => ({ y: 0 }),
-        routes: constantRoutes,
-    });
+const createRouter = () => new VueRouter({
+    mode: 'history',
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes,
+});
 
 const router = createRouter();
 
@@ -49,3 +46,4 @@ export function resetRouter() {
 }
 
 export default router;
+

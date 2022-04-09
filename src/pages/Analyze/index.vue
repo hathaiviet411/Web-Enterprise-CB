@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<h1>This is System Configuration screen.</h1>
+		<span>Cat</span>
 	</div>
 </template>
 
 <script>
 export default {
-    name: 'SettingIndex',
+    name: 'Analyze',
     data() {
         return {};
     },

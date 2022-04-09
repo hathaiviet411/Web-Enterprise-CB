@@ -20,9 +20,7 @@ export function isPassValidation(DATA = {}) {
                 title: 'Warning',
                 content: 'Email is required.',
             });
-        } else if (
-            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(DATA.email) === false
-        ) {
+        } else if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(DATA.email) === false) {
             MakeToast({
                 variant: 'warning',
                 title: 'Warning',

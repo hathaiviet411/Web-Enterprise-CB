@@ -16,8 +16,7 @@ const role = {
             meta: {
                 title: 'Role Index',
             },
-            component: () =>
-                import(/* webpackChunkName: "Role" */ '@/pages/RoleManagement/index'),
+            component: () => import(/* webpackChunkName: "Role" */ '@/pages/RoleManagement/index'),
         },
     ],
 };
