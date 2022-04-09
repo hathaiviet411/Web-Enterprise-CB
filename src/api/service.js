@@ -15,7 +15,7 @@ const service = axios.create({
 });
 
 service.interceptors.request.use(
-    (config) => {
+    config => {
         const token = getToken();
         // config.headers['Accept-Language'] = getLanguage();
 
@@ -30,14 +30,14 @@ service.interceptors.request.use(
 
         return config;
     },
-    (error) => {
+    error => {
         Promise.reject(error);
     }
 );
 
 service.interceptors.response.use(
-    (response) => {
-    // const USER_NOT_FOUND = CONST_AUTH.USER_NOT_FOUND;
+    response => {
+        // const USER_NOT_FOUND = CONST_AUTH.USER_NOT_FOUND;
 
         // if (JSON.stringify(USER_NOT_FOUND) === JSON.stringify(response.data)) {
         //     store.dispatch('user/doLogout')
@@ -61,9 +61,9 @@ service.interceptors.response.use(
 
         return response.data;
     },
-    (error) => {
-    // const isCheckTitle = i18n.te(error.response.data.title);
-    // const isCheckContent = i18n.te(error.response.data.message);
+    error => {
+        // const isCheckTitle = i18n.te(error.response.data.title);
+        // const isCheckContent = i18n.te(error.response.data.message);
 
         // const USER_NOT_FOUND = CONST_AUTH.USER_NOT_FOUND;
 

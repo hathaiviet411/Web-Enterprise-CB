@@ -62,7 +62,7 @@
 								</v-btn>
 								<v-btn class="save-btn" color="blue darken-1" text @click="save()">
 									<v-icon left>mdi-lead-pencil</v-icon>
-									<span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
+									<span>{{ editedIndex === -1 ? 'Register' : 'Save' }}</span>
 								</v-btn>
 							</v-card-actions>
 						</v-card>
@@ -101,7 +101,7 @@
 								</v-btn>
 								<v-btn color="red darken-1" text @click="deleteItemConfirm()">
 									<v-icon left>mdi-delete-empty</v-icon>
-									<span>{{ "Confirm" }}</span>
+									<span>{{ 'Confirm' }}</span>
 								</v-btn>
 							</v-card-actions>
 						</v-card>
@@ -110,17 +110,8 @@
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-icon
-					small
-					class="mr-2"
-					style="color: #051367"
-					@click="editItem(item)"
-				>mdi-pencil</v-icon>
-				<v-icon
-					small
-					style="color: #e84545"
-					@click="deleteItem(item)"
-				>mdi-delete</v-icon>
+				<v-icon small class="mr-2" style="color: #051367;" @click="editItem(item)">mdi-pencil</v-icon>
+				<v-icon small style="color: #E84545;" @click="deleteItem(item)">mdi-delete</v-icon>
 			</template>
 
 			<template v-slot:no-data>
@@ -132,11 +123,7 @@
 
 <script>
 // Apis import
-import {
-    getDepartment,
-    postDepartment,
-    deleteDepartment,
-} from '@/api/modules/department';
+import { getDepartment, postDepartment, deleteDepartment } from '@/api/modules/department';
 
 // URL apis
 const urlAPI = {
@@ -165,11 +152,7 @@ export default {
                     value: 'departmentName',
                 },
                 { text: 'Idea Contributed', value: 'numberOfIdea', align: 'center' },
-                {
-                    text: 'Staff Contributed',
-                    value: 'numberOfContributor',
-                    align: 'center',
-                },
+                { text: 'Staff Contributed', value: 'numberOfContributor', align: 'center' },
                 { text: 'Actions', value: 'actions', sortable: false },
             ],
 
@@ -228,10 +211,7 @@ export default {
             if (isPassValidation(this.editedItem) === true) {
                 this.close();
                 try {
-                    const response = await postDepartment(
-                        urlAPI.apiCreateNewDepartment,
-                        this.editedItem
-                    );
+                    const response = await postDepartment(urlAPI.apiCreateNewDepartment, this.editedItem);
                     if (response.status === true) {
                         MakeToast({
                             variant: 'success',
@@ -330,7 +310,6 @@ export default {
 
 <style lang="scss" scoped>
 .btn-register {
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
-    rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
 }
 </style>

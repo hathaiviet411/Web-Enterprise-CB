@@ -7,8 +7,12 @@ const koaStatic = require('koa-static');
 const morgan = require('koa-morgan');
 const fs = require('fs');
 const passport = require('koa-passport');
-const { createServer } = require('http');
-const { Server } = require('socket.io');
+const {
+    createServer,
+} = require('http');
+const {
+    Server,
+} = require('socket.io');
 const cors = require('@koa/cors');
 
 db.connect();
@@ -19,11 +23,9 @@ app.use(passport.session());
 const accessLogStream = fs.createWriteStream(__dirname + '/access.log', {
     flags: 'a',
 });
-app.use(
-    morgan('combined', {
-        stream: accessLogStream,
-    })
-);
+app.use(morgan('combined', {
+    stream: accessLogStream,
+}));
 app.use(cors());
 app.use(
     koaBody({
@@ -96,9 +98,7 @@ const httpServer = createServer(app.callback());
 const io = new Server(httpServer, {
     cors: {
         origin: '*',
-        allowedHeaders: [
-            'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Authorization, Access-Control-Request-Method, Access-Control-Request-Headers',
-        ],
+        allowedHeaders: ['Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Authorization, Access-Control-Request-Method, Access-Control-Request-Headers'],
         credentials: true,
     },
 });

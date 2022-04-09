@@ -16,8 +16,7 @@ const idea = {
             meta: {
                 title: 'Idea Index',
             },
-            component: () =>
-                import(/* webpackChunkName: "Idea" */ '@/pages/IdeaManagement/index'),
+            component: () => import(/* webpackChunkName: "Idea" */ '@/pages/IdeaManagement/index'),
         },
     ],
 };

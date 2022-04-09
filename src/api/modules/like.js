@@ -15,3 +15,4 @@ export function postLike(url, data) {
 export function deleteLike(url, data) {
     return RequestApi.deleteOne(url, data);
 }
+
