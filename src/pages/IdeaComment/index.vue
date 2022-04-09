@@ -17,7 +17,7 @@ export default {
         this.viewIdea();
     },
     methods: {
-        // component did mount
+    // component did mount
         viewIdea() {
             const ideaId = id();
             const payload = { ideaId: ideaId };
@@ -43,5 +43,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

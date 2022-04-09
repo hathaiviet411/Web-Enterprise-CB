@@ -50,9 +50,7 @@
 
 						<v-list-item-content>
 							<v-list-item-title v-html="item.title" />
-							<v-list-item-subtitle
-								v-html="item.subtitle"
-							/>
+							<v-list-item-subtitle v-html="item.subtitle" />
 						</v-list-item-content>
 					</v-list-item>
 				</template>
@@ -81,16 +79,19 @@
 						<v-list-item-title>{{ user.name }}</v-list-item-title>
 						<v-list-item-subtitle>
 							<v-chip class="ma-2" color="success">
-								<v-icon left x-small>
-									mdi-check
-								</v-icon>
+								<v-icon left x-small> mdi-check </v-icon>
 								Logged in
 							</v-chip>
 						</v-list-item-subtitle>
 					</v-list-item-content>
 				</v-list-item>
 				<v-divider />
-				<v-list-item v-for="(menu, index) in menus" :key="index" link @click="handleProfileAction(menu)">
+				<v-list-item
+					v-for="(menu, index) in menus"
+					:key="index"
+					link
+					@click="handleProfileAction(menu)"
+				>
 					<v-list-item-icon>
 						<v-icon>{{ menu.icon }}</v-icon>
 					</v-list-item-icon>

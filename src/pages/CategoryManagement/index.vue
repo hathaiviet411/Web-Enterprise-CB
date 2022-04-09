@@ -9,7 +9,7 @@
 			<template v-slot:top>
 				<v-toolbar flat>
 					<v-toolbar-title>
-						<span>{{ 'Category Management' }}</span>
+						<span>{{ "Category Management" }}</span>
 					</v-toolbar-title>
 
 					<v-divider class="mx-4" inset vertical />
@@ -73,7 +73,12 @@
 														v-bind="attrs"
 														v-on="on"
 													>
-														<v-icon v-show="add_created_date_menu === true" slot="append" color="red" @click="editedItem.firstClosureDate = ''">mdi-close-box</v-icon>
+														<v-icon
+															v-show="add_created_date_menu === true"
+															slot="append"
+															color="red"
+															@click="editedItem.firstClosureDate = ''"
+														>mdi-close-box</v-icon>
 													</v-text-field>
 												</template>
 												<v-date-picker
@@ -105,7 +110,12 @@
 														readonly
 														v-on="on"
 													>
-														<v-icon v-show="add_expired_date_menu === true" slot="append" color="red" @click="editedItem.finalClosureDate = ''">mdi-close-box</v-icon>
+														<v-icon
+															v-show="add_expired_date_menu === true"
+															slot="append"
+															color="red"
+															@click="editedItem.finalClosureDate = ''"
+														>mdi-close-box</v-icon>
 													</v-text-field>
 												</template>
 												<v-date-picker
@@ -128,7 +138,7 @@
 								</v-btn>
 								<v-btn color="blue darken-1" text @click="save()">
 									<v-icon left>mdi-lead-pencil</v-icon>
-									<span>{{ editedIndex === -1 ? 'Register' : 'Save' }}</span>
+									<span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
 								</v-btn>
 							</v-card-actions>
 						</v-card>
@@ -183,7 +193,7 @@
 								</v-btn>
 								<v-btn color="red darken-1" text @click="deleteItemConfirm()">
 									<v-icon left>mdi-delete-empty</v-icon>
-									<span>{{ 'Confirm' }}</span>
+									<span>{{ "Confirm" }}</span>
 								</v-btn>
 							</v-card-actions>
 						</v-card>
@@ -192,20 +202,33 @@
 			</template>
 
 			<template v-slot:[`item.firstClosureDate`]="{ item }">
-				<span>{{ item.firstClosureDate | moment('dddd, MM/YYYY, HH:mm A') }}</span>
+				<span>{{
+					item.firstClosureDate | moment("dddd, MM/YYYY, HH:mm A")
+				}}</span>
 			</template>
 
 			<template v-slot:[`item.finalClosureDate`]="{ item }">
-				<span>{{ item.finalClosureDate | moment('dddd, MM/YYYY, HH:mm A') }}</span>
+				<span>{{
+					item.finalClosureDate | moment("dddd, MM/YYYY, HH:mm A")
+				}}</span>
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-icon small class="mr-2" style="color: #051367;" @click="editItem(item)">mdi-pencil</v-icon>
-				<v-icon small style="color: #E84545;" @click="deleteItem(item)">mdi-delete</v-icon>
+				<v-icon
+					small
+					class="mr-2"
+					style="color: #051367"
+					@click="editItem(item)"
+				>mdi-pencil</v-icon>
+				<v-icon
+					small
+					style="color: #e84545"
+					@click="deleteItem(item)"
+				>mdi-delete</v-icon>
 			</template>
 
 			<template v-slot:no-data>
-				<span>{{ 'Table is Empty' }}</span>
+				<span>{{ "Table is Empty" }}</span>
 			</template>
 
 			<!-- <template v-slot:footer class="mt-3">
@@ -223,7 +246,12 @@
 
 <script>
 // APIs import
-import { getCategory, postCategory, putCategory, deleteCategory } from '@/api/modules/category';
+import {
+    getCategory,
+    postCategory,
+    putCategory,
+    deleteCategory,
+} from '@/api/modules/category';
 
 // Helper functions import
 import { convertDateToISO } from '@/utils/handleConvertDateFormat';
@@ -258,7 +286,12 @@ export default {
             dialogDelete: false,
 
             vFields: [
-                { text: 'Category Name', value: 'categoryName', sortable: true, align: 'start' },
+                {
+                    text: 'Category Name',
+                    value: 'categoryName',
+                    sortable: true,
+                    align: 'start',
+                },
                 { text: 'Created Date', value: 'firstClosureDate', sortable: true },
                 { text: 'Expired Date', value: 'finalClosureDate', sortable: true },
                 { text: 'Actions', value: 'actions', sortable: false },
@@ -352,8 +385,12 @@ export default {
                 if (response.status === true) {
                     const RAW_DATA = [response.category];
                     for (let i = 0; i < RAW_DATA.length; i++) {
-                        RAW_DATA[i].firstClosureDate = convertDateToISO(RAW_DATA[i].firstClosureDate);
-                        RAW_DATA[i].finalClosureDate = convertDateToISO(RAW_DATA[i].finalClosureDate);
+                        RAW_DATA[i].firstClosureDate = convertDateToISO(
+                            RAW_DATA[i].firstClosureDate
+                        );
+                        RAW_DATA[i].finalClosureDate = convertDateToISO(
+                            RAW_DATA[i].finalClosureDate
+                        );
                     }
                     this.vItems = RAW_DATA[0];
                 }
@@ -370,7 +407,10 @@ export default {
             if (isPassValidation(this.editedItem) === true) {
                 this.close();
                 try {
-                    const response = await postCategory(URL_POST_CATEGORY, this.editedItem);
+                    const response = await postCategory(
+                        URL_POST_CATEGORY,
+                        this.editedItem
+                    );
                     if (response.status === true) {
                         MakeToast({
                             variant: 'success',
@@ -489,15 +529,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    @import '@/scss/variables.scss';
+@import "@/scss/variables.scss";
 
-    .btn {
-        min-width: 110px !important;
-        font-weight: bold;
-    }
+.btn {
+  min-width: 110px !important;
+  font-weight: bold;
+}
 
-    .confirm {
-        background-color: #FF1818 !important;
-        border: none !important;
-    }
+.confirm {
+  background-color: #ff1818 !important;
+  border: none !important;
+}
 </style>

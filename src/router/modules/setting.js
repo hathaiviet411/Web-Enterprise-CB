@@ -16,7 +16,8 @@ const setting = {
             meta: {
                 title: 'Setting Index',
             },
-            component: () => import(/* webpackChunkName: "Setting" */ '@/pages/Setting/index'),
+            component: () =>
+                import(/* webpackChunkName: "Setting" */ '@/pages/Setting/index'),
         },
     ],
 };

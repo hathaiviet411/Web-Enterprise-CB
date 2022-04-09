@@ -16,7 +16,10 @@ const category = {
             meta: {
                 title: 'Category Index',
             },
-            component: () => import(/* webpackChunkName: "Category" */ '@/pages/CategoryManagement/index'),
+            component: () =>
+                import(
+                    /* webpackChunkName: "Category" */ '@/pages/CategoryManagement/index'
+                ),
         },
     ],
 };

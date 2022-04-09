@@ -16,12 +16,11 @@ export default {
     mounted() {
         const ROLE = this.$store.getters.role;
 
-        this.$store.dispatch('role/generateRoutes', ROLE)
-            .then((routes) => {
-                for (let route = 0; route < routes.length; route++) {
-                    this.$router.addRoute(routes[route]);
-                }
-            });
+        this.$store.dispatch('role/generateRoutes', ROLE).then((routes) => {
+            for (let route = 0; route < routes.length; route++) {
+                this.$router.addRoute(routes[route]);
+            }
+        });
     },
 };
 </script>

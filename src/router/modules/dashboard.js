@@ -16,7 +16,8 @@ const dashboard = {
             meta: {
                 title: 'Dashboard Index',
             },
-            component: () => import(/* webpackChunkName: "Dashboard" */ '@/pages/Dashboard/index'),
+            component: () =>
+                import(/* webpackChunkName: "Dashboard" */ '@/pages/Dashboard/index'),
         },
         {
             path: 'detail/:id',
@@ -24,7 +25,10 @@ const dashboard = {
             meta: {
                 title: 'Dashboard Detail',
             },
-            component: () => import(/* webpackChunkName: "DashboardDetail" */ '@/pages/Dashboard/detail'),
+            component: () =>
+                import(
+                    /* webpackChunkName: "DashboardDetail" */ '@/pages/Dashboard/detail'
+                ),
         },
     ],
 };

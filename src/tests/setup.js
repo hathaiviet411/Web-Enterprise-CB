@@ -7,7 +7,7 @@ import Vuetify from 'vuetify';
 Vue.use(Vuetify);
 
 import { config } from '@vue/test-utils';
-config.mocks.$t = key => key;
+config.mocks.$t = (key) => key;
 
 Vue.config.productionTip = false;
 config.showDeprecationWarnings = false;

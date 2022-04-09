@@ -16,7 +16,10 @@ const department = {
             meta: {
                 title: 'Department Index',
             },
-            component: () => import(/* webpackChunkName: "Department" */ '@/pages/DepartmentManagement/index'),
+            component: () =>
+                import(
+                    /* webpackChunkName: "Department" */ '@/pages/DepartmentManagement/index'
+                ),
         },
     ],
 };

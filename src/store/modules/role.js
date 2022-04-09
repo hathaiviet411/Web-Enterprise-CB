@@ -9,7 +9,7 @@ function canAccess(role, route) {
     if (route.meta) {
         let hasRole = true;
         if (route.meta.role) {
-        // If it has meta.role, accessible = hasRole
+            // If it has meta.role, accessible = hasRole
             hasRole = false;
             if (route.meta.role.include(role)) {
                 hasRole = true;
@@ -24,21 +24,18 @@ function canAccess(role, route) {
 }
 
 /**
-   * Find all routes of this role
-   * @param routes asyncRoutes
-   * @param role
-   */
+ * Find all routes of this role
+ * @param routes asyncRoutes
+ * @param role
+ */
 function filterAsyncRoutes(routes, role) {
     const response = [];
 
-    routes.forEach(route => {
+    routes.forEach((route) => {
         const tmp = { ...route };
         if (canAccess(role, tmp)) {
             if (tmp.children) {
-                tmp.children = filterAsyncRoutes(
-                    tmp.children,
-                    role
-                );
+                tmp.children = filterAsyncRoutes(tmp.children, role);
             }
             response.push(tmp);
         }
@@ -65,7 +62,7 @@ const mutations = {
 
 const actions = {
     generateRoutes({ commit }, role) {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             const accessedRoutes = filterAsyncRoutes(asyncRoutes, role);
 
             commit('SET_ROUTES', accessedRoutes);

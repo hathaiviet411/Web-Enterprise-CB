@@ -7,7 +7,8 @@ module.exports = {
     transform: {
         '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
         '.*\\.(vue)$': '<rootDir>/node_modules/vue-jest',
-        '^.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub',
+        '^.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$':
+      'jest-transform-stub',
     },
     snapshotSerializers: ['jest-serializer-vue'],
     collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx,vue}'],

@@ -7,9 +7,7 @@
 			class="elevation-12"
 		>
 			<template v-slot:top>
-				<v-toolbar
-					flat
-				>
+				<v-toolbar flat>
 					<v-toolbar-title>Role Management</v-toolbar-title>
 
 					<v-divider class="mx-4" inset vertical />
@@ -23,7 +21,9 @@
 
 					<v-dialog v-model="dialogDelete" max-width="500px">
 						<v-card>
-							<v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+							<v-card-title
+								class="text-h5"
+							>Are you sure you want to delete this item?</v-card-title>
 
 							<v-card-text>
 								<v-container>
@@ -87,12 +87,8 @@
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-icon small class="mr-2" @click="editItem(item)">
-					mdi-pencil
-				</v-icon>
-				<v-icon small @click="deleteItem(item)">
-					mdi-delete
-				</v-icon>
+				<v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+				<v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
 			</template>
 
 			<template v-slot:no-data>
@@ -215,7 +211,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .btn-register {
-        box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
-    }
+.btn-register {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+    rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+}
 </style>

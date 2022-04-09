@@ -44,9 +44,9 @@ export default {
                     disabled: false,
                 },
                 {
-                    icon: 'mdi-account',
-                    name: 'Analyze',
-                    url: '/analyze/index',
+                    icon: 'fas fa-chart-bar',
+                    name: 'Chart',
+                    url: '/chart/index',
                     disabled: false,
                 },
                 {
@@ -125,19 +125,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    @import '@/scss/variables.scss';
+@import "@/scss/variables.scss";
 
-    .route-item {
-        font-weight: bold;
-    }
+.route-item {
+  font-weight: bold;
+}
 
-    .v-list-item--disabled {
-        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
-        color: $white !important;
-        background-color: $shark;
+.v-list-item--disabled {
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  color: $white !important;
+  background-color: $shark;
 
-        .icon {
-            color: $dandelion;
-        }
-    }
+  .icon {
+    color: $dandelion;
+  }
+}
 </style>

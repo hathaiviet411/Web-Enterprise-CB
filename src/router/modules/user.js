@@ -16,7 +16,8 @@ const user = {
             meta: {
                 title: 'User Index',
             },
-            component: () => import(/* webpackChunkName: "User" */ '@/pages/UserManagement/index'),
+            component: () =>
+                import(/* webpackChunkName: "User" */ '@/pages/UserManagement/index'),
         },
     ],
 };

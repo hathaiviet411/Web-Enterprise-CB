@@ -15,4 +15,3 @@ export function postDislike(url, data) {
 export function deleteDislike(url, data) {
     return RequestApi.deleteOne(url, data);
 }
-

@@ -1,7 +1,7 @@
 <template>
 	<v-app id="inspire">
 		<Sidebar :drawer="drawer" />
-		<Topbar style="z-index: 9999999;" @drawerEvent="drawer = !drawer" />
+		<Topbar style="z-index: 9999999" @drawerEvent="drawer = !drawer" />
 		<v-main style="background: #f5f5f540">
 			<v-container class="py-8 px-6 main" fluid>
 				<router-view />
@@ -25,7 +25,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.main {
-		min-width: 100% !important;
-	}
+.main {
+  min-width: 100% !important;
+}
 </style>
