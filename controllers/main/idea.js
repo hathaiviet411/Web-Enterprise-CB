@@ -140,45 +140,6 @@ module.exports = {
         })
     },
 
-
-    createIdea: async (ctx) => {
-        const idea = new Idea(ctx.request.body);
-        const category = ctx.request.body.category;
-        const thisCategory = await Category.findOne({
-            _id: category
-        }).select("isDisabled");
-        if (thisCategory.isDisabled === true) {
-            return (ctx.body = {
-                status: false,
-                message: "this category has been disabled"
-            })
-        }
-        if (ctx.request.files.ideaFile) {
-            for (let i = 0; i < ctx.request.files.ideaFile.length; i++) {
-                let ideaFilePath = ctx.request.files.ideaFile[i].path.split("/");
-                idea.ideaFile[i] = getPath(ideaFilePath);
-            }
-        }
-
-        if (ctx.request.files.ideaPicture) {
-            let ideaPicturePath = ctx.request.files.ideaPicture[0].path.split("/");
-            idea.ideaPicture = getPath(ideaPicturePath);
-        }
-
-    return (ctx.body = {
-      status: true,
-      message: "get idea and comments success",
-      data: {
-        idea,
-        likes,
-        dislikes,
-        comments,
-        liked,
-        disliked,
-      },
-    });
-  },
-
   createIdea: async (ctx) => {
     const idea = new Idea(ctx.request.body);
     const category = ctx.request.body.category;
