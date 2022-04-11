@@ -14,6 +14,12 @@ export function isPassValidation(DATA = {}) {
                 title: 'Warning',
                 content: 'Username cannot contain space.',
             });
+        } else if (DATA.name.length === 0) {
+            MakeToast({
+                variant: 'warning',
+                title: 'Warning',
+                content: 'Full name is required.',
+            });
         } else if (DATA.email.length === 0) {
             MakeToast({
                 variant: 'warning',
@@ -34,13 +40,13 @@ export function isPassValidation(DATA = {}) {
                 title: 'Warning',
                 content: 'Name is required.',
             });
-        } else if (DATA.role === null) {
+        } else if (DATA.roleId === null) {
             MakeToast({
                 variant: 'warning',
                 title: 'Warning',
                 content: 'Role is required.',
             });
-        } else if (DATA.department === null) {
+        } else if (DATA.departmentId === null) {
             MakeToast({
                 variant: 'warning',
                 title: 'Warning',

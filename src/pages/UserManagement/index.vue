@@ -24,7 +24,7 @@
 
 					<v-spacer />
 
-					<v-dialog v-model="dialog" max-width="800px" persistent>
+					<v-dialog v-model="dialog" max-width="500px" persistent>
 						<template v-slot:activator="{ on, attrs }">
 							<v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
 								<v-icon left>mdi-plus-box</v-icon>
@@ -107,7 +107,7 @@
 												<span
 													style="font-size: 16px !important"
 												>I agreed with Idea Collecting System's Terms and
-													Conditions agreement.</span>
+													Services agreement.</span>
 											</b-form-checkbox>
 										</v-col>
 									</v-row>

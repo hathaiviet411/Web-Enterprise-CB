@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, createLocalVue, mount } from '@vue/test-utils';
 import Department from '../../pages/DepartmentManagement/index.vue';
 import Vuetify from 'vuetify';
 
@@ -10,7 +10,7 @@ describe('Department Management: Component Rendering UT', () => {
         vuetify = new Vuetify();
     });
 
-    it('Test department screen is rendered', () => {
+    test('Test department screen is rendered', () => {
         const wrapper = shallowMount(Department, {
             localVue,
             vuetify,
@@ -22,12 +22,9 @@ describe('Department Management: Component Rendering UT', () => {
         wrapper.destroy();
     });
 
-    it('Test table department list is rendered', () => {
+    test('Test table department list is rendered', () => {
         const wrapper = shallowMount(Department, {
             localVue,
-            methods: {
-                getDepartmentData: jest.fn(),
-            },
             vuetify,
         });
 
@@ -47,8 +44,13 @@ describe('Department Management: Functionality UT', () => {
     });
 
     const getDepartmentData = jest.fn();
+    const createNewDepartment = jest.fn();
+    const updateDepartment = jest.fn();
+    const deleteDepartment = jest.fn();
+    const close = jest.fn();
+    const closeDelete = jest.fn();
 
-    it('Test function call api get list department when created', async() => {
+    test('Test function call api get list department when created', async() => {
         const wrapper = shallowMount(Department, {
             localVue,
             methods: {
@@ -62,7 +64,7 @@ describe('Department Management: Functionality UT', () => {
         wrapper.destroy();
     });
 
-    it('Test function fetch data from the api to the table content', async() => {
+    test('Test function fetch data from the api to the table content', async() => {
         const wrapper = shallowMount(Department, {
             localVue,
             methods: {
@@ -95,21 +97,113 @@ describe('Department Management: Functionality UT', () => {
         wrapper.destroy();
     });
 
-    // it('Test function createNewDepartment when click on the register button', async() => {
-    //     const wrapper = mount(Department, {
-    //         localVue,
-    //         methods: {
-    //             getDepartmentData,
-    //         },
-    //         vuetify,
-    //     });
+    test('Test function createNewDepartment when click on the register button', async() => {
+        const wrapper = mount(Department, {
+            localVue,
+            methods: {
+                createNewDepartment,
+            },
+            vuetify,
+        });
 
-    //     const ButtonOpenModalRegister = (wrapper.find('.open-register-modal-btn').exists());
-    //     expect(ButtonOpenModalRegister).toBe(true);
+        const ButtonOpenModalRegister = (wrapper.find('.open-register-modal-btn').exists());
+        expect(ButtonOpenModalRegister).toBe(true);
 
-    //     // const ButtonDoRegister = (wrapper.find('.save-btn').exists());
-    //     // expect(ButtonDoRegister).toBe(true);
+        wrapper.vm.editedIndex = -1;
+        await wrapper.vm.save();
+        expect(createNewDepartment).toHaveBeenCalled();
 
-    //     wrapper.destroy();
-    // });
+        wrapper.destroy();
+    });
+
+    test('Test function closeDialogCreate when click on the close register button', async() => {
+        const wrapper = mount(Department, {
+            localVue,
+            methods: {
+                close,
+            },
+            vuetify,
+        });
+
+        const ButtonCloseModalRegister = (wrapper.find('.open-register-modal-btn').exists());
+        expect(ButtonCloseModalRegister).toBe(true);
+
+        await wrapper.vm.close();
+        expect(close).toHaveBeenCalled();
+
+        wrapper.destroy();
+    });
+
+    test('Test function closeDialogUpdate when click on the close update button', async() => {
+        const wrapper = mount(Department, {
+            localVue,
+            methods: {
+                close,
+            },
+            vuetify,
+        });
+
+        const ButtonCloseModalUpdate = (wrapper.find('.open-register-modal-btn').exists());
+        expect(ButtonCloseModalUpdate).toBe(true);
+
+        await wrapper.vm.close();
+        expect(close).toHaveBeenCalled();
+
+        wrapper.destroy();
+    });
+
+    test('Test function closeDialogDelete when click on the close delete button', async() => {
+        const wrapper = mount(Department, {
+            localVue,
+            methods: {
+                closeDelete,
+            },
+            vuetify,
+        });
+
+        const ButtonCloseModalDelete = (wrapper.find('.open-register-modal-btn').exists());
+        expect(ButtonCloseModalDelete).toBe(true);
+
+        await wrapper.vm.closeDelete();
+        expect(close).toHaveBeenCalled();
+
+        wrapper.destroy();
+    });
+
+    test('Test function updateDepartment when click on the update button', async() => {
+        const wrapper = mount(Department, {
+            localVue,
+            methods: {
+                updateDepartment,
+            },
+            vuetify,
+        });
+
+        const ButtonOpenModalUpdate = (wrapper.find('.open-register-modal-btn').exists());
+        expect(ButtonOpenModalUpdate).toBe(true);
+
+        wrapper.vm.editedIndex = 0;
+        await wrapper.vm.save();
+        expect(updateDepartment).toHaveBeenCalled();
+
+        wrapper.destroy();
+    });
+
+    test('Test function deleteDepartment when click on the delete button', async() => {
+        const wrapper = mount(Department, {
+            localVue,
+            methods: {
+                deleteDepartment,
+            },
+            vuetify,
+        });
+
+        const ButtonOpenModalDelete = (wrapper.find('.open-register-modal-btn').exists());
+        expect(ButtonOpenModalDelete).toBe(true);
+
+        await wrapper.vm.deleteItemConfirm();
+        expect(deleteDepartment).toHaveBeenCalled();
+
+        wrapper.destroy();
+    });
 });

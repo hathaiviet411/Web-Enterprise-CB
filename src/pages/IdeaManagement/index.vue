@@ -24,7 +24,7 @@
 
 					<v-spacer />
 
-					<v-dialog v-model="dialogCreateIdea" max-width="90%" persistent>
+					<v-dialog v-model="dialogCreateIdea" max-width="500px" persistent>
 						<template v-slot:activator="{ on, attrs }">
 							<v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
 								<v-icon left>mdi-plus-box</v-icon>

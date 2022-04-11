@@ -38,7 +38,7 @@ export default {
         return {
             listRoutes: [
                 {
-                    icon: 'mdi-microsoft-windows',
+                    icon: 'fas fa-home-lg',
                     name: 'Dashboard',
                     url: '/dashboard/index',
                     disabled: false,
@@ -62,7 +62,7 @@ export default {
                     disabled: false,
                 },
                 {
-                    icon: 'mdi-card-account-details-outline',
+                    icon: 'fas fa-lightbulb-on',
                     name: 'Idea',
                     url: '/idea/index',
                     disabled: false,
@@ -71,12 +71,6 @@ export default {
                     icon: 'mdi-city',
                     name: 'Department',
                     url: '/department/index',
-                    disabled: false,
-                },
-                {
-                    icon: 'mdi-cog',
-                    name: 'Setting',
-                    url: '/setting/index',
                     disabled: false,
                 },
             ],

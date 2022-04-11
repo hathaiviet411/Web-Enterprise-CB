@@ -41,7 +41,7 @@
 					<v-card>
 						<v-card-text class="text-center">
 							<v-icon left small>fas fa-thumbs-up</v-icon>
-							<span>Number of Likes / Category</span>
+							<span>Number of Likes / Idea</span>
 							<canvas id="barChartLike" />
 						</v-card-text>
 					</v-card>
@@ -51,7 +51,7 @@
 					<v-card>
 						<v-card-text class="text-center">
 							<v-icon left small>fas fa-thumbs-down</v-icon>
-							<span>Number of Dislikes / Category</span>
+							<span>Number of Dislikes / Idea</span>
 							<canvas id="barChartDislike" />
 						</v-card-text>
 					</v-card>
@@ -75,7 +75,7 @@
 					<v-card>
 						<v-card-text class="text-center">
 							<v-icon left small>fas fa-telescope</v-icon>
-							<span>Number of Views / Category</span>
+							<span>Number of Views / Idea</span>
 							<canvas id="barChartView" />
 						</v-card-text>
 					</v-card>
@@ -85,32 +85,8 @@
 					<v-card>
 						<v-card-text class="text-center">
 							<v-icon left small>fas fa-comment-alt</v-icon>
-							<span>Number of Comments / Category</span>
+							<span>Number of Comments / Idea</span>
 							<canvas id="barChartComment" />
-						</v-card-text>
-					</v-card>
-				</v-col>
-			</v-row>
-
-			<v-row class="mt-3">
-				<v-col cols="12">
-					<v-card>
-						<v-card-text class="text-center">
-							<v-icon left small>fas fa-lightbulb-on</v-icon>
-							<span>Number of Idea Posted / Month</span>
-							<canvas id="lineChartIdeaPosted" />
-						</v-card-text>
-					</v-card>
-				</v-col>
-			</v-row>
-
-			<v-row class="mt-3">
-				<v-col cols="12">
-					<v-card>
-						<v-card-text class="text-center">
-							<v-icon left small>fad fa-book-alt</v-icon>
-							<span>Number of Category Created / Month</span>
-							<canvas id="lineChartCategoryCreated" />
 						</v-card-text>
 					</v-card>
 				</v-col>
@@ -132,8 +108,6 @@ export default {
         this.initialBarChartDislike();
         this.initialBarChartView();
         this.initialBarChartComment();
-        this.initialLineChartIdeaPosted();
-        this.initialLineChartCategoryCreated();
     },
     methods: {
         initialBarChartLike() {
@@ -142,15 +116,15 @@ export default {
                 type: 'bar',
                 data: {
                     labels: [
-                        'Category 1',
-                        'Category 2',
-                        'Category 3',
-                        'Category 4',
-                        'Category 5',
+                        'Idea 1',
+                        'Idea 2',
+                        'Idea 3',
+                        'Idea 4',
+                        'Idea 5',
                     ],
                     datasets: [
                         {
-                            label: 'Number of Likes / Category',
+                            label: 'Number of Likes / Idea',
                             data: [12, 19, 3, 5, 2, 3, 20, 3, 1, 12],
                             backgroundColor: [
                                 '#EF6D6D',
@@ -188,15 +162,15 @@ export default {
                 type: 'bar',
                 data: {
                     labels: [
-                        'Category 1',
-                        'Category 2',
-                        'Category 3',
-                        'Category 4',
-                        'Category 5',
+                        'Idea 1',
+                        'Idea 2',
+                        'Idea 3',
+                        'Idea 4',
+                        'Idea 5',
                     ],
                     datasets: [
                         {
-                            label: 'Number of Dislike / Category',
+                            label: 'Number of Dislike / Idea',
                             data: [12, 19, 3, 5, 2, 3, 20, 3, 1, 12],
                             backgroundColor: [
                                 '#EF6D6D',
@@ -234,15 +208,15 @@ export default {
                 type: 'bar',
                 data: {
                     labels: [
-                        'Category 1',
-                        'Category 2',
-                        'Category 3',
-                        'Category 4',
-                        'Category 5',
+                        'Idea 1',
+                        'Idea 2',
+                        'Idea 3',
+                        'Idea 4',
+                        'Idea 5',
                     ],
                     datasets: [
                         {
-                            label: 'Number of View / Category',
+                            label: 'Number of View / Idea',
                             data: [12, 19, 3, 5, 2, 3, 20, 3, 1, 12],
                             backgroundColor: [
                                 '#EF6D6D',
@@ -280,15 +254,15 @@ export default {
                 type: 'bar',
                 data: {
                     labels: [
-                        'Category 1',
-                        'Category 2',
-                        'Category 3',
-                        'Category 4',
-                        'Category 5',
+                        'Idea 1',
+                        'Idea 2',
+                        'Idea 3',
+                        'Idea 4',
+                        'Idea 5',
                     ],
                     datasets: [
                         {
-                            label: 'Number of Comment / Category',
+                            label: 'Number of Comment / Idea',
                             data: [12, 19, 3, 5, 2, 3, 20, 3, 1, 12],
                             backgroundColor: [
                                 '#EF6D6D',
@@ -353,78 +327,6 @@ export default {
                     scales: {
                         y: {
                             beginAtZero: true,
-                        },
-                    },
-                },
-            });
-        },
-
-        initialLineChartIdeaPosted() {
-            const ctx = document.getElementById('lineChartIdeaPosted').getContext('2d');
-            new Chartjs(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                    datasets: [{
-                        label: 'Looping tension',
-                        data: [65, 59, 80, 81, 26, 55, 40, 65, 59, 80, 81, 26],
-                        fill: false,
-                        borderColor: '#ef6d6d',
-                    }],
-                },
-                options: {
-                    animations: {
-                        tension: {
-                            duration: 1000,
-                            easing: 'linear',
-                            from: 1,
-                            to: 0,
-                            loop: true,
-                        },
-                    },
-                    legend: {
-                        display: false,
-                    },
-                    scales: {
-                        y: {
-                            min: 0,
-                            max: 100,
-                        },
-                    },
-                },
-            });
-        },
-
-        initialLineChartCategoryCreated() {
-            const ctx = document.getElementById('lineChartCategoryCreated').getContext('2d');
-            new Chartjs(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                    datasets: [{
-                        label: 'Looping tension',
-                        data: [65, 59, 80, 81, 26, 55, 40, 65, 59, 80, 81, 26],
-                        fill: false,
-                        borderColor: '#8479e1',
-                    }],
-                },
-                options: {
-                    animations: {
-                        tension: {
-                            duration: 1000,
-                            easing: 'linear',
-                            from: 1,
-                            to: 0,
-                            loop: true,
-                        },
-                    },
-                    legend: {
-                        display: false,
-                    },
-                    scales: {
-                        y: {
-                            min: 0,
-                            max: 100,
                         },
                     },
                 },

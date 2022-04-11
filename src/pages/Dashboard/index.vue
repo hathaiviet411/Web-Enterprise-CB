@@ -93,20 +93,13 @@
 								</v-fade-transition>
 
 								<v-card-text v-if="post.ideaPicture" class="content">
-									<v-row>
-										<v-col cols="12">
-											<h5 class="post-content ml-3">{{ post.ideaTitle }}</h5>
-										</v-col>
-										<v-col cols="12">
-											<h5 class="post-content ml-3">{{ post.ideaContent }}</h5>
-										</v-col>
-									</v-row>
-
 									<div class="text-center">
 										<v-img
-											width="1168"
-											height="472"
+											max-width="100%"
 											contain
+											max-height="300"
+											aspect-ratio="1"
+											position="center center"
 											:src="post.ideaPicture"
 										/>
 									</div>
@@ -132,7 +125,7 @@
 				<div v-if="DATA.length" v-observe-visibility="handleScrolledBottom" />
 			</v-row>
 
-			<v-row>
+			<v-row v-if="isLastPage === false">
 				<v-col v-if="isLoading === true" cols="12" class="text-center">
 					<v-btn class="btn-loading rounded-xl" elevation="12" color="#7366FF">
 						<b-icon
@@ -142,6 +135,20 @@
 							font-scale="2"
 						/>
 						<span style="color: #ffffff">Loading...</span>
+					</v-btn>
+				</v-col>
+			</v-row>
+
+			<v-row v-else>
+				<v-col cols="12" class="text-center">
+					<v-btn class="btn-loading rounded-xl" elevation="12" color="#7366FF">
+						<b-icon
+							style="color: #ffffff"
+							icon="emoji-neutral"
+							animation=""
+							font-scale="2"
+						/>
+						<span style="color: #ffffff">No Data...</span>
 					</v-btn>
 				</v-col>
 			</v-row>
@@ -193,6 +200,8 @@ export default {
             },
 
             isLoading: false,
+
+            isLastPage: false,
         };
     },
     created() {
@@ -228,6 +237,7 @@ export default {
             this.isLoading = true;
 
             if (this.page <= this.totalPage) {
+                this.isLastPage = false;
                 const URL = `${urlAPI.apiGetListIdea}${this.page}`;
                 try {
                     const response = await getAllIdea(URL);
@@ -240,6 +250,9 @@ export default {
                 } catch (error) {
                     console.log(error);
                 }
+            } else {
+                console.log('No More Data');
+                this.isLastPage = true;
             }
 
             this.isLoading = false;

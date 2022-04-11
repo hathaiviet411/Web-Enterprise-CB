@@ -8,6 +8,10 @@ export function postDepartment(url, data) {
     return RequestApi.postOne(url, data);
 }
 
+export function putDepartment(url, data) {
+    return RequestApi.putOne(url, data);
+}
+
 export function deleteDepartment(url, Department_id) {
     return RequestApi.deleteOne(url, Department_id);
 }

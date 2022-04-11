@@ -136,6 +136,7 @@
 import {
     getDepartment,
     postDepartment,
+    putDepartment,
     deleteDepartment,
 } from '@/api/modules/department';
 
@@ -143,7 +144,7 @@ import {
 const urlAPI = {
     apiGetListDepartment: '/department',
     apiCreateNewDepartment: '/department',
-    // apiUpdateDepartment: '/department',
+    apiUpdateDepartment: '/department',
     apiDeleteDepartment: '/department',
 };
 
@@ -165,9 +166,9 @@ export default {
                     sortable: false,
                     value: 'departmentName',
                 },
-                { text: 'Idea Contributed', value: 'numberOfIdea', align: 'center' },
+                { text: 'Total Idea', value: 'numberOfIdea', align: 'center' },
                 {
-                    text: 'Staff Contributed',
+                    text: 'Total Staff',
                     value: 'numberOfContributor',
                     align: 'center',
                 },
@@ -248,18 +249,29 @@ export default {
             }
         },
 
-        // async updateDepartment() {
-        //     try {
-        //         const response = await postDepartment(urlAPI.apiUpdateDepartment, this.editedItem);
-        //         console.log(response);
-        //         if (response.status === true) {
-        //             this.getDepartmentData();
-        //             this.close();
-        //         }
-        //     } catch (error) {
-        //         console.log(error.message);
-        //     }
-        // },
+        async updateDepartment(department_id) {
+            if (isPassValidation(this.editedItem) === true) {
+                this.close();
+                const URL = `${urlAPI.apiUpdateDepartment}/${department_id}`;
+                try {
+                    const response = await putDepartment(
+                        URL,
+                        this.editedItem
+                    );
+                    if (response.status === true) {
+                        MakeToast({
+                            variant: 'success',
+                            title: 'Success',
+                            content: 'Update Department Successful',
+                        });
+
+                        this.getDepartmentData();
+                    }
+                } catch (error) {
+                    console.log(error.message);
+                }
+            }
+        },
 
         async deleteDepartment(id) {
             this.closeDelete();
@@ -320,7 +332,7 @@ export default {
 
         save() {
             if (this.editedIndex > -1) {
-                this.updateDepartment(this.editedItem);
+                this.updateDepartment(this.editedItem.id);
             } else {
                 this.createNewDepartment(this.editedItem);
             }

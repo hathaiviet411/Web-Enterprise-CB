@@ -12,7 +12,6 @@ import category from './modules/category';
 import idea from './modules/idea';
 import department from './modules/department';
 import role from './modules/role';
-import setting from './modules/setting';
 
 export const constantRoutes = [
     {
@@ -31,7 +30,6 @@ export const asyncRoutes = [
     idea,
     department,
     role,
-    setting,
 ];
 
 const createRouter = () =>

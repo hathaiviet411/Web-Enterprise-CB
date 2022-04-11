@@ -78,17 +78,16 @@
 				</v-card-title>
 
 				<v-card-text v-if="idea_picture" class="content">
-					<v-row>
-						<v-col cols="12">
+					<v-row class="mt-3 py-0">
+						<v-col cols="12" class="py-0">
 							<h5 class="post-content ml-3">{{ idea_title }}</h5>
-						</v-col>
-						<v-col cols="12">
-							<h5 class="post-content ml-3">{{ idea_content }}</h5>
+							<br>
+							<p class="post-content ml-3">{{ idea_content }}</p>
 						</v-col>
 					</v-row>
 
 					<div class="text-center">
-						<v-img width="1168" height="472" contain :src="idea_picture" />
+						<v-img max-width="100%" max-height="300" contain :src="idea_picture" />
 					</div>
 				</v-card-text>
 
