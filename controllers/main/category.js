@@ -25,22 +25,6 @@ module.exports = {
         isDisabled: false,
       }
     );
-    /*
-        cronjob(firstClosureDate {
-            await Category.updateOne({
-            _id: id,
-        }, {
-            isDisabled: true,
-        }));
-
-        cronjob(finalClosureDate {
-            await Idea.updateMany({
-                category: id
-            }, {
-                isDisabled: true,
-            })
-        }));
-        */
     return (ctx.body = {
       status: true,
       message: "update category success",
