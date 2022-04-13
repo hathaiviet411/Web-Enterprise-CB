@@ -2,6 +2,7 @@ import { createLocalVue, mount } from '@vue/test-utils';
 import Chart from '../../pages/ChartManagement/index.vue';
 import Chartjs from 'chart.js';
 import Vuetify from 'vuetify';
+import store from '@/store';
 
 describe('Chart: Functionality UT', () => {
     const localVue = createLocalVue();
@@ -29,6 +30,7 @@ describe('Chart: Functionality UT', () => {
                 initialData,
             },
             Chartjs,
+            store,
         });
 
         wrapper.vm.initialData();

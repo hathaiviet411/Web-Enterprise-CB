@@ -70,7 +70,7 @@
 					<v-col lg="6" sm="12" class="text-center">
 						<v-dialog v-model="dialogCreateIdea" max-width="500px" persistent>
 							<template v-slot:activator="{ on, attrs }">
-								<v-btn color="primary" dark class="pen-register-modal-btn" v-bind="attrs" v-on="on">
+								<v-btn color="primary" dark class="open-register-modal-btn" v-bind="attrs" v-on="on">
 									<v-icon left>mdi-plus-box</v-icon>
 									<span>New Idea</span>
 								</v-btn>

@@ -81,8 +81,8 @@ describe('Category Management: Functionality UT', () => {
                 sortable: true,
                 align: 'start',
             },
-            { text: 'Created Date', value: 'firstClosureDate', sortable: true },
-            { text: 'Expired Date', value: 'finalClosureDate', sortable: true },
+            { text: 'First Closure Date', value: 'firstClosureDate', sortable: true },
+            { text: 'Final Closure Date', value: 'finalClosureDate', sortable: true },
             { text: 'Actions', value: 'actions', sortable: false },
         ];
 
