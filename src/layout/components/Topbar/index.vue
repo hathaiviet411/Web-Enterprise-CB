@@ -11,7 +11,6 @@
 				<v-btn
 					class="rounded-xl text-white mr-4"
 					color="#7366FF"
-					min-width="150"
 					v-bind="attrs"
 					v-on="on"
 				>
@@ -19,7 +18,7 @@
 				</v-btn>
 			</template>
 
-			<v-list three-line width="210">
+			<v-list three-line max-width="210">
 				<template>
 					<v-list-item>
 						<v-list-item-content>
@@ -53,7 +52,7 @@
 								<v-img src="@/assets/images/avatar.png" />
 							</v-avatar>
 						</v-badge>
-						<span class="ml-3">{{ user.name }}</span>
+						<span class="ml-1">{{ user.name }}</span>
 					</v-chip>
 				</span>
 			</template>

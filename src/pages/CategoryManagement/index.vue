@@ -65,7 +65,7 @@
 												<template v-slot:activator="{ on, attrs }">
 													<v-text-field
 														:value="editedItem.firstClosureDate"
-														label="Created Date"
+														label="First Closure Date"
 														hint="YYYY-mm-dd"
 														persistent-hint
 														prepend-inner-icon="mdi-calendar"
@@ -102,7 +102,7 @@
 												<template v-slot:activator="{ on, attrs }">
 													<v-text-field
 														:value="editedItem.finalClosureDate"
-														label="Expired Date"
+														label="Final Closure Date"
 														hint="YYYY-mm-dd"
 														persistent-hint
 														prepend-inner-icon="mdi-calendar"
@@ -168,7 +168,7 @@
 										<v-col cols="12" sm="12" md="12">
 											<v-text-field
 												v-model="editedItem.firstClosureDate"
-												label="Created Date"
+												label="Fist Closure Date"
 												readonly
 												prepend-inner-icon="mdi-calendar"
 											/>
@@ -176,7 +176,7 @@
 										<v-col cols="12" sm="12" md="12">
 											<v-text-field
 												v-model="editedItem.finalClosureDate"
-												label="Expired Date"
+												label="Final Closure Date"
 												readonly
 												prepend-inner-icon="mdi-calendar"
 											/>
@@ -292,8 +292,8 @@ export default {
                     sortable: true,
                     align: 'start',
                 },
-                { text: 'Created Date', value: 'firstClosureDate', sortable: true },
-                { text: 'Expired Date', value: 'finalClosureDate', sortable: true },
+                { text: 'First Closure Date', value: 'firstClosureDate', sortable: true },
+                { text: 'Final Closure Date', value: 'finalClosureDate', sortable: true },
                 { text: 'Actions', value: 'actions', sortable: false },
             ],
 
