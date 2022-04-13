@@ -9,7 +9,7 @@
 		<v-menu offset-y rounded="xl">
 			<template v-slot:activator="{ attrs, on }">
 				<v-btn
-					class="rounded-xl text-white"
+					class="rounded-xl text-white mr-4"
 					color="#7366FF"
 					min-width="150"
 					v-bind="attrs"
@@ -38,48 +38,6 @@
 									</v-btn>
 								</v-col>
 							</v-row>
-						</v-list-item-content>
-					</v-list-item>
-				</template>
-			</v-list>
-		</v-menu>
-
-		<v-menu offset-y>
-			<template v-slot:activator="{ attrs, on }">
-				<span
-					class="mx-5 mr-10"
-					style="cursor: pointer"
-					v-bind="attrs"
-					v-on="on"
-				>
-					<v-badge content="3" color="red" offset-y="10" offset-x="10">
-						<v-icon>mdi-bell</v-icon>
-					</v-badge>
-				</span>
-			</template>
-
-			<v-list three-line width="250">
-				<template v-for="(item, index) in items">
-					<v-subheader
-						v-if="item.header"
-						:key="item.header"
-						v-text="item.header"
-					/>
-
-					<v-divider
-						v-else-if="item.divider"
-						:key="index"
-						:inset="item.inset"
-					/>
-
-					<v-list-item v-else :key="item.title">
-						<v-list-item-avatar>
-							<v-img :src="item.avatar" />
-						</v-list-item-avatar>
-
-						<v-list-item-content>
-							<v-list-item-title v-html="item.title" />
-							<v-list-item-subtitle v-html="item.subtitle" />
 						</v-list-item-content>
 					</v-list-item>
 				</template>
