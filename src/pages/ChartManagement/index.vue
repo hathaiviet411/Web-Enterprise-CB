@@ -44,7 +44,7 @@
 					<v-card>
 						<v-card-text class="text-center">
 							<v-icon left small>fas fa-thumbs-up</v-icon>
-							<span>Number of Likes / Idea</span>
+							<span>Top 5 Ideas Have The Most Likes</span>
 							<canvas id="barChartLike" />
 						</v-card-text>
 					</v-card>
@@ -54,7 +54,7 @@
 					<v-card>
 						<v-card-text class="text-center">
 							<v-icon left small>fas fa-thumbs-down</v-icon>
-							<span>Number of Dislikes / Idea</span>
+							<span>Top 5 Ideas Have The Most Dislikes</span>
 							<canvas id="barChartDislike" />
 						</v-card-text>
 					</v-card>
@@ -78,7 +78,7 @@
 					<v-card>
 						<v-card-text class="text-center">
 							<v-icon left small>fas fa-telescope</v-icon>
-							<span>Number of Views / Idea</span>
+							<span>Top 5 Ideas Have The Most Views</span>
 							<canvas id="barChartView" />
 						</v-card-text>
 					</v-card>
@@ -88,7 +88,7 @@
 					<v-card>
 						<v-card-text class="text-center">
 							<v-icon left small>fas fa-comment-alt</v-icon>
-							<span>Number of Comments / Idea</span>
+							<span>Top 5 Ideas Have The Most Comments</span>
 							<canvas id="barChartComment" />
 						</v-card-text>
 					</v-card>
@@ -100,6 +100,14 @@
 
 <script>
 import Chartjs from 'chart.js';
+
+import { getListIdeaHaveMostLike, getListIdeaHaveMostView } from '@/api/modules/chart';
+
+const urlAPI = {
+    apiGetListIdeaHaveMostLike: '/chart/list-ideas-have-most-like',
+    apiGetListIdeaHaveMostView: '/chart/list-ideas-have-most-view',
+};
+
 export default {
     name: 'ChartManagementIndex',
     data() {
@@ -128,33 +136,40 @@ export default {
         this.initialData();
     },
 
+    created() {
+        this.getChartIdeaHaveMostLike();
+        this.getChartIdeaHaveMostView();
+    },
+
     methods: {
         initialData() {
-            this.initialBarChartLike();
             this.initialBarChartDislike();
             this.initialDoughnutChart();
-            this.initialBarChartView();
             this.initialBarChartComment();
-
-            this.getTotalData();
         },
 
-        initialBarChartLike() {
+        async getChartIdeaHaveMostLike() {
+            const response = await getListIdeaHaveMostLike(urlAPI.apiGetListIdeaHaveMostLike);
+
+            const listLabel = [];
+            const listData = [];
+
+            if (response.status === true) {
+                for (let i = 0; i < response.data.idea.length; i++) {
+                    listLabel.push(response.data.idea[i].label);
+                    listData.push(response.data.idea[i].likes);
+                }
+            }
+
             const ctx = document.getElementById('barChartLike').getContext('2d');
             new Chartjs(ctx, {
                 type: 'bar',
                 data: {
-                    labels: [
-                        'Idea 1',
-                        'Idea 2',
-                        'Idea 3',
-                        'Idea 4',
-                        'Idea 5',
-                    ],
+                    labels: listLabel,
                     datasets: [
                         {
-                            label: 'Number of Likes / Idea',
-                            data: [12, 19, 3, 5, 2, 3, 20, 3, 1, 12],
+                            label: 'Likes',
+                            data: listData,
                             backgroundColor: [
                                 '#EF6D6D',
                                 '#A3E4DB',
@@ -201,53 +216,6 @@ export default {
                     datasets: [
                         {
                             label: 'Number of Dislike / Idea',
-                            data: [12, 19, 3, 5, 2, 3, 20, 3, 1, 12],
-                            backgroundColor: [
-                                '#EF6D6D',
-                                '#A3E4DB',
-                                '#8479E1',
-                                '#FFD93D',
-                                '#65C18C',
-                            ],
-                            borderColor: [
-                                '#EF6D6D',
-                                '#A3E4DB',
-                                '#8479E1',
-                                '#FFD93D',
-                                '#65C18C',
-                            ],
-                            responsive: true,
-                        },
-                    ],
-                },
-                options: {
-                    legend: {
-                        display: false,
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                        },
-                    },
-                },
-            });
-        },
-
-        initialBarChartView() {
-            const ctx = document.getElementById('barChartView').getContext('2d');
-            new Chartjs(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [
-                        'Idea 1',
-                        'Idea 2',
-                        'Idea 3',
-                        'Idea 4',
-                        'Idea 5',
-                    ],
-                    datasets: [
-                        {
-                            label: 'Number of View / Idea',
                             data: [12, 19, 3, 5, 2, 3, 20, 3, 1, 12],
                             backgroundColor: [
                                 '#EF6D6D',
@@ -367,8 +335,57 @@ export default {
             });
         },
 
-        getTotalData() {
-            console.log('Cat');
+        async getChartIdeaHaveMostView() {
+            const response = await getListIdeaHaveMostView(urlAPI.apiGetListIdeaHaveMostView);
+
+            const listLabel = [];
+            const listData = [];
+
+            if (response.status === true) {
+                for (let i = 0; i < response.data.idea.length; i++) {
+                    listLabel.push(response.data.idea[i].label);
+                    listData.push(response.data.idea[i].views);
+                }
+            }
+
+            const ctx = document.getElementById('barChartView').getContext('2d');
+            new Chartjs(ctx, {
+                type: 'bar',
+                data: {
+                    labels: listLabel,
+                    datasets: [
+                        {
+                            label: 'Views',
+                            data: listData,
+                            backgroundColor: [
+                                '#EF6D6D',
+                                '#A3E4DB',
+                                '#8479E1',
+                                '#FFD93D',
+                                '#65C18C',
+                            ],
+                            borderColor: [
+                                '#EF6D6D',
+                                '#A3E4DB',
+                                '#8479E1',
+                                '#FFD93D',
+                                '#65C18C',
+                            ],
+                            responsive: true,
+                        },
+                    ],
+                },
+                options: {
+                    legend: {
+                        display: false,
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
         },
     },
 };

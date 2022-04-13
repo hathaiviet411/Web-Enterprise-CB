@@ -1,34 +1,32 @@
-//getListIdeasHaveMostView
+// getListIdeasHaveMostView
 
-const Idea = require("../../models/idea");
-const User = require("../../models/user");
-const Like = require("../../models/like");
-const Dislike = require("../../models/dislike");
-require("dotenv").config();
-
+const Idea = require('../../models/idea');
+const User = require('../../models/user');
+const Like = require('../../models/like');
+const Dislike = require('../../models/dislike');
+require('dotenv').config();
 
 // /api/chart/list-ideas-have-most-view
 
 module.exports = {
-    getDashboardLikes: async (ctx) => {
+    getDashboardLikes: async(ctx) => {
+        const response = [];
+        const user = ctx.state.user.user._id.toString();
 
-        let response = []
-        const user = ctx.state.user.user._id.toString()
+        const ideas = await Idea.find({ user }).lean();
 
-        const ideas = await Idea.find({ user }).lean()
-
-        for (let idea of ideas) {
-            const like = await Like.find({ idea: idea._id.toString() }).count()
+        for (const idea of ideas) {
+            const like = await Like.find({ idea: idea._id.toString() }).count();
             const item = {
                 ideaTitle: idea.ideaTitle,
-                likes: like
+                likes: like,
             };
-            response.push(item)
+            response.push(item);
         }
         return (ctx.body = {
             status: true,
-            message: "get dashboard success",
-            data: response.sort(function (a, b) {
+            message: 'get dashboard success',
+            data: response.sort(function(a, b) {
                 if (a.likes < b.likes) {
                     return 1;
                 }
@@ -37,27 +35,46 @@ module.exports = {
                 }
                 return 0;
             }).slice(0, 5),
-        })
+        });
     },
 
-    getListIdeasHaveMostView: async (ctx) => {
-        const pageSize = 5
+    getListIdeasHaveMostView: async(ctx) => {
+        const pageSize = 5;
         const idea = await Idea.find({}).sort({ viewCount: 'DESC' }).limit(pageSize).lean();
 
         const response = idea.map((idea) => {
             return {
                 id: idea._id.toString(),
                 label: idea.ideaTitle,
-                views: idea.viewCount
-            }
-        })
+                views: idea.viewCount,
+            };
+        });
         return (ctx.body = {
             status: true,
-            message: "get idea success",
+            message: 'Get List Ideas Have Most View Success',
             data: {
-                idea: response
-            }
-        })
-    }
+                idea: response,
+            },
+        });
+    },
 
+    getListIdeasHaveMostLike: async(ctx) => {
+        const pageSize = 5;
+        const idea = await Idea.find({}).sort({ pointCount: 'DESC' }).limit(pageSize).lean();
+
+        const response = idea.map((idea) => {
+            return {
+                id: idea._id.toString(),
+                label: idea.ideaTitle,
+                likes: idea.pointCount,
+            };
+        });
+        return (ctx.body = {
+            status: true,
+            message: 'Get List Ideas Have Most Like Success',
+            data: {
+                idea: response,
+            },
+        });
+    },
 };
