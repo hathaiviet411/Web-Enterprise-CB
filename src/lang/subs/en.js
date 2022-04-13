@@ -4,8 +4,7 @@ export default {
     PAGE404: {
         OOPS: 'Oops!',
         MESSAGE: "The bodyguard said that you can't enter this page...",
-        DETAIL:
-      'Please check that the URL you entered is correct. Please click the button below to return to the homepage or send an error report.',
+        DETAIL: 'Please check that the URL you entered is correct. Please click the button below to return to the homepage or send an error report.',
         BACK_TO_HOME: 'Back to Home',
     },
 
@@ -34,11 +33,9 @@ export default {
                 REQUIRED_USER_ID: 'User ID is required.',
                 REQUIRED_USER_NAME: 'User name is required.',
                 REQUIRED_PASSWORD: 'Password is required.',
-                REQUIRED_PASSWORD_LENGTH:
-          'Password length must be between 8 - 16 characters.',
+                REQUIRED_PASSWORD_LENGTH: 'Password length must be between 8 - 16 characters.',
                 REQUIRED_NEW_PASSWORD: 'New password is required.',
-                REQUIRED_NEW_PASSWORD_LENGTH:
-          'New password must be between 8 - 16 characters.',
+                REQUIRED_NEW_PASSWORD_LENGTH: 'New password must be between 8 - 16 characters.',
                 VALIDATION_WAGE_INPUT: 'The wage is invalid.',
                 DUPLICATED_USER_ID: 'The User ID is already exists.',
                 ID_LENGTH_VALIDATION: 'The user ID must be between 1 and 8 characters.',
@@ -114,6 +111,8 @@ export default {
 
     NAVBAR: {
         LOGOUT: 'Logout',
+        ENGLISH: 'English',
+        VIETNAMESE: 'Vietnamese',
     },
 
     DEV: {

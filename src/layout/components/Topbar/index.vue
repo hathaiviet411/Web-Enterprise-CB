@@ -1,21 +1,49 @@
 <template>
 	<v-app-bar app elevation="6" color="white">
 		<v-app-bar-nav-icon @click="$emit('drawerEvent')" />
+
 		<v-spacer />
-		<!-- <v-col lg="6" cols="12">
-			<v-form>
-				<v-text-field
-					class="p-0 m-0 mt-6"
-					full-width
-					dense
-					append-icon="mdi-magnify"
-					outlined
-					rounded
-					placeholder="Search"
-				/>
-			</v-form>
-		</v-col> -->
+
 		<v-spacer />
+
+		<v-menu offset-y rounded="xl">
+			<template v-slot:activator="{ attrs, on }">
+				<v-btn
+					class="rounded-xl text-white"
+					color="#7366FF"
+					min-width="150"
+					v-bind="attrs"
+					v-on="on"
+				>
+					<span>{{ language === 'vn' ? 'Tiếng Việt' : 'English' }}</span>
+				</v-btn>
+			</template>
+
+			<v-list three-line width="210">
+				<template>
+					<v-list-item>
+						<v-list-item-content>
+							<v-row>
+								<v-col cols="12">
+									<v-btn block :class="['rounded-xl', language === 'en' ? 'active-btn' : '']" @click="setLanguage('en')">
+										<v-img class="flag-icon mr-10" :src="require('@/assets/images/united-kingdom.png')" />
+										<span>{{ $t('NAVBAR.ENGLISH') }}</span>
+									</v-btn>
+								</v-col>
+
+								<v-col cols="12">
+									<v-btn block :class="['rounded-xl', language === 'vn' ? 'active-btn' : '']" @click="setLanguage('vn')">
+										<v-img class="flag-icon mr-3" :src="require('@/assets/images/vietnam.png')" />
+										<span>{{ $t('NAVBAR.VIETNAMESE') }}</span>
+									</v-btn>
+								</v-col>
+							</v-row>
+						</v-list-item-content>
+					</v-list-item>
+				</template>
+			</v-list>
+		</v-menu>
+
 		<v-menu offset-y>
 			<template v-slot:activator="{ attrs, on }">
 				<span
@@ -29,6 +57,7 @@
 					</v-badge>
 				</span>
 			</template>
+
 			<v-list three-line width="250">
 				<template v-for="(item, index) in items">
 					<v-subheader
@@ -56,6 +85,7 @@
 				</template>
 			</v-list>
 		</v-menu>
+
 		<v-menu offset-y>
 			<template v-slot:activator="{ attrs, on }">
 				<span style="cursor: pointer" v-bind="attrs" v-on="on">
@@ -79,7 +109,7 @@
 						<v-list-item-title>{{ user.name }}</v-list-item-title>
 						<v-list-item-subtitle>
 							<v-chip class="ma-2" color="success">
-								<v-icon left x-small> mdi-check </v-icon>
+								<v-icon left x-small>mdi-check</v-icon>
 								Logged in
 							</v-chip>
 						</v-list-item-subtitle>
@@ -114,21 +144,20 @@ export default {
             menus: [
                 { title: 'Profile', icon: 'mdi-account' },
                 { title: 'Change Password', icon: 'mdi-key' },
-                { title: 'Setting', icon: 'mdi-cog' },
                 { title: 'Logout', icon: 'mdi-logout' },
             ],
             items: [
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-                    title: 'Trăng Trong Nước',
-                    subtitle: `<span class="text--primary">Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-                },
                 { divider: true, inset: true },
             ],
             user: {
                 name: this.$store.getters.profile.name,
             },
         };
+    },
+    computed: {
+        language() {
+            return this.$store.getters.language;
+        },
     },
     methods: {
         handleProfileAction(action) {
@@ -173,8 +202,41 @@ export default {
 
             await this.$store.dispatch('role/clearData');
         },
+
+        setLanguage(lang) {
+            this.$store.dispatch('app/setLanguage', lang)
+                .then(() => {
+                    this.$i18n.locale = lang;
+
+                    MakeToast({
+                        variant: 'success',
+                        title: this.$t('TOAST.TITLE.SUCCESS'),
+                        content: this.$t('TOAST.I18N.CHANGE_LANGUAGE.SUCCESS'),
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                    MakeToast({
+                        variant: 'success',
+                        title: this.$t('TOAST.TITLE.SUCCESS'),
+                        content: this.$t('TOAST.I18N.CHANGE_LANGUAGE.FAILED'),
+                    });
+                });
+        },
     },
 };
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.flag-icon {
+  max-width: 25px;
+  max-height: 25px;
+  vertical-align: middle;
+}
+
+.active-btn {
+  font-weight: bold;
+  background-color: #4CAF50 !important;
+  color: #FFFFFF !important;
+}
+</style>
