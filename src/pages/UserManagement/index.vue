@@ -7,129 +7,134 @@
 			:search="search"
 		>
 			<template v-slot:top>
-				<v-toolbar flat>
-					<v-toolbar-title>User Management</v-toolbar-title>
+				<v-toolbar flat elevation="6">
+					<v-row>
+						<v-col cols="6" class="text-left">
+							<v-toolbar-title>User Management</v-toolbar-title>
+						</v-col>
 
-					<v-divider class="mx-4" inset vertical />
+						<v-col cols="6" class="text-center">
+							<v-text-field
+								v-model="search"
+								append-icon="mdi-magnify"
+								label="Search"
+								single-line
+								hide-details
+							/>
+						</v-col>
+					</v-row>
+				</v-toolbar>
 
-					<v-spacer />
+				<v-row class="mt-3">
+					<v-col cols="12" class="text-center">
+						<v-dialog v-model="dialog" max-width="500px" persistent>
+							<template v-slot:activator="{ on, attrs }">
+								<v-btn color="primary" dark class="mb-2 open-register-modal-btn" v-bind="attrs" v-on="on">
+									<v-icon left>mdi-plus-box</v-icon>
+									<span>New User</span>
+								</v-btn>
+							</template>
 
-					<v-text-field
-						v-model="search"
-						append-icon="mdi-magnify"
-						label="Search"
-						single-line
-						hide-details
-					/>
-
-					<v-spacer />
-
-					<v-dialog v-model="dialog" max-width="500px" persistent>
-						<template v-slot:activator="{ on, attrs }">
-							<v-btn color="primary" dark class="mb-2 open-register-modal-btn" v-bind="attrs" v-on="on">
-								<v-icon left>mdi-plus-box</v-icon>
-								<span>New User</span>
-							</v-btn>
-						</template>
-
-						<v-card>
-							<v-card-title>
-								<v-row>
-									<v-col cols="12" class="text-center">
-										<span>{{ formTitle }}</span>
-									</v-col>
-								</v-row>
-							</v-card-title>
-
-							<v-card-text>
-								<v-container>
+							<v-card>
+								<v-card-title>
 									<v-row>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												v-model="editedItem.username"
-												prepend-icon="mdi-account"
-												label="Username"
-												required
-												type="text"
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												v-model="editedItem.name"
-												prepend-icon="mdi-border-color"
-												label="Full name"
-												required
-												type="text"
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												v-model="editedItem.email"
-												prepend-icon="mdi-email"
-												label="Email"
-												required
-												type="email"
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-select
-												v-model="editedItem.roleId"
-												:items="roleOptions"
-												label="Role"
-												prepend-icon="mdi-account-key"
-												dense
-												required
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-select
-												v-model="editedItem.departmentId"
-												:items="departmentOptions"
-												label="Department"
-												prepend-icon="mdi-domain"
-												dense
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												v-model="editedItem.password"
-												prepend-icon="mdi-lock"
-												label="Password"
-												required
-												type="password"
-											/>
-										</v-col>
-										<v-col cols="12">
-											<b-form-checkbox
-												v-model="editedItem.isAgreedTerm"
-												size="lg"
-											>
-												<span
-													style="font-size: 16px !important"
-												>I agreed with Idea Collecting System's Terms and
-													Services agreement.</span>
-											</b-form-checkbox>
+										<v-col cols="12" class="text-center">
+											<span>{{ formTitle }}</span>
 										</v-col>
 									</v-row>
-								</v-container>
-							</v-card-text>
+								</v-card-title>
 
-							<v-card-actions>
-								<v-spacer />
+								<v-card-text>
+									<v-container>
+										<v-row>
+											<v-col cols="12" sm="12" md="12">
+												<v-text-field
+													v-model="editedItem.username"
+													prepend-icon="mdi-account"
+													label="Username"
+													required
+													type="text"
+												/>
+											</v-col>
+											<v-col cols="12" sm="12" md="12">
+												<v-text-field
+													v-model="editedItem.name"
+													prepend-icon="mdi-border-color"
+													label="Full name"
+													required
+													type="text"
+												/>
+											</v-col>
+											<v-col cols="12" sm="12" md="12">
+												<v-text-field
+													v-model="editedItem.email"
+													prepend-icon="mdi-email"
+													label="Email"
+													required
+													type="email"
+												/>
+											</v-col>
+											<v-col cols="12" sm="12" md="12">
+												<v-select
+													v-model="editedItem.roleId"
+													:items="roleOptions"
+													label="Role"
+													prepend-icon="mdi-account-key"
+													dense
+													required
+												/>
+											</v-col>
+											<v-col cols="12" sm="12" md="12">
+												<v-select
+													v-model="editedItem.departmentId"
+													:items="departmentOptions"
+													label="Department"
+													prepend-icon="mdi-domain"
+													dense
+												/>
+											</v-col>
+											<v-col cols="12" sm="12" md="12">
+												<v-text-field
+													v-model="editedItem.password"
+													prepend-icon="mdi-lock"
+													label="Password"
+													required
+													type="password"
+												/>
+											</v-col>
+											<v-col cols="12">
+												<b-form-checkbox
+													v-model="editedItem.isAgreedTerm"
+													size="lg"
+												>
+													<span
+														style="font-size: 16px !important"
+													>I agreed with Idea Collecting System's Terms and
+														Services agreement.</span>
+												</b-form-checkbox>
+											</v-col>
+										</v-row>
+									</v-container>
+								</v-card-text>
 
-								<v-btn color="red darken-1" text @click="close()">
-									<v-icon left>mdi-exit-to-app</v-icon>
-									<span>Cancel</span>
-								</v-btn>
+								<v-card-actions>
+									<v-spacer />
 
-								<v-btn class="save-btn" color="blue darken-1" text @click="save()">
-									<v-icon left>mdi-lead-pencil</v-icon>
-									<span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
-								</v-btn>
-							</v-card-actions>
-						</v-card>
-					</v-dialog>
-				</v-toolbar>
+									<v-btn color="red darken-1" text @click="close()">
+										<v-icon left>mdi-exit-to-app</v-icon>
+										<span>Cancel</span>
+									</v-btn>
+
+									<v-btn class="save-btn" color="blue darken-1" text @click="save()">
+										<v-icon left>mdi-lead-pencil</v-icon>
+										<span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
+									</v-btn>
+								</v-card-actions>
+							</v-card>
+						</v-dialog>
+					</v-col>
+				</v-row>
+
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
@@ -259,19 +264,21 @@ export default {
     },
 
     created() {
+        this.initData();
     },
 
     methods: {
         async initData() {
+            await this.getListUsers();
             await this.getListRole();
             await this.getListDepartment();
-            await this.getListUsers();
         },
 
         async getListUsers() {
             try {
                 const response = await getUser(urlAPI.apiGetListUser);
                 if (response.status === true) {
+                    this.$store.dispatch('chart/setTotalUser', response.user.length);
                     this.vItems = response.user;
                 }
             } catch (error) {

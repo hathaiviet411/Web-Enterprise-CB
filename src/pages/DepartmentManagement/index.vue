@@ -8,106 +8,110 @@
 			:search="search"
 		>
 			<template v-slot:top>
-				<v-toolbar flat>
-					<v-toolbar-title>Department Management</v-toolbar-title>
+				<v-toolbar flat elevation="6">
+					<v-row>
+						<v-col cols="6" class="text-left">
+							<v-toolbar-title>Department Management</v-toolbar-title>
+						</v-col>
 
-					<v-divider class="mx-4" inset vertical />
-
-					<v-spacer />
-
-					<v-text-field
-						v-model="search"
-						append-icon="mdi-magnify"
-						label="Search"
-						single-line
-						hide-details
-					/>
-
-					<v-spacer />
-
-					<v-dialog v-model="dialogNewDepartment" max-width="500px" persistent>
-						<template v-slot:activator="{ on, attrs }">
-							<v-btn color="primary" dark class="mb-2 open-register-modal-btn" v-bind="attrs" v-on="on">
-								<v-icon left>mdi-plus-box</v-icon>
-								<span>New Department</span>
-							</v-btn>
-						</template>
-						<v-card>
-							<v-card-title>
-								<v-row>
-									<v-col cols="12" class="text-center">
-										<span>{{ formTitle }}</span>
-									</v-col>
-								</v-row>
-							</v-card-title>
-
-							<v-card-text>
-								<v-container>
-									<v-row>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												v-model="editedItem.departmentName"
-												prepend-inner-icon="mdi-library"
-												label="Department Name"
-											/>
-										</v-col>
-									</v-row>
-								</v-container>
-							</v-card-text>
-
-							<v-card-actions>
-								<v-spacer />
-								<v-btn color="red darken-1" text @click="close()">
-									<v-icon left>mdi-exit-to-app</v-icon>
-									<span>Cancel</span>
-								</v-btn>
-								<v-btn class="save-btn" color="blue darken-1" text @click="save()">
-									<v-icon left>mdi-lead-pencil</v-icon>
-									<span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
-								</v-btn>
-							</v-card-actions>
-						</v-card>
-					</v-dialog>
-
-					<v-dialog v-model="dialogDeleteDepartment" max-width="500px">
-						<v-card>
-							<v-card-title>
-								<v-row>
-									<v-col cols="12" class="text-center">
-										<span>Are you sure to delete this department?</span>
-									</v-col>
-								</v-row>
-							</v-card-title>
-
-							<v-card-text>
-								<v-container>
-									<v-row>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												:value="editedItem.departmentName"
-												label="Department name"
-												prepend-inner-icon="fa-building"
-												readonly
-											/>
-										</v-col>
-									</v-row>
-								</v-container>
-							</v-card-text>
-
-							<v-card-actions>
-								<v-spacer />
-								<v-btn color="blue darken-1" text @click="closeDelete()">
-									<v-icon left>mdi-exit-to-app</v-icon>
-									<span>Cancel</span>
-								</v-btn>
-								<v-btn color="red darken-1" text @click="deleteItemConfirm()">
-									<v-icon left>mdi-delete-empty</v-icon>
-									<span>{{ "Confirm" }}</span>
-								</v-btn>
-							</v-card-actions>
-						</v-card>
-					</v-dialog>
+						<v-col cols="6" class="text-center">
+							<v-text-field
+								v-model="search"
+								append-icon="mdi-magnify"
+								label="Search"
+								single-line
+								hide-details
+							/>
+						</v-col>
+					</v-row>
 				</v-toolbar>
+
+				<v-row class="mt-3">
+					<v-col cols="12" class="text-center">
+						<v-dialog v-model="dialogNewDepartment" max-width="500px" persistent>
+							<template v-slot:activator="{ on, attrs }">
+								<v-btn color="primary" dark class="mb-2 open-register-modal-btn" v-bind="attrs" v-on="on">
+									<v-icon left>mdi-plus-box</v-icon>
+									<span>New Department</span>
+								</v-btn>
+							</template>
+							<v-card>
+								<v-card-title>
+									<v-row>
+										<v-col cols="12" class="text-center">
+											<span>{{ formTitle }}</span>
+										</v-col>
+									</v-row>
+								</v-card-title>
+
+								<v-card-text>
+									<v-container>
+										<v-row>
+											<v-col cols="12" sm="12" md="12">
+												<v-text-field
+													v-model="editedItem.departmentName"
+													prepend-inner-icon="mdi-library"
+													label="Department Name"
+												/>
+											</v-col>
+										</v-row>
+									</v-container>
+								</v-card-text>
+
+								<v-card-actions>
+									<v-spacer />
+									<v-btn color="red darken-1" text @click="close()">
+										<v-icon left>mdi-exit-to-app</v-icon>
+										<span>Cancel</span>
+									</v-btn>
+									<v-btn class="save-btn" color="blue darken-1" text @click="save()">
+										<v-icon left>mdi-lead-pencil</v-icon>
+										<span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
+									</v-btn>
+								</v-card-actions>
+							</v-card>
+						</v-dialog>
+					</v-col>
+				</v-row>
+
+				<v-dialog v-model="dialogDeleteDepartment" max-width="500px">
+					<v-card>
+						<v-card-title>
+							<v-row>
+								<v-col cols="12" class="text-center">
+									<span>Are you sure to delete this department?</span>
+								</v-col>
+							</v-row>
+						</v-card-title>
+
+						<v-card-text>
+							<v-container>
+								<v-row>
+									<v-col cols="12" sm="12" md="12">
+										<v-text-field
+											:value="editedItem.departmentName"
+											label="Department name"
+											prepend-inner-icon="fa-building"
+											readonly
+										/>
+									</v-col>
+								</v-row>
+							</v-container>
+						</v-card-text>
+
+						<v-card-actions>
+							<v-spacer />
+							<v-btn color="blue darken-1" text @click="closeDelete()">
+								<v-icon left>mdi-exit-to-app</v-icon>
+								<span>Cancel</span>
+							</v-btn>
+							<v-btn color="red darken-1" text @click="deleteItemConfirm()">
+								<v-icon left>mdi-delete-empty</v-icon>
+								<span>{{ "Confirm" }}</span>
+							</v-btn>
+						</v-card-actions>
+					</v-card>
+				</v-dialog>
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
@@ -216,6 +220,7 @@ export default {
             try {
                 const response = await getDepartment(urlAPI.apiGetListDepartment);
                 if (response.status === true) {
+                    this.$store.dispatch('chart/setTotalDepartment', response.departmentStatistic.length);
                     const RAW_DATA = [...response.departmentStatistic];
                     for (let i = 0; i < RAW_DATA.length; i++) {
                         this.vItems = RAW_DATA;

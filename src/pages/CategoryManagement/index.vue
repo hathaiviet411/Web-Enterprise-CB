@@ -7,198 +7,200 @@
 			:search="search"
 		>
 			<template v-slot:top>
-				<v-toolbar flat>
-					<v-toolbar-title>
-						<span>{{ "Category Management" }}</span>
-					</v-toolbar-title>
+				<v-toolbar flat elevation="6">
+					<v-row>
+						<v-col cols="6" class="text-left">
+							<v-toolbar-title>Category Management</v-toolbar-title>
+						</v-col>
 
-					<v-divider class="mx-4" inset vertical />
-
-					<v-spacer />
-
-					<v-text-field
-						v-model="search"
-						append-icon="mdi-magnify"
-						label="Search"
-						single-line
-						hide-details
-					/>
-
-					<v-spacer />
-
-					<v-dialog v-model="dialog" max-width="500px" persistent>
-						<template v-slot:activator="{ on, attrs }">
-							<v-btn color="primary" dark class="mb-2 open-register-modal-btn" v-bind="attrs" v-on="on">
-								<v-icon left>mdi-plus-box</v-icon>
-								<span>New Category</span>
-							</v-btn>
-						</template>
-						<v-card>
-							<v-card-title>
-								<v-row>
-									<v-col cols="12" class="text-center">
-										<span>{{ formTitle }}</span>
-									</v-col>
-								</v-row>
-							</v-card-title>
-
-							<v-card-text>
-								<v-container>
-									<v-row>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												v-model="editedItem.categoryName"
-												prepend-inner-icon="mdi-library"
-												label="Category Name"
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-menu
-												ref="add_created_date_menu"
-												v-model="add_created_date_menu"
-												:close-on-content-click="false"
-												transition="scale-transition"
-												offset-y
-												max-width="290px"
-												min-width="auto"
-											>
-												<template v-slot:activator="{ on, attrs }">
-													<v-text-field
-														:value="editedItem.firstClosureDate"
-														label="First Closure Date"
-														hint="YYYY-mm-dd"
-														persistent-hint
-														prepend-inner-icon="mdi-calendar"
-														readonly
-														v-bind="attrs"
-														v-on="on"
-													>
-														<v-icon
-															v-show="add_created_date_menu === true"
-															slot="append"
-															color="red"
-															@click="editedItem.firstClosureDate = ''"
-														>mdi-close-box</v-icon>
-													</v-text-field>
-												</template>
-												<v-date-picker
-													v-model="editedItem.firstClosureDate"
-													no-title
-													:max="editedItem.finalClosureDate"
-													@input="add_created_date_menu = false"
-												/>
-											</v-menu>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-menu
-												ref="add_expired_date_menu"
-												v-model="add_expired_date_menu"
-												:close-on-content-click="false"
-												transition="scale-transition"
-												offset-y
-												max-width="290px"
-												min-width="auto"
-											>
-												<template v-slot:activator="{ on, attrs }">
-													<v-text-field
-														:value="editedItem.finalClosureDate"
-														label="Final Closure Date"
-														hint="YYYY-mm-dd"
-														persistent-hint
-														prepend-inner-icon="mdi-calendar"
-														v-bind="attrs"
-														readonly
-														v-on="on"
-													>
-														<v-icon
-															v-show="add_expired_date_menu === true"
-															slot="append"
-															color="red"
-															@click="editedItem.finalClosureDate = ''"
-														>mdi-close-box</v-icon>
-													</v-text-field>
-												</template>
-												<v-date-picker
-													v-model="editedItem.finalClosureDate"
-													no-title
-													:min="editedItem.firstClosureDate"
-													@input="add_expired_date_menu = false"
-												/>
-											</v-menu>
-										</v-col>
-									</v-row>
-								</v-container>
-							</v-card-text>
-
-							<v-card-actions>
-								<v-spacer />
-								<v-btn color="red darken-1" text @click="close()">
-									<v-icon left>mdi-exit-to-app</v-icon>
-									<span>Cancel</span>
-								</v-btn>
-								<v-btn class="save-btn" color="blue darken-1" text @click="save()">
-									<v-icon left>mdi-lead-pencil</v-icon>
-									<span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
-								</v-btn>
-							</v-card-actions>
-						</v-card>
-					</v-dialog>
-
-					<v-dialog v-model="dialogDelete" max-width="500px">
-						<v-card>
-							<v-card-title>
-								<v-row>
-									<v-col cols="12" class="text-center">
-										<span>Are you sure to delete this category?</span>
-									</v-col>
-								</v-row>
-							</v-card-title>
-
-							<v-card-text>
-								<v-container>
-									<v-row>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												v-model="editedItem.categoryName"
-												label="Category Name"
-												prepend-inner-icon="mdi-library"
-												readonly
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												v-model="editedItem.firstClosureDate"
-												label="Fist Closure Date"
-												readonly
-												prepend-inner-icon="mdi-calendar"
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												v-model="editedItem.finalClosureDate"
-												label="Final Closure Date"
-												readonly
-												prepend-inner-icon="mdi-calendar"
-											/>
-										</v-col>
-									</v-row>
-								</v-container>
-							</v-card-text>
-
-							<v-card-actions>
-								<v-spacer />
-								<v-btn color="blue darken-1" text @click="closeDelete()">
-									<v-icon left>mdi-exit-to-app</v-icon>
-									<span>Cancel</span>
-								</v-btn>
-								<v-btn color="red darken-1" text @click="deleteItemConfirm()">
-									<v-icon left>mdi-delete-empty</v-icon>
-									<span>{{ "Confirm" }}</span>
-								</v-btn>
-							</v-card-actions>
-						</v-card>
-					</v-dialog>
+						<v-col cols="6" class="text-center">
+							<v-text-field
+								v-model="search"
+								append-icon="mdi-magnify"
+								label="Search"
+								single-line
+								hide-details
+							/>
+						</v-col>
+					</v-row>
 				</v-toolbar>
+
+				<v-row class="mt-3">
+					<v-col cols="12" class="text-center">
+						<v-dialog v-model="dialog" max-width="500px" persistent>
+							<template v-slot:activator="{ on, attrs }">
+								<v-btn color="primary" dark class="mb-2 open-register-modal-btn" v-bind="attrs" v-on="on">
+									<v-icon left>mdi-plus-box</v-icon>
+									<span>New Category</span>
+								</v-btn>
+							</template>
+							<v-card>
+								<v-card-title>
+									<v-row>
+										<v-col cols="12" class="text-center">
+											<span>{{ formTitle }}</span>
+										</v-col>
+									</v-row>
+								</v-card-title>
+
+								<v-card-text>
+									<v-container>
+										<v-row>
+											<v-col cols="12" sm="12" md="12">
+												<v-text-field
+													v-model="editedItem.categoryName"
+													prepend-inner-icon="mdi-library"
+													label="Category Name"
+												/>
+											</v-col>
+											<v-col cols="12" sm="12" md="12">
+												<v-menu
+													ref="add_created_date_menu"
+													v-model="add_created_date_menu"
+													:close-on-content-click="false"
+													transition="scale-transition"
+													offset-y
+													max-width="290px"
+													min-width="auto"
+												>
+													<template v-slot:activator="{ on, attrs }">
+														<v-text-field
+															:value="editedItem.firstClosureDate"
+															label="First Closure Date"
+															hint="YYYY-mm-dd"
+															persistent-hint
+															prepend-inner-icon="mdi-calendar"
+															readonly
+															v-bind="attrs"
+															v-on="on"
+														>
+															<v-icon
+																v-show="add_created_date_menu === true"
+																slot="append"
+																color="red"
+																@click="editedItem.firstClosureDate = ''"
+															>mdi-close-box</v-icon>
+														</v-text-field>
+													</template>
+													<v-date-picker
+														v-model="editedItem.firstClosureDate"
+														no-title
+														:max="editedItem.finalClosureDate"
+														@input="add_created_date_menu = false"
+													/>
+												</v-menu>
+											</v-col>
+											<v-col cols="12" sm="12" md="12">
+												<v-menu
+													ref="add_expired_date_menu"
+													v-model="add_expired_date_menu"
+													:close-on-content-click="false"
+													transition="scale-transition"
+													offset-y
+													max-width="290px"
+													min-width="auto"
+												>
+													<template v-slot:activator="{ on, attrs }">
+														<v-text-field
+															:value="editedItem.finalClosureDate"
+															label="Final Closure Date"
+															hint="YYYY-mm-dd"
+															persistent-hint
+															prepend-inner-icon="mdi-calendar"
+															v-bind="attrs"
+															readonly
+															v-on="on"
+														>
+															<v-icon
+																v-show="add_expired_date_menu === true"
+																slot="append"
+																color="red"
+																@click="editedItem.finalClosureDate = ''"
+															>mdi-close-box</v-icon>
+														</v-text-field>
+													</template>
+													<v-date-picker
+														v-model="editedItem.finalClosureDate"
+														no-title
+														:min="editedItem.firstClosureDate"
+														@input="add_expired_date_menu = false"
+													/>
+												</v-menu>
+											</v-col>
+										</v-row>
+									</v-container>
+								</v-card-text>
+
+								<v-card-actions>
+									<v-spacer />
+									<v-btn color="red darken-1" text @click="close()">
+										<v-icon left>mdi-exit-to-app</v-icon>
+										<span>Cancel</span>
+									</v-btn>
+									<v-btn class="save-btn" color="blue darken-1" text @click="save()">
+										<v-icon left>mdi-lead-pencil</v-icon>
+										<span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
+									</v-btn>
+								</v-card-actions>
+							</v-card>
+						</v-dialog>
+					</v-col>
+				</v-row>
+
+				<v-dialog v-model="dialogDelete" max-width="500px">
+					<v-card>
+						<v-card-title>
+							<v-row>
+								<v-col cols="12" class="text-center">
+									<span>Are you sure to delete this category?</span>
+								</v-col>
+							</v-row>
+						</v-card-title>
+
+						<v-card-text>
+							<v-container>
+								<v-row>
+									<v-col cols="12" sm="12" md="12">
+										<v-text-field
+											v-model="editedItem.categoryName"
+											label="Category Name"
+											prepend-inner-icon="mdi-library"
+											readonly
+										/>
+									</v-col>
+									<v-col cols="12" sm="12" md="12">
+										<v-text-field
+											v-model="editedItem.firstClosureDate"
+											label="Fist Closure Date"
+											readonly
+											prepend-inner-icon="mdi-calendar"
+										/>
+									</v-col>
+									<v-col cols="12" sm="12" md="12">
+										<v-text-field
+											v-model="editedItem.finalClosureDate"
+											label="Final Closure Date"
+											readonly
+											prepend-inner-icon="mdi-calendar"
+										/>
+									</v-col>
+								</v-row>
+							</v-container>
+						</v-card-text>
+
+						<v-card-actions>
+							<v-spacer />
+							<v-btn color="blue darken-1" text @click="closeDelete()">
+								<v-icon left>mdi-exit-to-app</v-icon>
+								<span>Cancel</span>
+							</v-btn>
+							<v-btn color="red darken-1" text @click="deleteItemConfirm()">
+								<v-icon left>mdi-delete-empty</v-icon>
+								<span>{{ "Confirm" }}</span>
+							</v-btn>
+						</v-card-actions>
+					</v-card>
+				</v-dialog>
 			</template>
 
 			<template v-slot:[`item.firstClosureDate`]="{ item }">
@@ -383,6 +385,7 @@ export default {
             try {
                 const response = await getCategory(URL_GET_CATEGORY);
                 if (response.status === true) {
+                    this.$store.dispatch('chart/setTotalCategory', response.category.length);
                     const RAW_DATA = [response.category];
                     for (let i = 0; i < RAW_DATA.length; i++) {
                         RAW_DATA[i].firstClosureDate = convertDateToISO(

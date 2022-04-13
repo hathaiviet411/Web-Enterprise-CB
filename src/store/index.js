@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 
 // Import modules
 import app from './modules/app';
+import chart from './modules/chart';
 import user from './modules/user';
 import role from './modules/role';
 
@@ -13,6 +14,7 @@ Vue.use(Vuex);
 
 const modules = {
     app,
+    chart,
     user,
     role,
 };

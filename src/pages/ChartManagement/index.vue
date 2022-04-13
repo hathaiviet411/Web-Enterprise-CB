@@ -6,7 +6,7 @@
 					<v-card>
 						<v-btn block color="#F1DE94" class="darken-1">
 							<v-icon left>fas fa-lightbulb</v-icon>
-							<span>Total Idea</span>
+							<span>{{ 'Total Idea: ' + totalIdea }}</span>
 						</v-btn>
 					</v-card>
 				</v-col>
@@ -14,16 +14,18 @@
 				<v-col lg="3" sm="6" class="total-user">
 					<v-card>
 						<v-btn block color="#C32424D0" class="darken-1">
-							<v-icon left>fas fa-users</v-icon>
-							<span>Total User</span></v-btn>
+							<v-icon left color="white">fas fa-users</v-icon>
+							<span class="text-white">{{ 'Total User: ' + totalUser }}</span>
+						</v-btn>
 					</v-card>
 				</v-col>
 
 				<v-col lg="3" sm="6" class="total-department">
 					<v-card>
 						<v-btn block color="#8479E1" class="darken-1">
-							<v-icon left>fas fa-building</v-icon>
-							<span>Total Department</span></v-btn>
+							<v-icon left color="white">fas fa-building</v-icon>
+							<span class="text-white">{{ 'Total Department: ' + totalDepartment }}</span>
+						</v-btn>
 					</v-card>
 				</v-col>
 
@@ -31,7 +33,8 @@
 					<v-card>
 						<v-btn block color="#A3E4DB" class="darken-1">
 							<v-icon left>fas fa-books</v-icon>
-							<span>Total Category</span></v-btn>
+							<span>{{ 'Total Category: ' + totalCategory }}</span>
+						</v-btn>
 					</v-card>
 				</v-col>
 			</v-row>
@@ -101,6 +104,24 @@ export default {
     name: 'ChartManagementIndex',
     data() {
         return {};
+    },
+
+    computed: {
+        totalIdea() {
+            return this.$store.getters.totalIdea;
+        },
+
+        totalUser() {
+            return this.$store.getters.totalUser;
+        },
+
+        totalDepartment() {
+            return this.$store.getters.totalDepartment;
+        },
+
+        totalCategory() {
+            return this.$store.getters.totalCategory;
+        },
     },
 
     mounted() {

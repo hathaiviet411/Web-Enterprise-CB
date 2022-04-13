@@ -11,7 +11,7 @@
 			<template v-slot:top>
 				<v-toolbar>
 					<v-row>
-						<v-col cols="6" class="text-center">
+						<v-col cols="6" class="text-left">
 							<v-toolbar-title>Idea Management</v-toolbar-title>
 						</v-col>
 
@@ -735,6 +735,7 @@ export default {
             try {
                 const response = await getAllIdea(`${urlAPI.getAllIdea}?page=${this.current_page}`);
                 if (response.status === true) {
+                    this.$store.dispatch('chart/setTotalIdea', response.data.totalRecord);
                     this.vItems = response.data.ideas;
                     this.total_page = response.data.totalPage;
                 }
