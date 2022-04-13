@@ -2,13 +2,14 @@ import { MakeToast } from '@/toast/toastMessage';
 
 export function isPassValidation(DATA = {}) {
     if (DATA) {
-        if (DATA.file.length === 0 || DATA.file === undefined) {
+        console.log(DATA.totalSize);
+        if (DATA.files.length === 0) {
             MakeToast({
                 variant: 'warning',
                 title: 'Warning',
                 content: 'File is required.',
             });
-        } else if (DATA.file.size > 2000000) {
+        } else if (DATA.totalSize > 52428800) {
             MakeToast({
                 variant: 'warning',
                 title: 'Warning',

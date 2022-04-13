@@ -86,8 +86,8 @@
 										<v-col cols="12" sm="12" md="12">
 											<v-file-input
 												id="file_input"
-												ref="file"
-												v-model="editedItem.file"
+												ref="files"
+												v-model="editedItem.files"
 												counter
 												accept=".docx, .txt, .pdf, .zip, .rar, .csv, .xlsx"
 												multiple
@@ -119,7 +119,7 @@
 
 										<v-col cols="12" sm="12" md="12">
 											<v-textarea
-												v-model="editedItem.editorData"
+												v-model="editedItem.content"
 												label="Idea Content"
 												hide-details
 												prepend-icon="mdi-book-open-page-variant"
@@ -652,7 +652,7 @@ export default {
                 { text: 'Views', sortable: false, value: 'viewCount' },
                 { text: 'Author', sortable: false, value: 'user' },
                 { text: 'Posted Date', sortable: false, value: 'createdAt' },
-                { text: 'Actions', value: 'actions' },
+                { text: 'Actions', sortable: false, value: 'actions' },
             ],
 
             vItems: [],
@@ -661,21 +661,23 @@ export default {
 
             editedIndex: -1,
             editedItem: {
-                file: [],
+                files: [],
                 title: '',
                 category: null,
                 content: '',
                 author: '',
                 isAnonymous: false,
+                totalSize: 0,
             },
 
             defaultItem: {
-                file: [],
+                files: [],
                 title: '',
                 category: null,
                 content: '',
                 author: '',
                 isAnonymous: false,
+                totalSize: 0,
             },
 
             categoryOptions: [],
@@ -819,8 +821,14 @@ export default {
         async createNewIdea() {
             const formData = new FormData();
 
+            for (let i = 0; i < this.editedItem.files.length; i++) {
+                this.editedItem.totalSize += this.editedItem.files[i].size;
+            }
+
             if (isPassValidation(this.editedItem) === true) {
-                formData.append('ideaFile', this.editedItem.file);
+                for (let i = 0; i < this.editedItem.files.length; i++) {
+                    formData.append('ideaFile', this.editedItem.files[i]);
+                }
                 formData.append('ideaTitle', this.editedItem.title);
                 formData.append('ideaContent', this.editedItem.content);
                 formData.append('isAnonymous', this.editedItem.isAnonymous);
@@ -841,7 +849,7 @@ export default {
                         MakeToast({
                             variant: 'warning',
                             title: 'Warning',
-                            content: `${response.message}`,
+                            content: 'This category has been disabled.',
                         });
                         this.dialogCreateIdea = false;
                     }
@@ -852,7 +860,7 @@ export default {
         },
 
         uploadFile() {
-            this.editedItem.file = this.$refs.file;
+            this.editedItem.files = this.$refs.files;
         },
 
         editItem(item) {
@@ -907,18 +915,21 @@ export default {
 
             if (sort_type === SORT_BY_TIME) {
                 const response = await sort(`${URL}?page=1&sort=createdAt`);
+                this.sort_type = 'Time';
 
                 if (response.status === true) {
                     this.vItems = response.data.ideas;
                 }
             } else if (sort_type === SORT_BY_VIEW) {
                 const response = await sort(`${URL}?page=1&sort=view`);
+                this.sort_type = 'View';
 
                 if (response.status === true) {
                     this.vItems = response.data.ideas;
                 }
             } else if (sort_type === SORT_BY_LIKE) {
                 const response = await sort(`${URL}?page=1&sort=like`);
+                this.sort_type = 'Like';
 
                 if (response.status === true) {
                     this.vItems = response.data.ideas;
@@ -935,13 +946,5 @@ export default {
 .btn-register {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
     rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
-}
-
-.ckeditor_before {
-  width: 90%;
-}
-
-.ckeditor_after {
-  width: 100%;
 }
 </style>
