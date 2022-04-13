@@ -1,9 +1,9 @@
 <template>
-	<div>
+	<div class="category-screen">
 		<v-data-table
 			:headers="vFields"
 			:items="vItems"
-			class="elevation-12"
+			class="elevation-12 table-category-list"
 			:search="search"
 		>
 			<template v-slot:top>
@@ -28,7 +28,7 @@
 
 					<v-dialog v-model="dialog" max-width="500px" persistent>
 						<template v-slot:activator="{ on, attrs }">
-							<v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+							<v-btn color="primary" dark class="mb-2 open-register-modal-btn" v-bind="attrs" v-on="on">
 								<v-icon left>mdi-plus-box</v-icon>
 								<span>New Category</span>
 							</v-btn>
@@ -136,7 +136,7 @@
 									<v-icon left>mdi-exit-to-app</v-icon>
 									<span>Cancel</span>
 								</v-btn>
-								<v-btn color="blue darken-1" text @click="save()">
+								<v-btn class="save-btn" color="blue darken-1" text @click="save()">
 									<v-icon left>mdi-lead-pencil</v-icon>
 									<span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
 								</v-btn>

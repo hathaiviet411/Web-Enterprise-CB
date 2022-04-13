@@ -39,7 +39,7 @@
 												</b-col>
 											</b-row>
 
-											<b-row>
+											<b-row class="sub-illustration">
 												<b-col cols="12">
 													<v-img
 														src="@/assets/images/banner.png"
@@ -48,7 +48,7 @@
 												</b-col>
 											</b-row>
 
-											<b-row class="mt-3">
+											<b-row class="mt-3 notification">
 												<b-col cols="12" class="text-center">
 													<span
 														class="login-option-suggest"
@@ -57,13 +57,14 @@
 												</b-col>
 											</b-row>
 
-											<b-row>
+											<b-row class="form-input">
 												<b-col cols="12">
 													<label>
 														<span>Username</span>
 													</label>
 													<b-form-input
-														v-model="User.username"
+														v-model="username"
+														class="username-input"
 														type="text"
 														placeholder="Username"
 														:disabled="isProcess"
@@ -75,7 +76,8 @@
 														<span>Password</span>
 													</label>
 													<b-form-input
-														v-model="User.password"
+														v-model="password"
+														class="password-input"
 														type="password"
 														placeholder="⋄⋄⋄⋄⋄⋄⋄⋄⋄⋄⋄⋄⋄⋄"
 														:disabled="isProcess"
@@ -99,7 +101,7 @@
 
 														<b-col
 															cols="6"
-															class="text-right"
+															class="text-right forgot-password"
 															:disabled="isProcess"
 														>
 															<span
@@ -161,10 +163,8 @@ export default {
             LoginIllustration,
             OvalIllustration,
 
-            User: {
-                username: 'admin',
-                password: '123456',
-            },
+            username: 'admin',
+            password: '123456',
 
             isRememberMe: this.$store.getters.isRememberMe,
             isMobileMode: false,
@@ -188,19 +188,19 @@ export default {
         async doLogin() {
             this.isProcess = true;
 
-            if (this.User.username.length === 0) {
+            if (this.username.length === 0) {
                 MakeToast({
                     variant: 'warning',
                     title: 'Warning',
                     content: 'Username is required.',
                 });
-            } else if (this.User.password.length === 0) {
+            } else if (this.password.length === 0) {
                 MakeToast({
                     variant: 'warning',
                     title: 'Warning',
                     content: 'Password is required.',
                 });
-            } else if (this.User.password.length < 6) {
+            } else if (this.password.length < 6) {
                 MakeToast({
                     variant: 'warning',
                     title: 'Warning',
@@ -208,8 +208,8 @@ export default {
                 });
             } else {
                 const USER = {
-                    username: this.User.username,
-                    password: this.User.password,
+                    username: this.username,
+                    password: this.password,
                 };
 
                 this.callApiLogin(LOGIN_API, USER);
@@ -234,7 +234,7 @@ export default {
                             const PROFILE = {
                                 id: USER.info.user._id,
                                 isAgreedTerm: USER.info.user.isAgreedTerm,
-                                // username: USER.info.user.username,
+                                username: USER.info.user.username,
                                 name: USER.info.user.name,
                                 department_id: '',
                                 expired_token: EXPIRED_TOKE,

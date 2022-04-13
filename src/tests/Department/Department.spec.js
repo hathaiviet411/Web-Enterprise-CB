@@ -80,9 +80,9 @@ describe('Department Management: Functionality UT', () => {
                 sortable: false,
                 value: 'departmentName',
             },
-            { text: 'Idea Contributed', value: 'numberOfIdea', align: 'center' },
+            { text: 'Total Idea', value: 'numberOfIdea', align: 'center' },
             {
-                text: 'Staff Contributed',
+                text: 'Total Staff',
                 value: 'numberOfContributor',
                 align: 'center',
             },

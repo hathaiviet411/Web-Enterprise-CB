@@ -1,5 +1,5 @@
 <template>
-	<div class="dashboard">
+	<div class="dashboard-screen">
 		<b-overlay
 			:show="overlay.show"
 			:variant="overlay.variant"
@@ -16,12 +16,12 @@
 						animation="spin"
 					/>
 					<p style="margin-top: 10px; color: #7366ff">
-						{{ "Xin vui lòng chờ" }}
+						{{ "Please wait..." }}
 					</p>
 				</div>
 			</template>
 
-			<v-row>
+			<v-row class="dashboard-list-idea">
 				<v-col v-for="(post, index) in DATA" :key="index" cols="12">
 					<v-hover>
 						<template v-slot:default="{ hover }">
@@ -265,43 +265,43 @@ export default {
             socket.emit('idea', payload);
         },
 
-        handleLikeIdea(data) {
-            this.isClickLikeButton = true;
-            const payload = {
-                ideaId: data._id,
-            };
-            let responseSocket = {};
+        // handleLikeIdea(data) {
+        //     this.isClickLikeButton = true;
+        //     const payload = {
+        //         ideaId: data._id,
+        //     };
+        //     let responseSocket = {};
 
-            socket.emit('like:create', payload);
+        //     socket.emit('like:create', payload);
 
-            socket.on('like', (likes) => {
-                responseSocket = likes;
-                for (let i = 0; i < this.DATA.length; i++) {
-                    if (this.DATA[i]._id === responseSocket['ideaId']) {
-                        this.DATA[i].likes = responseSocket['likes'];
-                    }
-                }
-            });
-        },
+        //     socket.on('like', (likes) => {
+        //         responseSocket = likes;
+        //         for (let i = 0; i < this.DATA.length; i++) {
+        //             if (this.DATA[i]._id === responseSocket['ideaId']) {
+        //                 this.DATA[i].likes = responseSocket['likes'];
+        //             }
+        //         }
+        //     });
+        // },
 
-        handleUnLikeIdea(data) {
-            this.isClickLikeButton = false;
-            const payload = {
-                ideaId: data._id,
-            };
-            let responseSocket = {};
-            socket.emit('like:delete', payload);
+        // handleUnLikeIdea(data) {
+        //     this.isClickLikeButton = false;
+        //     const payload = {
+        //         ideaId: data._id,
+        //     };
+        //     let responseSocket = {};
+        //     socket.emit('like:delete', payload);
 
-            socket.on('like', (likes) => {
-                responseSocket = likes;
-                console.log(responseSocket);
-                for (let i = 0; i < this.DATA.length; i++) {
-                    if (this.DATA[i]._id === responseSocket['ideaId']) {
-                        this.DATA[i].likes = responseSocket['likes'];
-                    }
-                }
-            });
-        },
+        //     socket.on('like', (likes) => {
+        //         responseSocket = likes;
+        //         console.log(responseSocket);
+        //         for (let i = 0; i < this.DATA.length; i++) {
+        //             if (this.DATA[i]._id === responseSocket['ideaId']) {
+        //                 this.DATA[i].likes = responseSocket['likes'];
+        //             }
+        //         }
+        //     });
+        // },
 
         toDetailScreen(id) {
             this.$router.push({ path: `/dashboard/detail/${id}` });
