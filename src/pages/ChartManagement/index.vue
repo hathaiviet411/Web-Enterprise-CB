@@ -1,8 +1,8 @@
 <template>
-	<div class="chart-management">
+	<div class="chart-screen">
 		<v-app>
 			<v-row>
-				<v-col lg="3" sm="6">
+				<v-col lg="3" sm="6" class="total-idea">
 					<v-card>
 						<v-btn block color="#F1DE94" class="darken-1">
 							<v-icon left>fas fa-lightbulb</v-icon>
@@ -11,7 +11,7 @@
 					</v-card>
 				</v-col>
 
-				<v-col lg="3" sm="6">
+				<v-col lg="3" sm="6" class="total-user">
 					<v-card>
 						<v-btn block color="#C32424D0" class="darken-1">
 							<v-icon left>fas fa-users</v-icon>
@@ -19,7 +19,7 @@
 					</v-card>
 				</v-col>
 
-				<v-col lg="3" sm="6">
+				<v-col lg="3" sm="6" class="total-department">
 					<v-card>
 						<v-btn block color="#8479E1" class="darken-1">
 							<v-icon left>fas fa-building</v-icon>
@@ -27,7 +27,7 @@
 					</v-card>
 				</v-col>
 
-				<v-col lg="3" sm="6">
+				<v-col lg="3" sm="6" class="total-category">
 					<v-card>
 						<v-btn block color="#A3E4DB" class="darken-1">
 							<v-icon left>fas fa-books</v-icon>
@@ -37,7 +37,7 @@
 			</v-row>
 
 			<v-row class="mt-3">
-				<v-col cols="6">
+				<v-col cols="6" class="like-per-idea-chart">
 					<v-card>
 						<v-card-text class="text-center">
 							<v-icon left small>fas fa-thumbs-up</v-icon>
@@ -47,7 +47,7 @@
 					</v-card>
 				</v-col>
 
-				<v-col cols="6">
+				<v-col cols="6" class="dislike-per-idea-chart">
 					<v-card>
 						<v-card-text class="text-center">
 							<v-icon left small>fas fa-thumbs-down</v-icon>
@@ -59,7 +59,7 @@
 			</v-row>
 
 			<v-row class="mt-3">
-				<v-col cols="12">
+				<v-col cols="12" class="category-trending-chart">
 					<v-card>
 						<v-card-text class="text-center">
 							<v-icon left small>fas fa-analytics</v-icon>
@@ -71,7 +71,7 @@
 			</v-row>
 
 			<v-row class="mt-3">
-				<v-col cols="6">
+				<v-col cols="6" class="view-per-idea-chart">
 					<v-card>
 						<v-card-text class="text-center">
 							<v-icon left small>fas fa-telescope</v-icon>
@@ -81,7 +81,7 @@
 					</v-card>
 				</v-col>
 
-				<v-col cols="6">
+				<v-col cols="6" class="comment-per-idea-chart">
 					<v-card>
 						<v-card-text class="text-center">
 							<v-icon left small>fas fa-comment-alt</v-icon>
@@ -102,14 +102,22 @@ export default {
     data() {
         return {};
     },
+
     mounted() {
-        this.initialBarChartLike();
-        this.initialDoughnutChart();
-        this.initialBarChartDislike();
-        this.initialBarChartView();
-        this.initialBarChartComment();
+        this.initialData();
     },
+
     methods: {
+        initialData() {
+            this.initialBarChartLike();
+            this.initialBarChartDislike();
+            this.initialDoughnutChart();
+            this.initialBarChartView();
+            this.initialBarChartComment();
+
+            this.getTotalData();
+        },
+
         initialBarChartLike() {
             const ctx = document.getElementById('barChartLike').getContext('2d');
             new Chartjs(ctx, {
@@ -336,6 +344,10 @@ export default {
                     },
                 },
             });
+        },
+
+        getTotalData() {
+            console.log('Cat');
         },
     },
 };

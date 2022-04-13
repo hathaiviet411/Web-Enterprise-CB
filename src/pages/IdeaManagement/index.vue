@@ -1,9 +1,9 @@
 <template>
-	<div>
+	<div class="idea-screen">
 		<v-data-table
 			:headers="vFields"
 			:items="vItems"
-			class="elevation-12"
+			class="elevation-12 table-idea-list"
 			:search="search"
 		>
 			<template v-slot:top>
@@ -26,7 +26,7 @@
 
 					<v-dialog v-model="dialogCreateIdea" max-width="500px" persistent>
 						<template v-slot:activator="{ on, attrs }">
-							<v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+							<v-btn color="primary" dark class="mb-2 open-register-modal-btn" v-bind="attrs" v-on="on">
 								<v-icon left>mdi-plus-box</v-icon>
 								<span>New Idea</span>
 							</v-btn>
@@ -116,6 +116,7 @@
 								<v-btn
 									v-if="isAgreedTerm === false"
 									color="blue darken-1"
+									class="save-btn"
 									text
 									@click.stop="dialogTermService = true"
 								>
@@ -644,13 +645,17 @@ export default {
     },
 
     created() {
-        this.getListIdea();
-        this.getListUsers();
-        this.getListDepartment();
-        this.getListCategory();
+        this.initData();
     },
 
     methods: {
+        async initData() {
+            await this.getListIdea();
+            await this.getListUsers();
+            await this.getListDepartment();
+            await this.getListCategory();
+        },
+
         async getListIdea() {
             try {
                 const response = await getAllIdea(urlAPI.getAllIdea);

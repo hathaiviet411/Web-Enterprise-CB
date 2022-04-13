@@ -1,9 +1,9 @@
 <template>
-	<div>
+	<div class="user-screen">
 		<v-data-table
 			:headers="vFields"
 			:items="vItems"
-			class="elevation-12"
+			class="elevation-12 table-user-list"
 			:search="search"
 		>
 			<template v-slot:top>
@@ -26,7 +26,7 @@
 
 					<v-dialog v-model="dialog" max-width="500px" persistent>
 						<template v-slot:activator="{ on, attrs }">
-							<v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+							<v-btn color="primary" dark class="mb-2 open-register-modal-btn" v-bind="attrs" v-on="on">
 								<v-icon left>mdi-plus-box</v-icon>
 								<span>New User</span>
 							</v-btn>
@@ -122,7 +122,7 @@
 									<span>Cancel</span>
 								</v-btn>
 
-								<v-btn color="blue darken-1" text @click="save()">
+								<v-btn class="save-btn" color="blue darken-1" text @click="save()">
 									<v-icon left>mdi-lead-pencil</v-icon>
 									<span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
 								</v-btn>
@@ -259,12 +259,15 @@ export default {
     },
 
     created() {
-        this.getListRole();
-        this.getListDepartment();
-        this.getListUsers();
     },
 
     methods: {
+        async initData() {
+            await this.getListRole();
+            await this.getListDepartment();
+            await this.getListUsers();
+        },
+
         async getListUsers() {
             try {
                 const response = await getUser(urlAPI.apiGetListUser);
