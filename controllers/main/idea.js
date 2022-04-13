@@ -64,89 +64,81 @@ module.exports = {
           ? parseInt(totalRecord / 5)
           : parseInt(totalRecord / 5) + 1;
       for (allIdea of allIdeas) {
-        const comments = await Comment.find({ idea: allIdea._id })
-          .populate("user", "-password -idea")
-          .lean();
-        const likes = await Like.find({ idea: allIdea._id }).count();
-        const dislikes = await Dislike.find({ idea: allIdea._id }).count();
-        allIdea = {
-          ...allIdea,
-          likes: likes,
-          dislikes: dislikes,
-          comments: comments,
-        };
         ideas.push(allIdea);
       }
 
-            return (ctx.body = {
-                status: true,
-                message: "get idea success",
-                data: {
-                    page,
-                    totalPage,
-                    totalRecord,
-                    ideas
-                }
-            })
+      return (ctx.body = {
+        status: true,
+        message: "get idea success",
+        data: {
+          page,
+          totalPage,
+          totalRecord,
+          ideas
         }
-        const idea = await Idea.find({}).lean();
-        return (ctx.body = {
-            status: true,
-            message: "get idea success",
-            data: {
-                idea
-            }
-        })
+      })
+    }
+    const idea = await Idea.find({}).lean();
+    return (ctx.body = {
+      status: true,
+      message: "get idea success",
+      data: {
+        idea
+      }
+    })
 
-    },
+  },
 
-    getIdeaComment: async (ctx) => {
-        const ideaId = ctx.params.id
-        const user = ctx.state.user.user._id;
-        if (!ideaId) {
-            return (ctx.body = {
-                status: false,
-                message: "id not found",
-            })
-        }
-        const idea = await Idea.findOne({
-            _id: ideaId
-        }).populate("user", "-password").populate("category", "categoryName -_id").populate("department", "departmentName -_id").lean();
-        if (!idea) {
-            return (ctx.body = {
-                status: false,
-                message: "idea not found",
-            })
-        }
-        const comments = await Comment.find({ idea: ideaId }).sort({ createdAt: 'DESC' }).populate('user', '-password').lean();
-        const likes = await Like.find({ idea: ideaId }).count();
-        const dislikes = await Dislike.find({ idea: ideaId }).count();
-        const userLike = await Like.findOne({ user: user, idea: ideaId }).count();
-        const liked = userLike === 1 ? true : false;
-        const userDislike = await Dislike.findOne({ user: user, idea: ideaId }).count();
-        const disliked = userDislike === 1 ? true : false;
+  getIdeaComment: async (ctx) => {
+    const ideaId = ctx.params.id
+    const user = ctx.state.user.user._id;
+    if (!ideaId) {
+      return (ctx.body = {
+        status: false,
+        message: "id not found",
+      })
+    }
+    const idea = await Idea.findOne({
+      _id: ideaId
+    }).populate("user", "-password").populate("category", "categoryName -_id").populate("department", "departmentName -_id").lean();
+    if (!idea) {
+      return (ctx.body = {
+        status: false,
+        message: "idea not found",
+      })
+    }
+    const comments = await Comment.find({ idea: ideaId }).sort({ createdAt: 'DESC' }).populate('user', '-password').lean();
+    const likes = await Like.find({ idea: ideaId }).count();
+    const dislikes = await Dislike.find({ idea: ideaId }).count();
+    const userLike = await Like.findOne({ user: user, idea: ideaId }).count();
+    const liked = userLike === 1 ? true : false;
+    const userDislike = await Dislike.findOne({ user: user, idea: ideaId }).count();
+    const disliked = userDislike === 1 ? true : false;
 
-        return (ctx.body = {
-            status: true,
-            message: "get idea and comments success",
-            data: {
-                idea,
-                likes,
-                dislikes,
-                comments,
-                liked,
-                disliked
-            }
-        })
-    },
+    return (ctx.body = {
+      status: true,
+      message: "get idea and comments success",
+      data: {
+        idea,
+        likes,
+        dislikes,
+        comments,
+        liked,
+        disliked
+      }
+    })
+  },
 
   createIdea: async (ctx) => {
     const idea = new Idea(ctx.request.body);
     const category = ctx.request.body.category;
+
     const thisCategory = await Category.findOne({
       _id: category,
-    }).select("isDisabled");
-    if (thisCategory.isDisabled === true) {
+    });
+    const firstClosureDate = new Date(thisCategory.firstClosureDate);
+    const result = firstClosureDate.getTime();
+    if (result <= Date.now()) {
       return (ctx.body = {
         status: false,
         message: "this category has been disabled",
@@ -221,7 +213,6 @@ module.exports = {
         ideaContent: ideaContent,
       }
     );
-    await helpers.checkIfCloseIdea(idea.createdAt, id);
 
     return (ctx.body = {
       status: true,

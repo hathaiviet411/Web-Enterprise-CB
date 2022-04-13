@@ -17,10 +17,15 @@ module.exports = (io, socket) => {
     const userId = socket.decoded.payload;
     const idea = await Idea.findOne({ _id: ideaId })
       .populate("user", "-password")
+      .populate("category")
       .lean();
-    if (idea.isDisabled === true) {
-      socket.to("idea:" + ideaId).emit("comment:create", "this idea is closed");
+
+    const finalClosureDate = new Date(idea.category.finalClosureDate);
+    const result = finalClosureDate.getTime();
+    if (result <= Date.now()) {
+      throw new Error("this idea is closed");
     }
+
     if (idea) {
       const thisComment = new Comment({
         commentContent: commentContent,
@@ -29,7 +34,7 @@ module.exports = (io, socket) => {
         isAnonymous: isAnonymous,
       });
       await thisComment.save();
-      // const comment = await Comment.findOne({ _id: thisComment._id }).populate('user', '-password').lean()
+
       const comment = await Comment.find({ idea: ideaId })
         .populate("user", "-password")
         .sort({ createdAt: "DESC" })
@@ -37,10 +42,10 @@ module.exports = (io, socket) => {
       const payload = {
         comment,
       };
-      // socket.broadcast.to(ideaId).emit("renderComment", payload)
+
       socket.emit("renderComment", payload);
       socket.broadcast.emit("renderBroadcastComment", payload);
-      // socket.to("idea:" + ideaId).emit("renderComment", payload);
+
     } else {
       throw new Error("idea not found");
     }

@@ -58,3 +58,6 @@
 ::1 - - [01/Apr/2022:18:10:03 +0000] "GET /api/role HTTP/1.1" 200 317 "http://localhost:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36"
 ::1 - - [01/Apr/2022:18:10:03 +0000] "GET /api/user HTTP/1.1" 200 1612 "http://localhost:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36"
 ::1 - - [01/Apr/2022:18:10:03 +0000] "GET /api/department HTTP/1.1" 200 381 "http://localhost:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36"
+::1 - - [13/Apr/2022:06:12:30 +0000] "GET /api/idea?page=1&sort=like HTTP/1.1" 200 29535 "-" "PostmanRuntime/7.29.0"
+::1 - - [13/Apr/2022:06:13:22 +0000] "GET /api/idea?page=1&sort=view HTTP/1.1" 200 40834 "-" "PostmanRuntime/7.29.0"
+::1 - - [13/Apr/2022:06:14:23 +0000] "GET /api/idea?page=1&sort=view HTTP/1.1" 200 4702 "-" "PostmanRuntime/7.29.0"
