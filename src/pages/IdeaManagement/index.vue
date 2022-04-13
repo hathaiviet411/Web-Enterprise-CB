@@ -764,6 +764,14 @@ export default {
                         this.dialogCreateIdea = false;
                         this.getListIdea();
                     }
+					else if (response.status === false) {
+						MakeToast({
+                            variant: 'warning',
+                            title: 'Warning',
+                            content: `${response.message}`,
+                        });
+                        this.dialogCreateIdea = false;
+					}
                 } catch (error) {
                     console.log(error.message);
                 }
