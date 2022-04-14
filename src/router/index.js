@@ -11,6 +11,7 @@ import user from './modules/user';
 import category from './modules/category';
 import idea from './modules/idea';
 import department from './modules/department';
+import ErrorPage from './modules/page404';
 import role from './modules/role';
 
 export const constantRoutes = [
@@ -29,6 +30,12 @@ export const asyncRoutes = [
     category,
     idea,
     department,
+    ErrorPage,
+    {
+        path: '*',
+        redirect: { name: 'ErrorPage' },
+        hidden: true,
+    },
     role,
 ];
 

@@ -1,132 +1,132 @@
 export default {
-    ROUTER: {},
+    ROUTER: {
+        DASHBOARD: 'Bảng điều khiển',
+        CHART: 'Biểu đồ',
+        USER: 'Người dùng',
+        CATEGORY: 'Danh mục',
+        IDEA: 'Ý tưởng',
+        DEPARTMENT: 'Phòng ban',
+    },
 
     PAGE404: {
         OOPS: 'Oops!',
-        MESSAGE: "The bodyguard said that you can't enter this page...",
-        DETAIL: 'Please check that the URL you entered is correct. Please click the button below to return to the homepage or send an error report.',
-        BACK_TO_HOME: 'Back to Home',
+        MESSAGE: 'Tạm thời bạn không thể truy cập vào trang này...',
+        DETAIL: 'Vui lòng kiểm tra lại đường dẫn URL. Vui lòng nhấn nút bên dưới để quay về trang chủ hoặc gửi một báo cáo lỗi.',
+        BACK_TO_HOME: 'Quay về trang chủ',
     },
 
     TOAST: {
         TITLE: {
-            SUCCESS: 'Success',
-            WARNING: 'Warning',
-            ERROR: 'Error',
+            SUCCESS: 'Thành công',
+            WARNING: 'Cảnh báo',
+            ERROR: 'Lỗi',
         },
 
         CONTENT: {
             LOGIN: {
-                SUCCESS: 'Logged in successfully.',
-                WRONG_ID_PASSWORD: 'You entered the wrong format of ID, Password.',
-                REQUIRE_USER_ID: 'Please enter User ID',
-                REQUIRE_PASSWORD: 'Please enter Password',
+                SUCCESS: 'Đăng nhập thành công.',
+                WRONG_ID_PASSWORD: 'Bạn đã nhập sai định dạng ID, Password.',
+                REQUIRE_USER_ID: 'Vui lòng nhập User ID.',
+                REQUIRE_PASSWORD: 'Vui lòng nhập Password.',
             },
 
             LOGOUT: {
-                SUCCESS: 'You have successfully logged out.',
+                SUCCESS: 'Đăng xuất thành công.',
             },
 
             USER_MANAGEMENT: {
-                REQUIRED_USER_ROLE: 'User role is required.',
-                REQUIRED_BASE: 'Base is required.',
-                REQUIRED_USER_ID: 'User ID is required.',
-                REQUIRED_USER_NAME: 'User name is required.',
-                REQUIRED_PASSWORD: 'Password is required.',
-                REQUIRED_PASSWORD_LENGTH: 'Password length must be between 8 - 16 characters.',
-                REQUIRED_NEW_PASSWORD: 'New password is required.',
-                REQUIRED_NEW_PASSWORD_LENGTH: 'New password must be between 8 - 16 characters.',
-                VALIDATION_WAGE_INPUT: 'The wage is invalid.',
-                DUPLICATED_USER_ID: 'The User ID is already exists.',
-                ID_LENGTH_VALIDATION: 'The user ID must be between 1 and 8 characters.',
-                ROLE_HEADQUARTER: 'Headquarter',
-                ROLE_OPERATOR: 'Operator',
-                ROLE_TEAM: 'Team',
+                REQUIRED_USER_ROLE: 'Vui lòng chọn vai trò người dùng.',
+                REQUIRED_BASE: 'Vui lòng chọn cơ sở.',
+                REQUIRED_USER_ID: 'Vui lòng nhập User ID.',
+                REQUIRED_USER_NAME: 'Vui lòng nhập tên người dùng.',
+                REQUIRED_PASSWORD: 'Vui lòng nhập mật khẩu.',
+                REQUIRED_PASSWORD_LENGTH: 'Mật khẩu phải có độ dài từ 8 - 16 ký tự.',
+                REQUIRED_NEW_PASSWORD: 'Vui lòng nhập mật khẩu mới.',
+                REQUIRED_NEW_PASSWORD_LENGTH: 'Mật khẩu mới phải có độ dài từ 8 - 16 ký tự.',
             },
 
             OTHER: {
-                ERROR: 'An unexpected error has occurred',
+                ERROR: 'Đã xảy ra lỗi. Vui lòng thử lại.',
             },
         },
 
         I18N: {
             CHANGE_LANGUAGE: {
-                SUCCESS: 'Change language successfully.',
-                FAILED: 'Language change failed.',
+                SUCCESS: 'Đã thay đổi ngôn ngữ.',
+                FAILED: 'Đã xảy ra lỗi. Vui lòng thử lại.',
             },
         },
     },
 
     LOGIN: {
         ID: 'User ID',
-        PASSWORD: 'Password',
-        BUTTON_TEXT: 'Login',
+        PASSWORD: 'Mật khẩu',
+        BUTTON_TEXT: 'Đăng nhập',
     },
 
-    PAGE_TITLE: {
-        USER_MANAGEMENT: 'User Management',
+    TOPBAR: {
+        LOGGED_IN: 'Đã đăng nhập',
+        LOGOUT: 'Đăng xuất',
+    },
+
+    DASHBOARD: {
+        DEPARTMENT: 'Phòng ban',
+        CATEGORY: 'Danh mục',
+        SEE_MORE_INFO: 'Xem thêm thông tin',
+        LIKES: 'lượt thích',
+        DISLIKES: 'lượt không thích',
+        VIEWS: 'lượt xem',
+        COMMENTS: 'lượt bình luận',
+        LIKE: 'Thích',
+        DISLIKE: 'Không thích',
+        VIEW: 'Xem',
+        COMMENT: 'Bình luận',
+        ANONYMOUS_MODE: 'Chế độ ẩn danh',
+        LOADING: 'Đang tải...',
+        NO_DATA: 'Không có dữ liệu',
+        PLEASE_WAIT: 'Vui lòng đợi...',
+        WRITE_COMMENT_HERE: 'Viết bình luận tại đây...',
     },
 
     BUTTON: {
         PDF: 'PDF',
-        REGISTER: 'Register',
-        CLEAR_ALL: 'Clear All',
-        APPLY: 'Apply',
-        DETAIL: 'Detail',
-        DELETE: 'Delete',
-        BACK: 'Back',
-        SAVE: 'Save',
-        EDIT: 'Edit',
-    },
-
-    FILTER: {
-        TITLE: 'Filter',
+        REGISTER: 'Đăng ký',
+        APPLY: 'Áp dụng',
+        DETAIL: 'Chi tiết',
+        DELETE: 'Xóa',
+        BACK: 'Quay lại',
+        SAVE: 'Lưu',
+        EDIT: 'Sửa',
     },
 
     TABLE: {
-        EMPTY: 'Table is Empty',
-        NOT_COMPLETED: 'Not Completed',
-        COMPLETED: 'Completed',
+        EMPTY: 'Không có dữ liệu',
+        NOT_COMPLETED: 'Chưa hoàn thành',
+        COMPLETED: 'Đã hoàn thành',
     },
 
     MODAL: {
-        DELETE_CONFIRMATION: 'Are you sure to delete 【{name}】?',
-        YES: 'Yes',
-        NO: 'No',
+        DELETE_CONFIRMATION: 'Bạn có chắc chắn muốn xóa ?',
+        YES: 'Có',
+        NO: 'Không',
     },
 
     OVERLAY: {
-        PLEASE_WAIT: 'Please Wait',
-    },
-
-    PLACE_HOLDER: {
-        PLEASE_SELECT: '-- Please Select --',
-    },
-
-    DATE: {
-        YEAR: 'Year',
-        MONTH: 'Month',
-        DAY: 'Day',
+        PLEASE_WAIT: 'Vui lòng chờ...',
     },
 
     NAVBAR: {
-        LOGOUT: 'Logout',
-        ENGLISH: 'English',
-        VIETNAMESE: 'Vietnamese',
-    },
-
-    DEV: {
-        LANGUAGE: 'Language',
-        ENGLISH: 'English',
-        VIETNAMESE: 'Vietnamese',
+        LOGOUT: 'Đăng xuất',
+        ENGLISH: 'Tiếng Anh',
+        VIETNAMESE: 'Tiếng Việt',
     },
 
     PAGINATION: {
-        DISPLAY_PER_PAGE: 'Per Page',
+        DISPLAY_PER_PAGE: 'Hiển thị',
     },
 
     SESSION_TIMEOUT: {
         TITLE: 'Session timeout',
-        MESSAGE: 'Your session has expired',
+        MESSAGE: 'Your session has expired. Please login again.',
     },
 };

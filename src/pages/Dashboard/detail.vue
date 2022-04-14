@@ -16,7 +16,7 @@
 						animation="spin"
 					/>
 					<p style="margin-top: 10px; color: #7366ff">
-						{{ "Xin vui lòng chờ" }}
+						{{ $t('DASHBOARD.PLEASE_WAIT') }}
 					</p>
 				</div>
 			</template>
@@ -58,7 +58,8 @@
 								<v-col cols="12" lg="5">
 									<span class="text-small">
 										<strong>
-											<i class="fas fa-building mr-3" />Department:
+											<i class="fas fa-building mr-3" />
+											<span>{{ $t('DASHBOARD.DEPARTMENT') }}:</span>
 										</strong>
 										{{ department_name }}
 									</span>
@@ -67,7 +68,8 @@
 								<v-col cols="12" lg="5" class="text-center">
 									<span class="text-small">
 										<strong>
-											<i class="fas fa-box-open mr-3" />Category:
+											<i class="fas fa-box-open mr-3" />
+											<span>{{ $t('DASHBOARD.CATEGORY') }}:</span>
 										</strong>
 										{{ category_name }}
 									</span>
@@ -121,25 +123,25 @@
 					<v-row class="mt-3">
 						<v-col cols="3" lg="3" class="text-center">
 							<span class="like-total text-underline">{{
-								totalLikes + " likes"
+								totalLikes + " " + $t('DASHBOARD.LIKES')
 							}}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
 							<span class="comment-total text-underline">{{
-								total_views + " views"
+								total_views + " " + $t('DASHBOARD.VIEWS')
 							}}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
 							<span class="comment-total text-underline">{{
-								total_comments + " comments"
+								total_comments + " " + $t('DASHBOARD.COMMENTS')
 							}}</span>
 						</v-col>
 
 						<v-col cols="3" lg="3" class="text-center">
 							<span class="share-total text-underline mr-3">{{
-								totalDislikes + " dislike"
+								totalDislikes + " " + $t('DASHBOARD.DISLIKES')
 							}}</span>
 						</v-col>
 					</v-row>
@@ -156,7 +158,7 @@
 							@click.prevent="handleUnLike()"
 						>
 							<v-icon color="blue" small>mdi-thumb-up</v-icon>
-							<span class="button-text">Like</span>
+							<span class="button-text">{{ $t('DASHBOARD.LIKE') }}</span>
 						</v-btn>
 						<v-btn
 							v-else
@@ -165,7 +167,7 @@
 							@click.prevent="handleLike()"
 						>
 							<v-icon color="black" small>mdi-thumb-up</v-icon>
-							<span class="button-text">Like</span>
+							<span class="button-text">{{ $t('DASHBOARD.LIKE') }}</span>
 						</v-btn>
 					</v-col>
 
@@ -176,7 +178,7 @@
 							@click="isShowCommentSector = !isShowCommentSector"
 						>
 							<v-icon small>mdi-message</v-icon>
-							<span class="button-text">Comment</span>
+							<span class="button-text">{{ $t('DASHBOARD.COMMENT') }}</span>
 						</v-btn>
 					</v-col>
 
@@ -188,7 +190,7 @@
 							@click.prevent="handleUnDislike()"
 						>
 							<v-icon color="red" small>mdi-thumb-down</v-icon>
-							<span class="button-text">Dislike</span>
+							<span class="button-text">{{ $t('DASHBOARD.DISLIKE') }}</span>
 						</v-btn>
 
 						<v-btn
@@ -198,7 +200,7 @@
 							@click.prevent="handleDislike()"
 						>
 							<v-icon color="black" small>mdi-thumb-down</v-icon>
-							<span class="button-text">Dislike</span>
+							<span class="button-text">{{ $t('DASHBOARD.DISLIKE') }}</span>
 						</v-btn>
 					</v-col>
 				</v-row>
@@ -215,7 +217,7 @@
 									size="lg"
 									class="ml-3"
 								>
-									<span style="font-size: 12px">Anonymous Mode</span>
+									<span style="font-size: 12px">{{ $t('DASHBOARD.ANONYMOUS_MODE') }}</span>
 								</b-form-checkbox>
 							</v-col>
 						</v-row>
@@ -236,7 +238,7 @@
 							<v-col cols="10" lg="11">
 								<v-text-field
 									v-model="commentContent"
-									label="Write comment here..."
+									:label="$t('DASHBOARD.WRITE_COMMENT_HERE')"
 									filled
 									hide-details
 									rounded
@@ -283,8 +285,8 @@
 									/>
 
 									<div class="comment-section-button ml-6 mt-1">
-										<span class="text-underline">Like</span>
-										<span class="ml-3 text-underline">Comment</span>
+										<span class="text-underline">{{ $t('DASHBOARD.LIKE') }}</span>
+										<span class="ml-3 text-underline">{{ $t('DASHBOARD.COMMENT') }}</span>
 										<span class="ml-3 text-underline">{{
 											comment.createdAt | moment("from")
 										}}</span>

@@ -16,7 +16,7 @@
 						animation="spin"
 					/>
 					<p style="margin-top: 10px; color: #7366ff">
-						{{ "Please wait..." }}
+						{{ $t('DASHBOARD.PLEASE_WAIT') }}
 					</p>
 				</div>
 			</template>
@@ -60,7 +60,8 @@
 												<v-col cols="12" lg="5">
 													<span class="text-small">
 														<strong>
-															<i class="fas fa-building mr-3" />Department:
+															<i class="fas fa-building mr-3" />
+															<span>{{ $t('DASHBOARD.DEPARTMENT') }}:</span>
 														</strong>
 														{{ post.department.departmentName }}
 													</span>
@@ -69,7 +70,8 @@
 												<v-col cols="12" lg="5" class="text-center">
 													<span class="text-small">
 														<strong>
-															<i class="fas fa-box-open mr-3" />Category:
+															<i class="fas fa-box-open mr-3" />
+															<span>{{ $t('DASHBOARD.CATEGORY') }}:</span>
 														</strong>
 														{{ post.category.categoryName }}
 													</span>
@@ -87,7 +89,9 @@
 										:opacity=".5"
 									>
 										<v-btn color="#FFD154" @click.prevent="userReadIdea(post._id)">
-											<span style="color: #002795; font-weight: bold;">See more info</span>
+											<span style="color: #002795; font-weight: bold;">
+												{{ $t('DASHBOARD.SEE_MORE_INFO') }}
+											</span>
 										</v-btn>
 									</v-overlay>
 								</v-fade-transition>
@@ -138,7 +142,7 @@
 							animation="spin-pulse"
 							font-scale="2"
 						/>
-						<span style="color: #ffffff">Loading...</span>
+						<span style="color: #ffffff">{{ $t('DASHBOARD.LOADING') }}</span>
 					</v-btn>
 				</v-col>
 			</v-row>
@@ -152,7 +156,7 @@
 							animation=""
 							font-scale="2"
 						/>
-						<span style="color: #ffffff">No Data...</span>
+						<span style="color: #ffffff">{{ $t('DASHBOARD.NO_DATA') }}</span>
 					</v-btn>
 				</v-col>
 			</v-row>

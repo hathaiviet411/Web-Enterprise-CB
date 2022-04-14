@@ -1,5 +1,12 @@
 export default {
-    ROUTER: {},
+    ROUTER: {
+        DASHBOARD: 'Dashboard',
+        CHART: 'Chart',
+        USER: 'User',
+        CATEGORY: 'Category',
+        IDEA: 'Idea',
+        DEPARTMENT: 'Department',
+    },
 
     PAGE404: {
         OOPS: 'Oops!',
@@ -36,12 +43,6 @@ export default {
                 REQUIRED_PASSWORD_LENGTH: 'Password length must be between 8 - 16 characters.',
                 REQUIRED_NEW_PASSWORD: 'New password is required.',
                 REQUIRED_NEW_PASSWORD_LENGTH: 'New password must be between 8 - 16 characters.',
-                VALIDATION_WAGE_INPUT: 'The wage is invalid.',
-                DUPLICATED_USER_ID: 'The User ID is already exists.',
-                ID_LENGTH_VALIDATION: 'The user ID must be between 1 and 8 characters.',
-                ROLE_HEADQUARTER: 'Headquarter',
-                ROLE_OPERATOR: 'Operator',
-                ROLE_TEAM: 'Team',
             },
 
             OTHER: {
@@ -63,24 +64,39 @@ export default {
         BUTTON_TEXT: 'Login',
     },
 
-    PAGE_TITLE: {
-        USER_MANAGEMENT: 'User Management',
+    TOPBAR: {
+        LOGGED_IN: 'Logged in',
+        LOGOUT: 'Logout',
+    },
+
+    DASHBOARD: {
+        DEPARTMENT: 'Department',
+        CATEGORY: 'Category',
+        SEE_MORE_INFO: 'See more info',
+        LIKES: 'Likes',
+        DISLIKES: 'Dislikes',
+        VIEWS: 'Views',
+        COMMENTS: 'Comments',
+        LIKE: 'Likes',
+        DISLIKE: 'Dislikes',
+        VIEW: 'Views',
+        COMMENT: 'Comment',
+        ANONYMOUS_MODE: 'Anonymous mode',
+        LOADING: 'Loading...',
+        NO_DATA: 'No data',
+        PLEASE_WAIT: 'Please wait...',
+        WRITE_COMMENT_HERE: 'Write comment here...',
     },
 
     BUTTON: {
         PDF: 'PDF',
         REGISTER: 'Register',
-        CLEAR_ALL: 'Clear All',
         APPLY: 'Apply',
         DETAIL: 'Detail',
         DELETE: 'Delete',
         BACK: 'Back',
         SAVE: 'Save',
         EDIT: 'Edit',
-    },
-
-    FILTER: {
-        TITLE: 'Filter',
     },
 
     TABLE: {
@@ -90,7 +106,7 @@ export default {
     },
 
     MODAL: {
-        DELETE_CONFIRMATION: 'Are you sure to delete 【{name}】?',
+        DELETE_CONFIRMATION: 'Are you sure to delete ?',
         YES: 'Yes',
         NO: 'No',
     },
@@ -99,24 +115,8 @@ export default {
         PLEASE_WAIT: 'Please Wait',
     },
 
-    PLACE_HOLDER: {
-        PLEASE_SELECT: '-- Please Select --',
-    },
-
-    DATE: {
-        YEAR: 'Year',
-        MONTH: 'Month',
-        DAY: 'Day',
-    },
-
     NAVBAR: {
         LOGOUT: 'Logout',
-        ENGLISH: 'English',
-        VIETNAMESE: 'Vietnamese',
-    },
-
-    DEV: {
-        LANGUAGE: 'Language',
         ENGLISH: 'English',
         VIETNAMESE: 'Vietnamese',
     },
@@ -127,6 +127,6 @@ export default {
 
     SESSION_TIMEOUT: {
         TITLE: 'Session timeout',
-        MESSAGE: 'Your session has expired',
+        MESSAGE: 'Your session has expired. Please login again.',
     },
 };

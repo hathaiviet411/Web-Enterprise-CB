@@ -67,7 +67,7 @@
 						<v-list-item-subtitle>
 							<v-chip class="ma-2" color="success">
 								<v-icon left x-small>mdi-check</v-icon>
-								Logged in
+								<span>{{ $t('TOPBAR.LOGGED_IN') }}</span>
 							</v-chip>
 						</v-list-item-subtitle>
 					</v-list-item-content>
@@ -99,9 +99,9 @@ export default {
     data() {
         return {
             menus: [
-                { title: 'Profile', icon: 'mdi-account' },
-                { title: 'Change Password', icon: 'mdi-key' },
-                { title: 'Logout', icon: 'mdi-logout' },
+                // { title: 'Profile', icon: 'mdi-account' },
+                // { title: 'Change Password', icon: 'mdi-key' },
+                { title: this.$t('TOPBAR.LOGOUT'), icon: 'mdi-logout' },
             ],
             items: [
                 { divider: true, inset: true },
