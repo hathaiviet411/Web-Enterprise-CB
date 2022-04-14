@@ -64,6 +64,13 @@ module.exports = {
           ? parseInt(totalRecord / 5)
           : parseInt(totalRecord / 5) + 1;
       for (allIdea of allIdeas) {
+        const likes = await Like.find({ idea: allIdea._id }).count();
+        const dislikes = await Dislike.find({ idea: allIdea._id }).count();
+        allIdea = {
+          ...allIdea,
+          likes: likes,
+          dislikes: dislikes,
+        };
         ideas.push(allIdea);
       }
 
