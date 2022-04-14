@@ -2,10 +2,10 @@ export default {
     ROUTER: {
         DASHBOARD: 'Dashboard',
         CHART: 'Chart',
-        USER: 'User',
-        CATEGORY: 'Category',
-        IDEA: 'Idea',
-        DEPARTMENT: 'Department',
+        USER: 'User Management',
+        CATEGORY: 'Category Management',
+        IDEA: 'Idea Management',
+        DEPARTMENT: 'Department Management',
     },
 
     PAGE404: {
@@ -86,6 +86,11 @@ export default {
         NO_DATA: 'No data',
         PLEASE_WAIT: 'Please wait...',
         WRITE_COMMENT_HERE: 'Write comment here...',
+    },
+
+    DEPARTMENT: {
+        DEPARTMENT_NAME: 'Department Name',
+        NEW_DEPARTMENT: 'New Department',
     },
 
     BUTTON: {

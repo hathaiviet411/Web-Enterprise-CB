@@ -16,7 +16,7 @@
 				</v-list-item-icon>
 
 				<v-list-item-content>
-					<v-list-item-title>{{ item.name }}</v-list-item-title>
+					<v-list-item-title>{{ $t(item.name) }}</v-list-item-title>
 				</v-list-item-content>
 			</v-list-item>
 		</v-list>
@@ -74,42 +74,42 @@ export default {
             this.listRoutes = [
                 {
                     icon: 'fas fa-home-lg',
-                    name: this.$t('ROUTER.DASHBOARD'),
+                    name: 'ROUTER.DASHBOARD',
                     url: '/dashboard/index',
                     disabled: false,
                     isHidden: '',
                 },
                 {
                     icon: 'fas fa-chart-bar',
-                    name: this.$t('ROUTER.CHART'),
+                    name: 'ROUTER.CHART',
                     url: '/chart/index',
                     disabled: false,
                     isHidden: (this.role === 'Quality Assurance Manager' || this.role === 'Admin') ? '' : 'd-none',
                 },
                 {
                     icon: 'mdi-account',
-                    name: this.$t('ROUTER.USER'),
+                    name: 'ROUTER.USER',
                     url: '/user/index',
                     disabled: false,
                     isHidden: '',
                 },
                 {
                     icon: 'mdi-clipboard-list-outline',
-                    name: this.$t('ROUTER.CATEGORY'),
+                    name: 'ROUTER.CATEGORY',
                     url: '/category/index',
                     disabled: false,
                     isHidden: '',
                 },
                 {
                     icon: 'fas fa-lightbulb-on',
-                    name: this.$t('ROUTER.IDEA'),
+                    name: 'ROUTER.IDEA',
                     url: '/idea/index',
                     disabled: false,
                     isHidden: '',
                 },
                 {
                     icon: 'mdi-city',
-                    name: this.$t('ROUTER.DEPARTMENT'),
+                    name: 'ROUTER.DEPARTMENT',
                     url: '/department/index',
                     disabled: false,
                     isHidden: '',

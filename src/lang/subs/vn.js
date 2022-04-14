@@ -2,9 +2,9 @@ export default {
     ROUTER: {
         DASHBOARD: 'Bảng điều khiển',
         CHART: 'Biểu đồ',
-        USER: 'Người dùng',
-        CATEGORY: 'Danh mục',
-        IDEA: 'Ý tưởng',
+        USER: 'Quản li người dùng',
+        CATEGORY: 'Quản lí danh mục',
+        IDEA: 'Quản lí ý tưởng',
         DEPARTMENT: 'Phòng ban',
     },
 

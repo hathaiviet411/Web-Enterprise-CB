@@ -11,7 +11,7 @@
 				<v-toolbar flat elevation="6">
 					<v-row>
 						<v-col cols="6" class="text-left">
-							<v-toolbar-title>Department Management</v-toolbar-title>
+							<v-toolbar-title>{{ $t('ROUTER.DEPARTMENT') }}</v-toolbar-title>
 						</v-col>
 
 						<v-col cols="6" class="text-center">
