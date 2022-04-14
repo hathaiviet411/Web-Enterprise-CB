@@ -8,7 +8,7 @@
 				:key="index"
 				link
 				:disabled="item.disabled"
-				:class="['route-item', isSelected, isDisplay]"
+				:class="['route-item,', isSelected, item.isHidden]"
 				@click="handleNavigation(item)"
 			>
 				<v-list-item-icon>
@@ -36,57 +36,25 @@ export default {
     },
     data() {
         return {
-            listRoutes: [
-                {
-                    icon: 'fas fa-home-lg',
-                    name: 'Dashboard',
-                    url: '/dashboard/index',
-                    disabled: false,
-                },
-                {
-                    icon: 'fas fa-chart-bar',
-                    name: 'Chart',
-                    url: '/chart/index',
-                    disabled: false,
-                },
-                {
-                    icon: 'mdi-account',
-                    name: 'User',
-                    url: '/user/index',
-                    disabled: false,
-                },
-                {
-                    icon: 'mdi-clipboard-list-outline',
-                    name: 'Category',
-                    url: '/category/index',
-                    disabled: false,
-                },
-                {
-                    icon: 'fas fa-lightbulb-on',
-                    name: 'Idea',
-                    url: '/idea/index',
-                    disabled: false,
-                },
-                {
-                    icon: 'mdi-city',
-                    name: 'Department',
-                    url: '/department/index',
-                    disabled: false,
-                },
-            ],
+            listRoutes: [],
 
             drawerStorage: this.drawerStorage,
             isSelected: '',
             isDisplay: '',
         };
     },
+    computed: {
+        role() {
+            return this.$store.getters.role;
+        },
+    },
     watch: {
-        $route() {},
         drawer() {
             this.drawerStorage = !this.drawer;
         },
     },
     created() {
+        this.initialListRoutes();
         this.handleSetDataWhenCreated();
     },
     methods: {
@@ -99,6 +67,54 @@ export default {
                 }
             }
             this.$router.push({ path: `${item.url}` });
+        },
+
+        initialListRoutes() {
+            console.log(this.role);
+            this.listRoutes = [
+                {
+                    icon: 'fas fa-home-lg',
+                    name: 'Dashboard',
+                    url: '/dashboard/index',
+                    disabled: false,
+                    isHidden: '',
+                },
+                {
+                    icon: 'fas fa-chart-bar',
+                    name: 'Chart',
+                    url: '/chart/index',
+                    disabled: false,
+                    isHidden: (this.role === 'Quality Assurance Manager' || this.role === 'Admin') ? '' : 'd-none',
+                },
+                {
+                    icon: 'mdi-account',
+                    name: 'User',
+                    url: '/user/index',
+                    disabled: false,
+                    isHidden: '',
+                },
+                {
+                    icon: 'mdi-clipboard-list-outline',
+                    name: 'Category',
+                    url: '/category/index',
+                    disabled: false,
+                    isHidden: '',
+                },
+                {
+                    icon: 'fas fa-lightbulb-on',
+                    name: 'Idea',
+                    url: '/idea/index',
+                    disabled: false,
+                    isHidden: '',
+                },
+                {
+                    icon: 'mdi-city',
+                    name: 'Department',
+                    url: '/department/index',
+                    disabled: false,
+                    isHidden: '',
+                },
+            ];
         },
 
         handleSetDataWhenCreated() {

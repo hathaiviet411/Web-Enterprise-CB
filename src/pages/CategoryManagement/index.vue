@@ -29,7 +29,7 @@
 					<v-col cols="12" class="text-center">
 						<v-dialog v-model="dialog" max-width="500px" persistent>
 							<template v-slot:activator="{ on, attrs }">
-								<v-btn color="primary" dark class="mb-2 open-register-modal-btn" v-bind="attrs" v-on="on">
+								<v-btn v-if="role !== 'Quality Assurance Coordinator' && role !== 'Staff'" color="primary" dark class="mb-2 open-register-modal-btn" v-bind="attrs" v-on="on">
 									<v-icon left>mdi-plus-box</v-icon>
 									<span>New Category</span>
 								</v-btn>
@@ -217,12 +217,14 @@
 
 			<template v-slot:[`item.actions`]="{ item }">
 				<v-icon
+					v-if="role !== 'Quality Assurance Manager' && role !== 'Quality Assurance Coordinator' && role !== 'Staff'"
 					small
 					class="mr-2"
 					style="color: #051367"
 					@click="editItem(item)"
 				>mdi-pencil</v-icon>
 				<v-icon
+					v-if="role !== 'Quality Assurance Coordinator' && role !== 'Staff'"
 					small
 					style="color: #e84545"
 					@click="deleteItem(item)"
@@ -351,6 +353,10 @@ export default {
 
         formTitle() {
             return this.editedIndex === -1 ? 'New Category' : 'Edit Category';
+        },
+
+        role() {
+            return this.$store.getters.role;
         },
     },
 
