@@ -232,7 +232,7 @@
 			</template>
 
 			<template v-slot:[`item.csv`]="{ item }">
-				<v-btn min-width="100px" color="success" @click="handleDownloadCSV(item.id)">
+				<v-btn v-if="role === 'Quality Assurance Manager' || role === 'Admin'" min-width="100px" color="success" @click="handleDownloadCSV(item.id)">
 					<v-icon>fas fa-file-csv</v-icon>
 				</v-btn>
 			</template>

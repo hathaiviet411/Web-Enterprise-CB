@@ -519,7 +519,7 @@
 			</template>
 
 			<template v-slot:[`item.zip`]="{ zip }">
-				<v-btn min-width="100px" color="success" @click="handleDownloadZip(zip.id)">
+				<v-btn v-if="role === 'Quality Assurance Manager' || role === 'Admin'" min-width="100px" color="success" @click="handleDownloadZip(zip.id)">
 					<v-icon>fas fa-file-archive</v-icon>
 				</v-btn>
 			</template>
@@ -648,6 +648,10 @@ export default {
 
         isChangeCurrentPage() {
             return this.current_page;
+        },
+
+        role() {
+            return this.$store.getters.role;
         },
     },
 
