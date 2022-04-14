@@ -49,7 +49,7 @@
 										<v-list-item-content>
 											<v-row>
 												<v-col cols="12">
-													<v-btn color="primary" block elevation="5" @click="handleSort('time')">Time</v-btn>
+													<v-btn color="primary" block elevation="5" @click="handleSort('time')">Newest</v-btn>
 												</v-col>
 
 												<v-col cols="12">
@@ -57,7 +57,7 @@
 												</v-col>
 
 												<v-col cols="12">
-													<v-btn color="primary" block elevation="5" @click="handleSort('like')">Like</v-btn>
+													<v-btn color="primary" block elevation="5" @click="handleSort('like')">Popular</v-btn>
 												</v-col>
 											</v-row>
 										</v-list-item-content>
@@ -648,7 +648,8 @@ export default {
                 { text: 'Idea', align: 'start', sortable: false, value: 'ideaTitle' },
                 { text: 'Category', sortable: false, value: 'category' },
                 { text: 'Department', sortable: false, value: 'department' },
-                { text: 'Likes', sortable: false, value: 'pointCount' },
+                { text: 'Likes', sortable: false, value: 'likes' },
+                { text: 'Dislikes', sortable: false, value: 'dislikes' },
                 { text: 'Views', sortable: false, value: 'viewCount' },
                 { text: 'Author', sortable: false, value: 'user' },
                 { text: 'Posted Date', sortable: false, value: 'createdAt' },
