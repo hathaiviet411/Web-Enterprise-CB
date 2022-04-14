@@ -1,6 +1,7 @@
 import { shallowMount, createLocalVue, mount } from '@vue/test-utils';
 import Category from '../../pages/CategoryManagement/index.vue';
 import Vuetify from 'vuetify';
+import store from '@/store';
 
 describe('Category Management: Component Rendering UT', () => {
     const localVue = createLocalVue();
@@ -14,6 +15,7 @@ describe('Category Management: Component Rendering UT', () => {
         const wrapper = shallowMount(Category, {
             localVue,
             vuetify,
+            store,
         });
 
         const CategoryScreen = wrapper.find('.category-screen');
@@ -26,6 +28,7 @@ describe('Category Management: Component Rendering UT', () => {
         const wrapper = shallowMount(Category, {
             localVue,
             vuetify,
+            store,
         });
 
         const CategoryTable = wrapper.find('.table-category-list');
@@ -57,6 +60,7 @@ describe('Category Management: Functionality UT', () => {
                 getListCategory,
             },
             vuetify,
+            store,
         });
 
         await wrapper.vm.getListCategory();
@@ -72,6 +76,7 @@ describe('Category Management: Functionality UT', () => {
                 getListCategory,
             },
             vuetify,
+            store,
         });
 
         const vFields = [
@@ -83,6 +88,7 @@ describe('Category Management: Functionality UT', () => {
             },
             { text: 'First Closure Date', value: 'firstClosureDate', sortable: true },
             { text: 'Final Closure Date', value: 'finalClosureDate', sortable: true },
+            { text: 'CSV Download', value: 'csv', sortable: true, align: 'center' },
             { text: 'Actions', value: 'actions', sortable: false },
         ];
 
@@ -104,6 +110,7 @@ describe('Category Management: Functionality UT', () => {
                 createNewCategory,
             },
             vuetify,
+            store,
         });
 
         const btnRegister = (wrapper.find('.open-register-modal-btn').exists());
@@ -124,6 +131,7 @@ describe('Category Management: Functionality UT', () => {
                 close,
             },
             vuetify,
+            store,
         });
 
         const btnClose = (wrapper.find('.open-register-modal-btn').exists());
@@ -142,6 +150,7 @@ describe('Category Management: Functionality UT', () => {
                 updateCategory,
             },
             vuetify,
+            store,
         });
 
         const btnUpdate = (wrapper.find('.open-register-modal-btn').exists());
@@ -162,6 +171,7 @@ describe('Category Management: Functionality UT', () => {
                 close,
             },
             vuetify,
+            store,
         });
 
         const btnClose = (wrapper.find('.open-register-modal-btn').exists());
@@ -180,6 +190,7 @@ describe('Category Management: Functionality UT', () => {
                 removeCategory,
             },
             vuetify,
+            store,
         });
 
         const btnDelete = (wrapper.find('.open-register-modal-btn').exists());
@@ -199,6 +210,7 @@ describe('Category Management: Functionality UT', () => {
                 closeDelete,
             },
             vuetify,
+            store,
         });
 
         const btnClose = (wrapper.find('.open-register-modal-btn').exists());

@@ -12,7 +12,10 @@ describe('Chart: Functionality UT', () => {
         vuetify = new Vuetify();
     });
 
-    const initialData = jest.fn();
+    // const initialData = jest.fn();
+
+    const getChartIdeaHaveMostLike = jest.fn();
+    const getChartIdeaHaveMostView = jest.fn();
 
     // const initialBarChartLike = jest.fn();
     // const initialBarChartDislike = jest.fn();
@@ -27,14 +30,18 @@ describe('Chart: Functionality UT', () => {
             localVue,
             vuetify,
             methods: {
-                initialData,
+                getChartIdeaHaveMostLike,
+                getChartIdeaHaveMostView,
             },
             Chartjs,
             store,
         });
 
-        wrapper.vm.initialData();
-        expect(initialData).toHaveBeenCalled();
+        wrapper.vm.getChartIdeaHaveMostLike();
+        expect(getChartIdeaHaveMostLike).toHaveBeenCalled();
+
+        wrapper.vm.getChartIdeaHaveMostView();
+        expect(getChartIdeaHaveMostView).toHaveBeenCalled();
 
         wrapper.destroy();
     });

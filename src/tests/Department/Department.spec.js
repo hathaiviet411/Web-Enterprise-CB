@@ -1,6 +1,7 @@
 import { shallowMount, createLocalVue, mount } from '@vue/test-utils';
 import Department from '../../pages/DepartmentManagement/index.vue';
 import Vuetify from 'vuetify';
+import store from '@/store';
 
 describe('Department Management: Component Rendering UT', () => {
     const localVue = createLocalVue();
@@ -14,6 +15,7 @@ describe('Department Management: Component Rendering UT', () => {
         const wrapper = shallowMount(Department, {
             localVue,
             vuetify,
+            store,
         });
 
         const DepartmentScreen = wrapper.find('.department-screen');
@@ -26,6 +28,7 @@ describe('Department Management: Component Rendering UT', () => {
         const wrapper = shallowMount(Department, {
             localVue,
             vuetify,
+            store,
         });
 
         const DepartmentTable = wrapper.find('.table-department-list');
@@ -57,6 +60,7 @@ describe('Department Management: Functionality UT', () => {
                 getDepartmentData,
             },
             vuetify,
+            store,
         });
 
         expect(getDepartmentData).toHaveBeenCalled();
@@ -71,6 +75,7 @@ describe('Department Management: Functionality UT', () => {
                 getDepartmentData,
             },
             vuetify,
+            store,
         });
 
         const vFields = [
@@ -104,6 +109,7 @@ describe('Department Management: Functionality UT', () => {
                 createNewDepartment,
             },
             vuetify,
+            store,
         });
 
         const ButtonOpenModalRegister = (wrapper.find('.open-register-modal-btn').exists());
@@ -123,6 +129,7 @@ describe('Department Management: Functionality UT', () => {
                 close,
             },
             vuetify,
+            store,
         });
 
         const ButtonCloseModalRegister = (wrapper.find('.open-register-modal-btn').exists());
@@ -141,6 +148,7 @@ describe('Department Management: Functionality UT', () => {
                 close,
             },
             vuetify,
+            store,
         });
 
         const ButtonCloseModalUpdate = (wrapper.find('.open-register-modal-btn').exists());
@@ -159,6 +167,7 @@ describe('Department Management: Functionality UT', () => {
                 closeDelete,
             },
             vuetify,
+            store,
         });
 
         const ButtonCloseModalDelete = (wrapper.find('.open-register-modal-btn').exists());
@@ -177,6 +186,7 @@ describe('Department Management: Functionality UT', () => {
                 updateDepartment,
             },
             vuetify,
+            store,
         });
 
         const ButtonOpenModalUpdate = (wrapper.find('.open-register-modal-btn').exists());
@@ -196,6 +206,7 @@ describe('Department Management: Functionality UT', () => {
                 deleteDepartment,
             },
             vuetify,
+            store,
         });
 
         const ButtonOpenModalDelete = (wrapper.find('.open-register-modal-btn').exists());
