@@ -103,10 +103,15 @@
 									{{ idea_title }}
 								</h5>
 							</v-col>
+
 							<v-col cols="12">
 								<h5 style="color: #ffd154" class="post-content">
 									{{ idea_content }}
 								</h5>
+							</v-col>
+
+							<v-col v-for="(file, indexFile) in idea_file" :key="indexFile" cols="12">
+								<a :href="file" style="color: #FFD154;" class="post-content">{{ file.split('uploads/')[1] }}</a>
 							</v-col>
 						</v-row>
 					</div>
@@ -339,6 +344,7 @@ export default {
             category_name: '',
             idea_picture: '',
             idea_title: '',
+            idea_file: [],
             idea_content: '',
             total_views: '',
             total_comments: '',
@@ -369,6 +375,7 @@ export default {
                     this.category_name = this.DATA.idea.category.categoryName;
                     this.idea_picture = this.DATA.idea.ideaPicture;
                     this.idea_title = this.DATA.idea.ideaTitle;
+                    this.idea_file = this.DATA.idea.ideaFile;
                     this.idea_content = this.DATA.idea.ideaContent;
                     this.total_views = this.DATA.idea.viewCount;
                     this.total_comments = this.DATA.comments.length;

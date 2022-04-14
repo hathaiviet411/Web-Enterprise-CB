@@ -231,6 +231,12 @@
 				>mdi-delete</v-icon>
 			</template>
 
+			<template v-slot:[`item.csv`]="{ item }">
+				<v-btn min-width="100px" color="success" @click="handleDownloadCSV(item.id)">
+					<v-icon>fas fa-file-csv</v-icon>
+				</v-btn>
+			</template>
+
 			<template v-slot:no-data>
 				<span>{{ "Table is Empty" }}</span>
 			</template>
@@ -298,6 +304,7 @@ export default {
                 },
                 { text: 'First Closure Date', value: 'firstClosureDate', sortable: true },
                 { text: 'Final Closure Date', value: 'finalClosureDate', sortable: true },
+                { text: 'CSV Download', value: 'csv', sortable: true, align: 'center' },
                 { text: 'Actions', value: 'actions', sortable: false },
             ],
 
@@ -532,6 +539,11 @@ export default {
                 created_date: false,
                 expired_date: false,
             };
+        },
+
+        handleDownloadCSV(id) {
+            // const URL = `${URL_GET_CATEGORY}/${id}/csv`;
+            // window.open(URL);
         },
     },
 };

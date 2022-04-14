@@ -114,6 +114,10 @@
 											<v-col cols="12">
 												<h5 style="color: #FFD154;" class="post-content">{{ post.ideaContent }}</h5>
 											</v-col>
+
+											<v-col v-for="(file, indexFile) in post.ideaFile" :key="indexFile" cols="12">
+												<span style="color: #FFD154;" class="post-content">{{ file.split('uploads/')[1] }}</span>
+											</v-col>
 										</v-row>
 									</div>
 								</v-card-text>
@@ -160,8 +164,6 @@
 // Apis import
 import { getAllIdea } from '@/api/modules/idea';
 
-import DefaultCutCho from '@/assets/images/default-cut-cho.png';
-
 import socket from '@/socket/socket';
 
 // Const APIs Url
@@ -173,8 +175,6 @@ export default {
     name: 'Dashboard',
     data() {
         return {
-            DefaultCutCho: DefaultCutCho,
-
             DATA: [],
 
             isShowCommentSector: false,
@@ -264,44 +264,6 @@ export default {
             };
             socket.emit('idea', payload);
         },
-
-        // handleLikeIdea(data) {
-        //     this.isClickLikeButton = true;
-        //     const payload = {
-        //         ideaId: data._id,
-        //     };
-        //     let responseSocket = {};
-
-        //     socket.emit('like:create', payload);
-
-        //     socket.on('like', (likes) => {
-        //         responseSocket = likes;
-        //         for (let i = 0; i < this.DATA.length; i++) {
-        //             if (this.DATA[i]._id === responseSocket['ideaId']) {
-        //                 this.DATA[i].likes = responseSocket['likes'];
-        //             }
-        //         }
-        //     });
-        // },
-
-        // handleUnLikeIdea(data) {
-        //     this.isClickLikeButton = false;
-        //     const payload = {
-        //         ideaId: data._id,
-        //     };
-        //     let responseSocket = {};
-        //     socket.emit('like:delete', payload);
-
-        //     socket.on('like', (likes) => {
-        //         responseSocket = likes;
-        //         console.log(responseSocket);
-        //         for (let i = 0; i < this.DATA.length; i++) {
-        //             if (this.DATA[i]._id === responseSocket['ideaId']) {
-        //                 this.DATA[i].likes = responseSocket['likes'];
-        //             }
-        //         }
-        //     });
-        // },
 
         toDetailScreen(id) {
             this.$router.push({ path: `/dashboard/detail/${id}` });

@@ -500,68 +500,6 @@
 						</v-card-actions>
 					</v-card>
 				</v-dialog>
-
-				<v-dialog v-model="dialogDelete" max-width="500px">
-					<v-card>
-						<v-card-title
-							class="text-h5"
-						>Are you sure you want to delete this idea?</v-card-title>
-
-						<v-card-text>
-							<v-container>
-								<v-row>
-									<v-col cols="12" sm="12" md="12">
-										<v-text-field
-											:value="editedItem.name"
-											label="Dessert name"
-											disabled
-										/>
-									</v-col>
-									<v-col cols="12" sm="12" md="12">
-										<v-text-field
-											:value="editedItem.calories"
-											label="Calories"
-											disabled
-										/>
-									</v-col>
-									<v-col cols="12" sm="12" md="12">
-										<v-text-field
-											:value="editedItem.fat"
-											label="Fat (g)"
-											disabled
-										/>
-									</v-col>
-									<v-col cols="12" sm="12" md="12">
-										<v-text-field
-											:value="editedItem.carbs"
-											label="Carbs (g)"
-											disabled
-										/>
-									</v-col>
-									<v-col cols="12" sm="12" md="12">
-										<v-text-field
-											:value="editedItem.protein"
-											label="Protein (g)"
-											disabled
-										/>
-									</v-col>
-								</v-row>
-							</v-container>
-						</v-card-text>
-
-						<v-card-actions>
-							<v-spacer />
-							<v-btn color="blue darken-1" text @click="closeDelete()">
-								<v-icon left>mdi-exit-to-app</v-icon>
-								<span>Cancel</span>
-							</v-btn>
-							<v-btn color="red darken-1" text @click="deleteItemConfirm()">
-								<v-icon left>mdi-delete-empty</v-icon>
-								<span>{{ "Confirm" }}</span>
-							</v-btn>
-						</v-card-actions>
-					</v-card>
-				</v-dialog>
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
@@ -578,6 +516,12 @@
 					style="color: #e84545"
 					@click="deleteItem(item)"
 				>mdi-delete</v-icon>
+			</template>
+
+			<template v-slot:[`item.zip`]="{ zip }">
+				<v-btn min-width="100px" color="success" @click="handleDownloadZip(zip.id)">
+					<v-icon>fas fa-file-archive</v-icon>
+				</v-btn>
 			</template>
 
 			<template v-slot:[`item.category`]="{ category }">
@@ -653,6 +597,7 @@ export default {
                 { text: 'Views', sortable: false, value: 'viewCount' },
                 { text: 'Author', sortable: false, value: 'user' },
                 { text: 'Posted Date', sortable: false, value: 'createdAt' },
+                { text: 'Zip Download', sortable: false, value: 'zip', align: 'center' },
                 { text: 'Actions', sortable: false, value: 'actions' },
             ],
 
@@ -939,6 +884,10 @@ export default {
             } else {
                 console.log('error');
             }
+        },
+
+        handleDownloadZip(id) {
+            // window.open(`${urlAPI.downloadZip}/${id}`);
         },
     },
 };
