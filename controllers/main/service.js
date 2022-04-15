@@ -30,36 +30,35 @@ module.exports = {
             index++
         }
 
-        console.log(data);
-
-        // const json2csv = new Parser()
-
-
         var fields = ['categoryName', 'startDate', 'firstClosureDate', 'finalClosureDate', 'isDisabled', 'createdAt', 'updatedAt']
-
         const ops = { fields }
         var csv = parse(data, ops);
 
         const directoryPath = cwd()
 
-        let file_name = `${Date.now()}.csv`
+        const slug = new Date().getFullYear()
+
+        let file_name = `${slug}_${Date.now()}.csv`
 
         var path = `${directoryPath}/public/csv/${file_name}`;
         fs.writeFile(path, csv, 'utf8', function (err, data) {
             if (err) { throw err; }
-            console.log('Created a new csv file.')
             return data
         });
 
-        const src = fs.createReadStream(path);
+        const response = fs.createReadStream(path);
         ctx.response.set("content-type", 'text/csv');
         ctx.response.set("content-disposition", `attachment; filename=${file_name}`);
-        ctx.body = src;
+        ctx.body = response;
     },
 
     async downloadZip(ctx) {
         // const { path } = ctx.request.body;
-        const path = '276270758_3862731587343623_2010198310967369279_n-17fc548c9e3.png'
+        const path = 'Business_Requirement-17fbc21e37c.docx'
+
+        const slug = new Date().getFullYear()
+
+        let file_name = `${slug}_${Date.now()}.zip`
 
         const zip = new AdmZip();
 
@@ -69,17 +68,16 @@ module.exports = {
         });
         const data = body.data;
 
-        zip.addFile('item', Buffer.from(data, "utf8"), "download zip folder", 0644 << 16)
+        zip.addFile(`item`, Buffer.from(data, "utf8"), "download zip folder", 0644 << 16)
         zip.toBuffer()
-        zip.writeZip("public/zip/item.zip")
+        zip.writeZip(`public/zip/${file_name}`)
 
         const directoryPath = cwd()
 
-        var pathZip = `${directoryPath}/public/zip/item.zip`;
-        var mimeType = mime.lookup(pathZip);
-        const src = fs.createReadStream(pathZip);
-        ctx.response.set("content-type", mimeType);
-        ctx.response.set("content-disposition", "attachment; filename=item.zip");
-        ctx.body = src;
+        var pathZip = `${directoryPath}/public/zip/${file_name}`;
+        const response = fs.createReadStream(pathZip);
+        ctx.response.set("content-type", 'application/zip');
+        ctx.response.set("content-disposition", `attachment; filename=${file_name}`);
+        ctx.body = response;
     }
 }
