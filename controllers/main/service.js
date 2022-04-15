@@ -1,4 +1,4 @@
-const json2csv = require('json2csv').parse;
+const { parse } = require('json2csv');
 
 
 const axios = require("axios");
@@ -20,34 +20,44 @@ module.exports = {
 
     },
 
-    async downloadZip(ctx) {
-        const data = await Category.find({}).lean()
+    async downloadCsv(ctx) {
+        let data = await Category.find({}).lean()
+
+        for (element of data) {
+            let index = 0
+            delete element._v
+            element._id = index
+            index++
+        }
+
+        console.log(data);
 
         // const json2csv = new Parser()
 
-        var fields = ['categoryName', 'startDate', 'firstClosureDate', 'finalClosureDate', 'isDisabled', 'createdAt', 'updatedAt']
-        var csv = json2csv({ data: data, fields: fields });
 
-        console.log(csv);
-        const pZip = cwd()
+        var fields = ['categoryName', 'startDate', 'firstClosureDate', 'finalClosureDate', 'isDisabled', 'createdAt', 'updatedAt']
+
+        const ops = { fields }
+        var csv = parse(data, ops);
+
+        const directoryPath = cwd()
 
         let file_name = `${Date.now()}.csv`
 
-        var path = `${pZip}/public/csv/${file_name}`;
+        var path = `${directoryPath}/public/csv/${file_name}`;
         fs.writeFile(path, csv, 'utf8', function (err, data) {
             if (err) { throw err; }
+            console.log('Created a new csv file.')
+            return data
         });
 
-        ctx.attachment(path)
-
-        // var mimeType = mime.lookup(path);
-        // const src = fs.createReadStream(path);
-        // ctx.response.set("content-type", mimeType);
-        // ctx.response.set(`content-disposition", "attachment; filename=item.csv`);
-        // ctx.body = src;
+        const src = fs.createReadStream(path);
+        ctx.response.set("content-type", 'text/csv');
+        ctx.response.set("content-disposition", `attachment; filename=${file_name}`);
+        ctx.body = src;
     },
 
-    async downloadCsv(ctx) {
+    async downloadZip(ctx) {
         // const { path } = ctx.request.body;
         const path = '276270758_3862731587343623_2010198310967369279_n-17fc548c9e3.png'
 
@@ -58,19 +68,18 @@ module.exports = {
             responseType: 'arraybuffer'
         });
         const data = body.data;
-        console.log(data);
 
-        zip.addFile('item', Buffer.from(data, "utf8"), "download zip folder")
-        // zip.toBuffer()
+        zip.addFile('item', Buffer.from(data, "utf8"), "download zip folder", 0644 << 16)
+        zip.toBuffer()
         zip.writeZip("public/zip/item.zip")
 
-        const pZip = cwd()
+        const directoryPath = cwd()
 
-        var pathZip = `${pZip}/public/zip/item.zip`;
+        var pathZip = `${directoryPath}/public/zip/item.zip`;
         var mimeType = mime.lookup(pathZip);
         const src = fs.createReadStream(pathZip);
         ctx.response.set("content-type", mimeType);
-        ctx.response.set("content-disposition", "attachment; filename=idea.zip");
+        ctx.response.set("content-disposition", "attachment; filename=item.zip");
         ctx.body = src;
     }
 }
