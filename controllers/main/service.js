@@ -53,7 +53,9 @@ module.exports = {
 
         const slug = new Date().getFullYear()
 
-        let file_name = `${slug}_${Date.now()}.csv`
+        let file_name = `${slug}_${Date.now().toString()}.csv`
+
+        console.log(file_name);
 
         var path = `${directoryPath}/public/csv/${file_name}`;
         fs.writeFile(path, csv, 'utf8', function (err, data) {
@@ -68,22 +70,28 @@ module.exports = {
     },
 
     async downloadZip(ctx) {
-        const { path } = ctx.request.body;
-
-        const slug = new Date().getFullYear()
-
-        let file_name = `${slug}_${Date.now()}.zip`
-
         const zip = new AdmZip();
 
-        const url = `http://localhost:8000/uploads/${path}`;
-        const body = await axios.get(url, {
-            responseType: 'arraybuffer'
-        });
-        const data = body.data;
+        const { path } = ctx.request.body;
+        const slug = new Date().getFullYear()
 
-        zip.addFile(`item`, Buffer.from(data, "utf8"), "download zip folder", 0644 << 16)
-        zip.toBuffer()
+        const file_name = `${slug}_${Date.now()}.zip`
+        let index = 1
+
+        for (let pathAPI of path) {
+
+            let type = pathAPI.split('.')[1]
+
+            const url = `http://localhost:8000/uploads/${pathAPI}`;
+            const body = await axios.get(url, {
+                responseType: 'arraybuffer'
+            });
+            const data = body.data;
+            await zip.addFile(`attachment_${index}.${type}`, Buffer.from(data, "utf8"), "", 0644 << 16)
+            index++
+        }
+
+        zip.toBuffer();
         zip.writeZip(`public/zip/${file_name}`)
 
         const directoryPath = cwd()
