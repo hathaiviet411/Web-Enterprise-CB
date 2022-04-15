@@ -518,8 +518,8 @@
 				>mdi-delete</v-icon>
 			</template>
 
-			<template v-slot:[`item.zip`]="{ zip }">
-				<v-btn v-if="role === 'Quality Assurance Manager' || role === 'Admin'" min-width="100px" color="success" @click="handleDownloadZip(zip.id)">
+			<template v-slot:[`item.ideaFile`]="{ item }">
+				<v-btn v-if="role === 'Quality Assurance Manager' || role === 'Admin'" min-width="100px" color="success" @click="handleDownloadZip(item.ideaFile)">
 					<v-icon>fas fa-file-archive</v-icon>
 				</v-btn>
 			</template>
@@ -564,6 +564,7 @@ import { getCategory } from '@/api/modules/category';
 import { getAllIdea, postIdea, sort } from '@/api/modules/idea';
 import { getDepartment } from '@/api/modules/department';
 import { getUser } from '@/api/modules/user';
+import { postDownloadZip } from '@/api/modules/download';
 
 // Const APIs Url
 const urlAPI = {
@@ -572,6 +573,7 @@ const urlAPI = {
     getAllIdea: '/idea',
     apiGetListUser: '/user',
     apiGetListDepartment: '/department',
+    apiPostDownloadZip: '/download/zip',
 };
 
 // Helper functions import
@@ -597,7 +599,7 @@ export default {
                 { text: 'Views', sortable: false, value: 'viewCount' },
                 { text: 'Author', sortable: false, value: 'user' },
                 { text: 'Posted Date', sortable: false, value: 'createdAt' },
-                { text: 'Zip Download', sortable: false, value: 'zip', align: 'center' },
+                { text: 'Zip Download', sortable: false, value: 'ideaFile', align: 'center' },
                 { text: 'Actions', sortable: false, value: 'actions' },
             ],
 
@@ -890,8 +892,11 @@ export default {
             }
         },
 
-        handleDownloadZip(id) {
+        async handleDownloadZip(ideaFile) {
             // window.open(`${urlAPI.downloadZip}/${id}`);
+            await postDownloadZip(urlAPI.apiPostDownloadZip, { path: ideaFile });
+            // console.log(response);
+            console.log(ideaFile);
         },
     },
 };

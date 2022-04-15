@@ -232,7 +232,7 @@
 			</template>
 
 			<template v-slot:[`item.csv`]="{ item }">
-				<v-btn v-if="role === 'Quality Assurance Manager' || role === 'Admin'" min-width="100px" color="success" @click="handleDownloadCSV(item.id)">
+				<v-btn v-if="role === 'Quality Assurance Manager' || role === 'Admin'" min-width="100px" color="success" @click="handleDownloadCSV(item._id)">
 					<v-icon>fas fa-file-csv</v-icon>
 				</v-btn>
 			</template>
@@ -262,6 +262,7 @@ import {
     putCategory,
     deleteCategory,
 } from '@/api/modules/category';
+import { postDownloadCsv } from '@/api/modules/download';
 
 // Helper functions import
 import { convertDateToISO } from '@/utils/handleConvertDateFormat';
@@ -273,6 +274,7 @@ const URL_GET_CATEGORY = '/category';
 const URL_POST_CATEGORY = '/category';
 const URL_PUT_CATEGORY = '/category';
 const URL_DELETE_CATEGORY = '/category';
+const URL_DOWNLOAD_CSV = '/download/csv';
 
 export default {
     name: 'CategoryManagement',
@@ -541,9 +543,9 @@ export default {
             };
         },
 
-        handleDownloadCSV(id) {
-            // const URL = `${URL_GET_CATEGORY}/${id}/csv`;
-            // window.open(URL);
+        async handleDownloadCSV(id) {
+            const response = await postDownloadCsv(URL_DOWNLOAD_CSV, { category_id: id });
+            window.open(response);
         },
     },
 };

@@ -1,8 +1,5 @@
 const { parse } = require('json2csv');
-
-
 const axios = require("axios");
-
 const AdmZip = require('adm-zip');
 const fs = require('fs');
 const { cwd } = require("process");
@@ -15,7 +12,7 @@ const Department = require('../../models/department');
 module.exports = {
     async downloadCsv(ctx) {
 
-        let { category_id } = ctx.request.body
+        let { category_id } = ctx.request.body;
         const category = await Category.findOne({ _id: category_id }).lean()
 
         let ideas = await Idea.find({ category: category._id }).lean()
@@ -43,8 +40,6 @@ module.exports = {
             return idea
         }))
 
-
-
         var fields = ['id', 'category', 'ideaTitle', 'ideaContent', 'viewCount', 'pointCount', 'isAnonymous', 'isDisabled', 'department', 'user', 'firstClosureDate', 'finalClosureDate', 'createdAt', 'updatedAt']
         const ops = { fields }
         var csv = parse(data, ops);
@@ -64,11 +59,13 @@ module.exports = {
         const response = fs.createReadStream(path);
         ctx.response.set("content-type", 'text/csv');
         ctx.response.set("content-disposition", `attachment; filename=${file_name}`);
-        ctx.body = response;
+        const downloadUrl = `${process.env.BASE_URL}/csv/${file_name}`
+        ctx.body = downloadUrl;
     },
 
     async downloadZip(ctx) {
         const { path } = ctx.request.body;
+        console.log(ctx.request.body)
 
         const slug = new Date().getFullYear()
 
@@ -76,7 +73,7 @@ module.exports = {
 
         const zip = new AdmZip();
 
-        const url = `http://localhost:8000/uploads/${path}`;
+        const url = path;
         const body = await axios.get(url, {
             responseType: 'arraybuffer'
         });
@@ -92,6 +89,7 @@ module.exports = {
         const response = fs.createReadStream(pathZip);
         ctx.response.set("content-type", 'application/zip');
         ctx.response.set("content-disposition", `attachment; filename=${file_name}`);
-        ctx.body = response;
+        const downloadUrl = `${process.env.BASE_URL}/zip/${file_name}`
+        ctx.body = downloadUrl;
     }
 }
