@@ -53,8 +53,7 @@ module.exports = {
     },
 
     async downloadZip(ctx) {
-        // const { path } = ctx.request.body;
-        const path = 'Business_Requirement-17fbc21e37c.docx'
+         const { path } = ctx.request.body;
 
         const slug = new Date().getFullYear()
 
