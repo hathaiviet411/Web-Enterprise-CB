@@ -82,7 +82,8 @@ module.exports = {
 
             let type = pathAPI.split('.')[1]
 
-            const url = `http://localhost:8000/uploads/${pathAPI}`;
+
+            const url = pathAPI
             const body = await axios.get(url, {
                 responseType: 'arraybuffer'
             });
