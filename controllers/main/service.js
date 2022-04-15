@@ -4,33 +4,48 @@ const { parse } = require('json2csv');
 const axios = require("axios");
 
 const AdmZip = require('adm-zip');
-const { saveAs } = require('file-saver');
-const mime = require('mime-types')
 const fs = require('fs');
 const { cwd } = require("process");
 const Category = require("../../models/category");
+const Idea = require('../../models/idea');
+const User = require('../../models/user');
+const Department = require('../../models/department');
 
 
 module.exports = {
-    generatedZip() {
-
-    },
-
-    generatedCsv() {
-
-    },
-
     async downloadCsv(ctx) {
-        let data = await Category.find({}).lean()
 
-        for (element of data) {
-            let index = 0
-            delete element._v
-            element._id = index
-            index++
-        }
+        let { category_id } = ctx.request.body
+        const category = await Category.findOne({ _id: category_id }).lean()
 
-        var fields = ['categoryName', 'startDate', 'firstClosureDate', 'finalClosureDate', 'isDisabled', 'createdAt', 'updatedAt']
+        let ideas = await Idea.find({ category: category._id }).lean()
+        const data = await Promise.all(ideas.map(async (idea, index) => {
+
+            idea.id = index;
+
+            const user = await User.findOne({ _id: idea.user }).lean()
+            const department = await Department.findOne({ _id: idea.department }).lean()
+
+            delete idea.user
+            delete idea.ideaFile
+            delete idea._id
+            delete idea.__v;
+
+            idea.category = category.categoryName;
+            idea.user = user.name;
+            idea.department = department.departmentName
+            idea.firstClosureDate = category.firstClosureDate;
+            idea.finalClosureDate = category.finalClosureDate;
+
+            delete user;
+            delete department;
+
+            return idea
+        }))
+
+
+
+        var fields = ['id', 'category', 'ideaTitle', 'ideaContent', 'viewCount', 'pointCount', 'isAnonymous', 'isDisabled', 'department', 'user', 'firstClosureDate', 'finalClosureDate', 'createdAt', 'updatedAt']
         const ops = { fields }
         var csv = parse(data, ops);
 
@@ -53,7 +68,7 @@ module.exports = {
     },
 
     async downloadZip(ctx) {
-         const { path } = ctx.request.body;
+        const { path } = ctx.request.body;
 
         const slug = new Date().getFullYear()
 
