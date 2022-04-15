@@ -13,9 +13,7 @@ const auth = db.user && db.password ? `${db.user}:${db.password}@` : "";
 
 async function connect() {
   try {
-    await mongoose.connect(
-      `${db.connect}://${auth}${db.host}/${db.database}`
-    );
+    await mongoose.connect(`${db.connect}://${auth}${db.host}/${db.database}`);
 
     console.log("Connected to mongodb");
   } catch (err) {

@@ -3,6 +3,10 @@ import Layout from '@/layout';
 const department = {
     path: '/department',
     name: 'Department',
+    meta: {
+        title: 'Department Management',
+        roles: ['admin, qac, qaa, staff'],
+    },
     hidden: true,
     component: Layout,
     children: [
@@ -12,7 +16,10 @@ const department = {
             meta: {
                 title: 'Department Index',
             },
-            component: () => import(/* webpackChunkName: "Department" */ '@/pages/DepartmentManagement/index'),
+            component: () =>
+                import(
+                    /* webpackChunkName: "Department" */ '@/pages/DepartmentManagement/index'
+                ),
         },
     ],
 };

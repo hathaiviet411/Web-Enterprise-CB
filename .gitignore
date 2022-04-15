@@ -3,7 +3,8 @@ node_modules
 /dist
 
 # mode module file
-package-local.json
+package-lock.json
+access.log
 
 # local env files
 .env.local
@@ -23,3 +24,5 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+*.log
+access.log

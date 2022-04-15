@@ -6,41 +6,45 @@ Vue.use(VueRouter);
 // Import modules router
 import login from './modules/login';
 import dashboard from './modules/dashboard';
+import chartManagement from './modules/chart';
 import user from './modules/user';
 import category from './modules/category';
-import ideal from './modules/ideal';
+import idea from './modules/idea';
 import department from './modules/department';
-import setting from './modules/setting';
+import ErrorPage from './modules/page404';
+import role from './modules/role';
 
 export const constantRoutes = [
     {
         path: '/',
-        redirect: { name: 'DashboardIndex' },
+        redirect: { name: 'Login' },
         hidden: true,
     },
     login,
-    dashboard,
-    user,
-    category,
-    ideal,
-    department,
-    setting,
 ];
 
 export const asyncRoutes = [
     dashboard,
+    chartManagement,
     user,
     category,
-    ideal,
+    idea,
     department,
-    setting,
+    ErrorPage,
+    {
+        path: '*',
+        redirect: { name: 'ErrorPage' },
+        hidden: true,
+    },
+    role,
 ];
 
-const createRouter = () => new VueRouter({
-    mode: 'history',
-    scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes,
-});
+const createRouter = () =>
+    new VueRouter({
+        mode: 'history',
+        scrollBehavior: () => ({ y: 0 }),
+        routes: constantRoutes,
+    });
 
 const router = createRouter();
 
@@ -50,4 +54,3 @@ export function resetRouter() {
 }
 
 export default router;
-

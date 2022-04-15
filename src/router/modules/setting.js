@@ -3,6 +3,10 @@ import Layout from '@/layout';
 const setting = {
     path: '/setting',
     name: 'Setting',
+    meta: {
+        title: 'Setting Management',
+        roles: ['admin, qac, qaa, staff'],
+    },
     hidden: true,
     component: Layout,
     children: [
@@ -12,7 +16,8 @@ const setting = {
             meta: {
                 title: 'Setting Index',
             },
-            component: () => import(/* webpackChunkName: "Setting" */ '@/pages/Setting/index'),
+            component: () =>
+                import(/* webpackChunkName: "Setting" */ '@/pages/Setting/index'),
         },
     ],
 };

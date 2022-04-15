@@ -1,102 +1,159 @@
 <template>
-	<div>
+	<div class="user-screen">
 		<v-data-table
-			:headers="headers"
-			:items="desserts"
-			sort-by="calories"
-			class="elevation-1"
+			:headers="vFields"
+			:items="vItems"
+			class="elevation-12 table-user-list"
+			:search="search"
 		>
 			<template v-slot:top>
-				<v-toolbar
-					flat
-				>
-					<v-toolbar-title>User Management</v-toolbar-title>
+				<v-toolbar flat elevation="6">
+					<v-row>
+						<v-col cols="6" class="text-left">
+							<v-toolbar-title>User Management</v-toolbar-title>
+						</v-col>
 
-					<v-divider
-						class="mx-4"
-						inset
-						vertical
-					/>
+						<v-col cols="6" class="text-center">
+							<v-text-field
+								v-model="search"
+								append-icon="mdi-magnify"
+								label="Search"
+								single-line
+								hide-details
+							/>
+						</v-col>
+					</v-row>
+				</v-toolbar>
 
-					<v-spacer />
+				<v-row class="mt-3">
+					<v-col cols="12" class="text-center">
+						<v-dialog v-model="dialog" max-width="500px" persistent>
+							<template v-slot:activator="{ on, attrs }">
+								<v-btn color="primary" dark class="mb-2 open-register-modal-btn" v-bind="attrs" v-on="on">
+									<v-icon left>mdi-plus-box</v-icon>
+									<span>New User</span>
+								</v-btn>
+							</template>
 
-					<v-btn color="primary" dark class="mb-2 btn-register">
-						<span class="mdi mdi-account-plus pr-1" />
-						<span>New User</span>
-					</v-btn>
-
-					<v-dialog v-model="dialogDelete" max-width="500px">
-						<v-card>
-							<v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
-
-							<v-card-text>
-								<v-container>
+							<v-card>
+								<v-card-title>
 									<v-row>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												:value="editedItem.name"
-												label="Dessert name"
-												disabled
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												:value="editedItem.calories"
-												label="Calories"
-												disabled
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												:value="editedItem.fat"
-												label="Fat (g)"
-												disabled
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												:value="editedItem.carbs"
-												label="Carbs (g)"
-												disabled
-											/>
-										</v-col>
-										<v-col cols="12" sm="12" md="12">
-											<v-text-field
-												:value="editedItem.protein"
-												label="Protein (g)"
-												disabled
-											/>
+										<v-col cols="12" class="text-center">
+											<span>{{ formTitle }}</span>
 										</v-col>
 									</v-row>
-								</v-container>
-							</v-card-text>
+								</v-card-title>
 
-							<v-card-actions>
-								<v-spacer />
+								<v-card-text>
+									<v-container>
+										<v-row>
+											<v-col cols="12" sm="12" md="12">
+												<v-text-field
+													v-model="editedItem.username"
+													prepend-icon="mdi-account"
+													label="Username"
+													required
+													type="text"
+												/>
+											</v-col>
+											<v-col cols="12" sm="12" md="12">
+												<v-text-field
+													v-model="editedItem.name"
+													prepend-icon="mdi-border-color"
+													label="Full name"
+													required
+													type="text"
+												/>
+											</v-col>
+											<v-col cols="12" sm="12" md="12">
+												<v-text-field
+													v-model="editedItem.email"
+													prepend-icon="mdi-email"
+													label="Email"
+													required
+													type="email"
+												/>
+											</v-col>
+											<v-col cols="12" sm="12" md="12">
+												<v-select
+													v-model="editedItem.roleId"
+													:items="roleOptions"
+													label="Role"
+													prepend-icon="mdi-account-key"
+													dense
+													required
+												/>
+											</v-col>
+											<v-col cols="12" sm="12" md="12">
+												<v-select
+													v-model="editedItem.departmentId"
+													:items="departmentOptions"
+													label="Department"
+													prepend-icon="mdi-domain"
+													dense
+												/>
+											</v-col>
+											<v-col cols="12" sm="12" md="12">
+												<v-text-field
+													v-model="editedItem.password"
+													prepend-icon="mdi-lock"
+													label="Password"
+													required
+													type="password"
+												/>
+											</v-col>
+											<v-col cols="12">
+												<b-form-checkbox
+													v-model="editedItem.isAgreedTerm"
+													size="lg"
+												>
+													<span
+														style="font-size: 16px !important"
+													>I agreed with Idea Collecting System's Terms and
+														Services agreement.</span>
+												</b-form-checkbox>
+											</v-col>
+										</v-row>
+									</v-container>
+								</v-card-text>
 
-								<v-btn tile color="success" @click="closeDelete">
-									<v-icon left>mdi-delete-empty</v-icon>
-									<span>Cancel</span>
-								</v-btn>
+								<v-card-actions>
+									<v-spacer />
 
-								<v-btn tile color="success" @click="deleteItemConfirm">
-									<v-icon left>mdi-delete-empty</v-icon>
-									<span>OK</span>
-								</v-btn>
-								<v-spacer />
-							</v-card-actions>
-						</v-card>
-					</v-dialog>
-				</v-toolbar>
+									<v-btn color="red darken-1" text @click="close()">
+										<v-icon left>mdi-exit-to-app</v-icon>
+										<span>Cancel</span>
+									</v-btn>
+
+									<v-btn class="save-btn" color="blue darken-1" text @click="save()">
+										<v-icon left>mdi-lead-pencil</v-icon>
+										<span>{{ editedIndex === -1 ? "Register" : "Save" }}</span>
+									</v-btn>
+								</v-card-actions>
+							</v-card>
+						</v-dialog>
+					</v-col>
+				</v-row>
+
 			</template>
 
 			<template v-slot:[`item.actions`]="{ item }">
-				<v-icon small class="mr-2" @click="editItem(item)">
-					mdi-pencil
-				</v-icon>
-				<v-icon small @click="deleteItem(item)">
-					mdi-delete
-				</v-icon>
+				<v-icon
+					small
+					class="mr-2"
+					style="color: #051367"
+					@click="editItem(item)"
+				>mdi-pencil</v-icon>
+			</template>
+
+			<template v-slot:[`item.user.isAgreedTerm`]="{ isAgreedTerm }">
+				<span
+					v-if="isAgreedTerm === true"
+					style="color: #3dc238; font-weight: bold"
+				>{{ "Agreed" }}</span>
+				<span v-else style="color: #d11515; font-weight: bold">{{
+					"Disagreed"
+				}}</span>
 			</template>
 
 			<template v-slot:no-data>
@@ -107,47 +164,93 @@
 </template>
 
 <script>
+// Apis import
+import { getRole } from '@/api/modules/role';
+import { getDepartment } from '@/api/modules/department';
+import { getUser, postUser, putUser } from '@/api/modules/user';
+
+// Helper functions import
+import { isPassValidation } from './helper';
+import { MakeToast } from '@/toast/toastMessage';
+
+const urlAPI = {
+    apiGetListRole: '/role',
+    apiGetListDepartment: '/department',
+    apiGetListUser: '/user',
+    apiCreateUser: '/register',
+    apiUpdateUser: '/user',
+};
+
 export default {
     name: 'UserManagement',
     data() {
         return {
             dialog: false,
             dialogDelete: false,
-            headers: [
+
+            vFields: [
                 {
-                    text: 'Dessert (100g serving)',
+                    text: 'Username',
                     align: 'start',
                     sortable: false,
-                    value: 'name',
+                    value: 'user.username',
                 },
-                { text: 'Calories', value: 'calories' },
-                { text: 'Fat (g)', value: 'fat' },
-                { text: 'Carbs (g)', value: 'carbs' },
-                { text: 'Protein (g)', value: 'protein' },
-                { text: 'Actions', value: 'actions', sortable: false },
+                {
+                    text: 'Full name',
+                    align: 'start',
+                    sortable: false,
+                    value: 'user.name',
+                },
+                { text: 'User Email', value: 'user.email', align: 'center' },
+                { text: 'User Role', value: 'role.roleName', align: 'center' },
+                {
+                    text: 'Department',
+                    value: 'department.departmentName',
+                    align: 'center',
+                },
+                {
+                    text: 'Agreed with Term',
+                    value: 'user.isAgreedTerm',
+                    align: 'center',
+                },
+                { text: 'Actions', value: 'actions', sortable: false, align: 'center' },
             ],
-            desserts: [],
+
+            vItems: [],
+
             editedIndex: -1,
             editedItem: {
+                id: '',
+                username: '',
                 name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0,
+                email: '',
+                password: '',
+                isAgreedTerm: false,
+                roleId: null,
+                departmentId: null,
             },
+
             defaultItem: {
+                id: '',
+                username: '',
                 name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0,
+                email: '',
+                password: '',
+                isAgreedTerm: false,
+                roleId: null,
+                departmentId: null,
             },
+
+            roleOptions: [],
+            departmentOptions: [],
+
+            search: '',
         };
     },
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+            return this.editedIndex === -1 ? 'New User' : 'Edit User';
         },
     },
 
@@ -161,100 +264,114 @@ export default {
     },
 
     created() {
-        this.initialize();
+        this.initData();
     },
 
     methods: {
-        initialize() {
-            this.desserts = [
-                {
-                    name: 'Frozen Yogurt',
-                    calories: 159,
-                    fat: 6.0,
-                    carbs: 24,
-                    protein: 4.0,
-                },
-                {
-                    name: 'Ice cream sandwich',
-                    calories: 237,
-                    fat: 9.0,
-                    carbs: 37,
-                    protein: 4.3,
-                },
-                {
-                    name: 'Eclair',
-                    calories: 262,
-                    fat: 16.0,
-                    carbs: 23,
-                    protein: 6.0,
-                },
-                {
-                    name: 'Cupcake',
-                    calories: 305,
-                    fat: 3.7,
-                    carbs: 67,
-                    protein: 4.3,
-                },
-                {
-                    name: 'Gingerbread',
-                    calories: 356,
-                    fat: 16.0,
-                    carbs: 49,
-                    protein: 3.9,
-                },
-                {
-                    name: 'Jelly bean',
-                    calories: 375,
-                    fat: 0.0,
-                    carbs: 94,
-                    protein: 0.0,
-                },
-                {
-                    name: 'Lollipop',
-                    calories: 392,
-                    fat: 0.2,
-                    carbs: 98,
-                    protein: 0,
-                },
-                {
-                    name: 'Honeycomb',
-                    calories: 408,
-                    fat: 3.2,
-                    carbs: 87,
-                    protein: 6.5,
-                },
-                {
-                    name: 'Donut',
-                    calories: 452,
-                    fat: 25.0,
-                    carbs: 51,
-                    protein: 4.9,
-                },
-                {
-                    name: 'KitKat',
-                    calories: 518,
-                    fat: 26.0,
-                    carbs: 65,
-                    protein: 7,
-                },
-            ];
+        async initData() {
+            await this.getListUsers();
+            await this.getListRole();
+            await this.getListDepartment();
+        },
+
+        async getListUsers() {
+            try {
+                const response = await getUser(urlAPI.apiGetListUser);
+                if (response.status === true) {
+                    this.$store.dispatch('chart/setTotalUser', response.user.length);
+                    this.vItems = response.user;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async getListRole() {
+            try {
+                const response = await getRole(urlAPI.apiGetListRole);
+
+                if (response.status === true) {
+                    const DATA = response.role;
+                    for (let i = 0; i < DATA.length; i++) {
+                        this.roleOptions.push({
+                            value: DATA[i]._id,
+                            text: DATA[i].roleName,
+                        });
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async getListDepartment() {
+            try {
+                const response = await getDepartment(urlAPI.apiGetListDepartment);
+
+                if (response.status === true) {
+                    const DATA = response.departmentStatistic;
+                    for (let i = 0; i < DATA.length; i++) {
+                        this.departmentOptions.push({
+                            value: DATA[i]._id,
+                            text: DATA[i].departmentName,
+                        });
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async createUser() {
+            if (isPassValidation(this.editedItem) === true) {
+                this.close();
+
+                try {
+                    const response = await postUser(
+                        urlAPI.apiCreateUser,
+                        this.editedItem
+                    );
+                    if (response.status === true) {
+                        MakeToast({
+                            variant: 'success',
+                            title: 'Success',
+                            content: 'Create User Successful',
+                        });
+
+                        this.getListUsers();
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        },
+
+        async updateUser(ID) {
+            const URL = `${urlAPI.apiUpdateUser}/${ID}`;
+            if (isPassValidation(this.editedItem) === true) {
+                this.close();
+                try {
+                    const response = await putUser(URL, this.editedItem);
+                    console.log(response);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
         },
 
         editItem(item) {
-            this.editedIndex = this.desserts.indexOf(item);
-            this.editedItem = Object.assign({}, item);
+            this.editedIndex = this.vItems.indexOf(item);
+            this.editedItem = {
+                id: item.user._id,
+                username: item.user.username,
+                email: item.user.email,
+                name: item.user.name,
+                password: '',
+                isAgreedTerm: item.user.isAgreedTerm,
+                roleId: item.role._id,
+                departmentId: item.department._id,
+            };
             this.dialog = true;
-        },
-
-        deleteItem(item) {
-            this.editedIndex = this.desserts.indexOf(item);
-            this.editedItem = Object.assign({}, item);
-            this.dialogDelete = true;
-        },
-
-        deleteItemConfirm() {
-            this.desserts.splice(this.editedIndex, 1);
-            this.closeDelete();
         },
 
         close() {
@@ -265,28 +382,20 @@ export default {
             });
         },
 
-        closeDelete() {
-            this.dialogDelete = false;
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem);
-                this.editedIndex = -1;
-            });
-        },
-
         save() {
             if (this.editedIndex > -1) {
-                Object.assign(this.desserts[this.editedIndex], this.editedItem);
+                this.updateUser(this.editedItem.id);
             } else {
-                this.desserts.push(this.editedItem);
+                this.createUser();
             }
-            this.close();
         },
     },
 };
 </script>
 
 <style lang="scss" scoped>
-    .btn-register {
-        box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
-    }
+.btn-register {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+    rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+}
 </style>

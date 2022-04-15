@@ -1,29 +1,23 @@
 const Router = require("@koa/router");
 const router = new Router();
-const admin = require("./admin");
-const QAM = require("./QA manager")
 const auth = require("./auth/auth");
+const main = require("./main");
 const passport = require("koa-passport");
 const checkRole = require("../../middleware/checkRole");
+const service = require("../../routes/api/main/service")
 require("../../middleware/passport");
 
-//Auth api
+
+// Auth api
 router.use("/auth", auth);
 
-//Admin api
-router.use(
-  "/admin",
-  passport.authenticate("jwt-access", { failWithError: true }),
-  checkRole.checkAdmin,
-  admin
-);
+router.use('/download', service)
 
 router.use(
-  "/qamanager",
-  passport.authenticate("jwt-access", { failWithError: true }),
-  checkRole.checkQAM,
-  QAM
+  passport.authenticate("jwt-access", {
+    failWithError: true,
+  }),
+  main
 );
-
 
 module.exports = router.routes();

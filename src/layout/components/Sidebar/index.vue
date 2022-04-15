@@ -1,6 +1,6 @@
 <template>
 	<v-navigation-drawer v-model="drawerStorage" app>
-		<v-img height="140" class="pa-4" src="@/assets/images/logo.png" />
+		<v-img height="200" class="pa-4" src="@/assets/images/logo.png" />
 		<v-divider />
 		<v-list>
 			<v-list-item
@@ -8,7 +8,7 @@
 				:key="index"
 				link
 				:disabled="item.disabled"
-				:class="['route-item', isSelected]"
+				:class="['route-item,', isSelected, item.isHidden]"
 				@click="handleNavigation(item)"
 			>
 				<v-list-item-icon>
@@ -16,7 +16,7 @@
 				</v-list-item-icon>
 
 				<v-list-item-content>
-					<v-list-item-title>{{ item.name }}</v-list-item-title>
+					<v-list-item-title>{{ $t(item.name) }}</v-list-item-title>
 				</v-list-item-content>
 			</v-list-item>
 		</v-list>
@@ -36,56 +36,25 @@ export default {
     },
     data() {
         return {
-            listRoutes: [
-                {
-                    icon: 'mdi-microsoft-windows',
-                    name: 'Dashboard',
-                    url: '/dashboard/index',
-                    disabled: false,
-                },
-                {
-                    icon: 'mdi-account',
-                    name: 'User',
-                    url: '/user/index',
-                    disabled: false,
-                },
-                {
-                    icon: 'mdi-clipboard-list-outline',
-                    name: 'Category',
-                    url: '/category/index',
-                    disabled: false,
-                },
-                {
-                    icon: 'mdi-card-account-details-outline',
-                    name: 'Ideal',
-                    url: '/ideal/index',
-                    disabled: false,
-                },
-                {
-                    icon: 'mdi-city',
-                    name: 'Department',
-                    url: '/department/index',
-                    disabled: false,
-                },
-                {
-                    icon: 'mdi-cog',
-                    name: 'Setting',
-                    url: '/setting/index',
-                    disabled: false,
-                },
-            ],
+            listRoutes: [],
 
             drawerStorage: this.drawerStorage,
             isSelected: '',
+            isDisplay: '',
         };
     },
+    computed: {
+        role() {
+            return this.$store.getters.role;
+        },
+    },
     watch: {
-        $route() {},
         drawer() {
             this.drawerStorage = !this.drawer;
         },
     },
     created() {
+        this.initialListRoutes();
         this.handleSetDataWhenCreated();
     },
     methods: {
@@ -98,6 +67,54 @@ export default {
                 }
             }
             this.$router.push({ path: `${item.url}` });
+        },
+
+        initialListRoutes() {
+            console.log(this.role);
+            this.listRoutes = [
+                {
+                    icon: 'fas fa-home-lg',
+                    name: 'ROUTER.DASHBOARD',
+                    url: '/dashboard/index',
+                    disabled: false,
+                    isHidden: '',
+                },
+                {
+                    icon: 'fas fa-chart-bar',
+                    name: 'ROUTER.CHART',
+                    url: '/chart/index',
+                    disabled: false,
+                    isHidden: (this.role === 'Quality Assurance Manager' || this.role === 'Admin') ? '' : 'd-none',
+                },
+                {
+                    icon: 'mdi-account',
+                    name: 'ROUTER.USER',
+                    url: '/user/index',
+                    disabled: false,
+                    isHidden: '',
+                },
+                {
+                    icon: 'mdi-clipboard-list-outline',
+                    name: 'ROUTER.CATEGORY',
+                    url: '/category/index',
+                    disabled: false,
+                    isHidden: '',
+                },
+                {
+                    icon: 'fas fa-lightbulb-on',
+                    name: 'ROUTER.IDEA',
+                    url: '/idea/index',
+                    disabled: false,
+                    isHidden: '',
+                },
+                {
+                    icon: 'mdi-city',
+                    name: 'ROUTER.DEPARTMENT',
+                    url: '/department/index',
+                    disabled: false,
+                    isHidden: '',
+                },
+            ];
         },
 
         handleSetDataWhenCreated() {
@@ -118,19 +135,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    @import '@/scss/variables.scss';
+@import "@/scss/variables.scss";
 
-    .route-item {
-        font-weight: bold;
-    }
+.route-item {
+  font-weight: bold;
+}
 
-    .v-list-item--disabled {
-        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
-        color: $white !important;
-        background-color: $shark;
+.v-list-item--disabled {
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  color: $white !important;
+  background-color: $shark;
 
-        .icon {
-            color: $dandelion;
-        }
-    }
+  .icon {
+    color: $dandelion;
+  }
+}
 </style>
