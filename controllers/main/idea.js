@@ -8,7 +8,6 @@ const Like = require("../../models/like");
 const Dislike = require("../../models/dislike");
 const sendEmail = require("../../middleware/nodemailer");
 require("dotenv").config();
-const helpers = require("../helpers");
 
 const getPath = (path) => {
   return (

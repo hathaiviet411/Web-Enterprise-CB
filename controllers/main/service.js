@@ -1,71 +1,40 @@
-const { parse } = require('json2csv');
 
-
+const service = require('../helpers/download.helper')
 const axios = require("axios");
+const { cwd } = require("process");
+const fs = require('fs');
 
 const AdmZip = require('adm-zip');
-const fs = require('fs');
-const { cwd } = require("process");
 const Category = require("../../models/category");
 const Idea = require('../../models/idea');
-const User = require('../../models/user');
-const Department = require('../../models/department');
+
+async function getIdeaFromCategory(_id) {
+    const category = await Category.findOne({ _id }).lean()
+
+    const ideas = await Idea.find({ category: category._id }).lean()
+
+    const ops = {
+        name: category.categoryName,
+        firstClosureDate: category.firstClosureDate,
+        finalClosureDate: category.finalClosureDate
+    }
+
+    const data = await Promise.all(await service.hasOwnProperty(ideas, ops))
+
+    return data
+}
 
 
 module.exports = {
     async downloadCsv(ctx) {
-
         let { category_id } = ctx.request.body
-        const category = await Category.findOne({ _id: category_id }).lean()
 
-        let ideas = await Idea.find({ category: category._id }).lean()
-        const data = await Promise.all(ideas.map(async (idea, index) => {
+        const data = await getIdeaFromCategory(category_id)
 
-            idea.id = index;
+        const response = await service.toCsv(data)
 
-            const user = await User.findOne({ _id: idea.user }).lean()
-            const department = await Department.findOne({ _id: idea.department }).lean()
-
-            delete idea.user
-            delete idea.ideaFile
-            delete idea._id
-            delete idea.__v;
-
-            idea.category = category.categoryName;
-            idea.user = user.name;
-            idea.department = department.departmentName
-            idea.firstClosureDate = category.firstClosureDate;
-            idea.finalClosureDate = category.finalClosureDate;
-
-            delete user;
-            delete department;
-
-            return idea
-        }))
-
-        var fields = ['id', 'category', 'ideaTitle', 'ideaContent', 'viewCount', 'pointCount', 'isAnonymous', 'isDisabled', 'department', 'user', 'firstClosureDate', 'finalClosureDate', 'createdAt', 'updatedAt']
-        const ops = { fields }
-        var csv = parse(data, ops);
-
-        const directoryPath = cwd()
-
-        const slug = new Date().getFullYear()
-
-        let file_name = `${slug}_${Date.now().toString()}.csv`
-
-        console.log(file_name);
-
-        var path = `${directoryPath}/public/csv/${file_name}`;
-        fs.writeFile(path, csv, 'utf8', function (err, data) {
-            if (err) { throw err; }
-            return data
-        });
-
-        const response = fs.createReadStream(path);
         ctx.response.set("content-type", 'text/csv');
-        ctx.response.set("content-disposition", `attachment; filename=${file_name}`);
-        const downloadUrl = `${process.env.BASE_URL}/csv/${file_name}`
-        ctx.body = downloadUrl;
+        ctx.body = response;
     },
 
     async downloadZip(ctx) {
@@ -101,6 +70,7 @@ module.exports = {
         ctx.response.set("content-type", 'application/zip');
         ctx.response.set("content-disposition", `attachment; filename=${file_name}`);
         const downloadUrl = `${process.env.BASE_URL}/zip/${file_name}`
+        console.log(downloadUrl);
         ctx.body = downloadUrl;
     }
 }
