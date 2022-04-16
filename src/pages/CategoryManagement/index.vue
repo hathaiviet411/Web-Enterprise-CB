@@ -545,6 +545,7 @@ export default {
 
         async handleDownloadCSV(id) {
             const response = await postDownloadCsv(URL_DOWNLOAD_CSV, { category_id: id });
+            console.log(response);
             window.open(response);
         },
     },

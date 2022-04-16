@@ -64,7 +64,8 @@ module.exports = {
         const response = fs.createReadStream(path);
         ctx.response.set("content-type", 'text/csv');
         ctx.response.set("content-disposition", `attachment; filename=${file_name}`);
-        ctx.body = response;
+        const downloadUrl = `${process.env.BASE_URL}/csv/${file_name}`
+        ctx.body = downloadUrl;
     },
 
     async downloadZip(ctx) {
@@ -99,6 +100,7 @@ module.exports = {
         const response = fs.createReadStream(pathZip);
         ctx.response.set("content-type", 'application/zip');
         ctx.response.set("content-disposition", `attachment; filename=${file_name}`);
-        ctx.body = response;
+        const downloadUrl = `${process.env.BASE_URL}/zip/${file_name}`
+        ctx.body = downloadUrl;
     }
 }

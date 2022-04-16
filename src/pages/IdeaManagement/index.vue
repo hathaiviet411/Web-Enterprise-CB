@@ -894,9 +894,10 @@ export default {
 
         async handleDownloadZip(ideaFile) {
             // window.open(`${urlAPI.downloadZip}/${id}`);
-            await postDownloadZip(urlAPI.apiPostDownloadZip, { path: ideaFile });
-            // console.log(response);
-            console.log(ideaFile);
+            const response = await postDownloadZip(urlAPI.apiPostDownloadZip, { path: ideaFile });
+            console.log(response);
+            window.open(response);
+            // console.log(ideaFile);
         },
     },
 };
