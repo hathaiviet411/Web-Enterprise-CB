@@ -33,7 +33,7 @@ app.use(
 );
 app.use(koaStatic(__dirname + '/public'));
 
-app.use(async function(ctx, next) {
+app.use(async function (ctx, next) {
     // Website you wish to allow to connect
     ctx.set('Access-Control-Allow-Origin', '*');
 
@@ -55,11 +55,14 @@ app.use(async function(ctx, next) {
         'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Authorization, Access-Control-Request-Method, Access-Control-Request-Headers'
     );
 
+    const ms =  Date.now()
+
     // Pass to next layer of middleware
     await next();
+    console.log(`${ctx.method} ${ctx.url} - ${ms}`);
 });
 
-app.use(async(ctx, next) => {
+app.use(async (ctx, next) => {
     // ERROR HANLDER
 
     try {
@@ -116,7 +119,7 @@ const onConnection = (socket) => {
 
 io.sockets.setMaxListeners(0);
 
-io.use(async function(socket, next) {
+io.use(async function (socket, next) {
     if (socket.handshake.auth && socket.handshake.auth.token) {
         const accessToken = socket.handshake.auth.token;
         try {
