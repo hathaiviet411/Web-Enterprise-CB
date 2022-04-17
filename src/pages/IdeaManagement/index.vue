@@ -29,7 +29,15 @@
 
 				<v-row class="mt-3">
 					<v-col lg="6" sm="12" class="text-center">
-						<v-menu offset-y>
+						<v-select
+							v-model="sort_type"
+							:items="sortOptions"
+							label="Sort by"
+							style="max-width: 200px"
+							class="mx-auto"
+						/>
+
+						<!-- <v-menu offset-y>
 							<template v-slot:activator="{ attrs, on }">
 								<v-btn
 									class="text-white"
@@ -64,7 +72,7 @@
 									</v-list-item>
 								</template>
 							</v-list>
-						</v-menu>
+						</v-menu> -->
 					</v-col>
 
 					<v-col lg="6" sm="12" class="text-center">
@@ -636,10 +644,17 @@ export default {
 
             search: '',
 
-            sort_type: 'Sort',
+            sort_type: 0,
 
             current_page: 1,
             total_page: 1,
+
+            sortOptions: [
+                { text: 'Default', value: 0 },
+                { text: 'Newest', value: 1 },
+                { text: 'View', value: 2 },
+                { text: 'Popular', value: 3 },
+            ],
         };
     },
 
@@ -655,6 +670,10 @@ export default {
         role() {
             return this.$store.getters.role;
         },
+
+        isChangeSortType() {
+            return this.sort_type;
+        },
     },
 
     watch: {
@@ -668,6 +687,18 @@ export default {
 
         isChangeCurrentPage() {
             this.getListIdea();
+        },
+
+        isChangeSortType() {
+            if (this.sort_type === 1) {
+                this.handleSort(1);
+            } else if (this.sort_type === 2) {
+                this.handleSort(2);
+            } else if (this.sort_type === 3) {
+                this.handleSort(3);
+            } else {
+                this.handleSort(0);
+            }
         },
     },
 
@@ -862,27 +893,35 @@ export default {
         async handleSort(sort_type) {
             const URL = urlAPI.getAllIdea;
 
-            const SORT_BY_TIME = 'time';
-            const SORT_BY_VIEW = 'view';
-            const SORT_BY_LIKE = 'like';
+            const SORT_BY_DEFAULT = 0;
+            const SORT_BY_TIME = 1;
+            const SORT_BY_VIEW = 2;
+            const SORT_BY_LIKE = 3;
 
             if (sort_type === SORT_BY_TIME) {
-                const response = await sort(`${URL}?page=1&sort=createdAt`);
-                this.sort_type = 'Time';
+                const response = await sort(`${URL}?page=${this.current_page}&sort=createdAt`);
+                this.sort_type = 1;
 
                 if (response.status === true) {
                     this.vItems = response.data.ideas;
                 }
             } else if (sort_type === SORT_BY_VIEW) {
-                const response = await sort(`${URL}?page=1&sort=view`);
-                this.sort_type = 'View';
+                const response = await sort(`${URL}?page=${this.current_page}&sort=view`);
+                this.sort_type = 2;
 
                 if (response.status === true) {
                     this.vItems = response.data.ideas;
                 }
             } else if (sort_type === SORT_BY_LIKE) {
-                const response = await sort(`${URL}?page=1&sort=like`);
-                this.sort_type = 'Like';
+                const response = await sort(`${URL}?page=${this.current_page}&sort=like`);
+                this.sort_type = 3;
+
+                if (response.status === true) {
+                    this.vItems = response.data.ideas;
+                }
+            } else if (sort_type === SORT_BY_DEFAULT) {
+                const response = await sort(`${URL}?page=${this.current_page}`);
+                this.sort_type = 0;
 
                 if (response.status === true) {
                     this.vItems = response.data.ideas;
