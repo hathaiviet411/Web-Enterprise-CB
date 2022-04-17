@@ -100,9 +100,9 @@ describe('Idea Management: Functionality UT', () => {
             { text: 'Likes', sortable: false, value: 'likes' },
             { text: 'Dislikes', sortable: false, value: 'dislikes' },
             { text: 'Views', sortable: false, value: 'viewCount' },
-            { text: 'Author', sortable: false, value: 'user' },
+            { text: 'Author', sortable: false, value: 'user.name' },
             { text: 'Posted Date', sortable: false, value: 'createdAt' },
-            { text: 'Zip Download', sortable: false, value: 'zip', align: 'center' },
+            { text: 'Zip Download', sortable: false, value: 'ideaFile', align: 'center' },
             { text: 'Actions', sortable: false, value: 'actions' },
         ];
 
