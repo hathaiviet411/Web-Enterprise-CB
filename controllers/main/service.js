@@ -48,7 +48,9 @@ module.exports = {
 
         for (let pathAPI of path) {
 
-            let type = pathAPI.split('.')[1]
+            let p = pathAPI.split('.');
+
+            let type = p[p.length - 1];
 
 
             const url = pathAPI
