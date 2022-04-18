@@ -152,13 +152,13 @@ module.exports = {
     }
     if (ctx.request.files.ideaFile) {
       for (let i = 0; i < ctx.request.files.ideaFile.length; i++) {
-        let ideaFilePath = ctx.request.files.ideaFile[i].path.split("\\");
+        let ideaFilePath = ctx.request.files.ideaFile[i].path.split("/");
         idea.ideaFile[i] = getPath(ideaFilePath);
       }
     }
 
     if (ctx.request.files.ideaPicture) {
-      let ideaPicturePath = ctx.request.files.ideaPicture[0].path.split("\\");
+      let ideaPicturePath = ctx.request.files.ideaPicture[0].path.split("/");
       idea.ideaPicture = getPath(ideaPicturePath);
     }
 
